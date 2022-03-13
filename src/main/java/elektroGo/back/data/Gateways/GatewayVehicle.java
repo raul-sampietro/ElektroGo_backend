@@ -162,7 +162,7 @@ public class GatewayVehicle implements Gateway{
     public void update() throws SQLException {
         Database d = Database.getInstance();
         Connection c = d.getConnection();
-        PreparedStatement pS = c.prepareStatement("UPDATE VEHICLE SET id = ?, brand = ?, model = ?, numberPlate = ?, " +
+        PreparedStatement pS = c.prepareStatement("UPDATE VEHICLE SET brand = ?, model = ?, numberPlate = ?, " +
                 "drivingRange = ?, fabricationYear = ?, seats = ?, imageId = ?, userName = ? ;");
         setPreparedStatementNoID(pS);
         pS.executeUpdate();

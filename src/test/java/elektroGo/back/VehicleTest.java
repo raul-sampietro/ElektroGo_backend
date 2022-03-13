@@ -13,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class VehicleTest {
-
     @Test
     public void createVehicleTest1() throws SQLException {
         GatewayVehicle gV = new GatewayVehicle(99821736,"testModel","5755","Test");
