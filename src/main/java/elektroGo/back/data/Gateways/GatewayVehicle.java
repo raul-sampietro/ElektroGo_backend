@@ -5,42 +5,46 @@ import elektroGo.back.data.Finders.FinderVehicle;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class GatewayVehicle {
     private long id;
     private String brand;
     private String model;
     private String numberPlate;
-    private int range;
-    private Date yearOfProduction;
-    private int maxSeats;
-    private String pathPhoto;
+    private int drivingRange;
+    private LocalDate fabricationYear;
+    private int seats;
+    private String imageId;
+    //private Driver driver;
 
     private FinderVehicle fV;
 
-
-    public GatewayVehicle(long id, String brand, String model, String numberPlate, int range, Date yearOfProduction, int maxSeats, String pathPhoto) {
-        fV = FinderVehicle.getInstance();
-        this.id = id;
-        this.brand = brand;
-        this.model = model;
-        this.numberPlate = numberPlate;
-        this.range = range;
-        this.yearOfProduction = yearOfProduction;
-        this.maxSeats = maxSeats;
-        this.pathPhoto = pathPhoto;
+    public GatewayVehicle(long id, String model, String numberPlate) {
+        setUp(id, model, numberPlate);
     }
 
-    public GatewayVehicle(long id, String brand, String model, String numberPlate, int range, Date yearOfProduction, int maxSeats) {
-        fV = FinderVehicle.getInstance();
-        this.id = id;
+    public GatewayVehicle(long id, String brand, String model, String numberPlate, int drivingRange, LocalDate fabricationYear, int seats, String imageId) {
+        setUp(id, model, numberPlate);
         this.brand = brand;
+        this.drivingRange = drivingRange;
+        this.fabricationYear = fabricationYear;
+        this.seats = seats;
+        this.imageId = imageId;
+    }
+
+    public GatewayVehicle(long id, String brand, String model, String numberPlate, int drivingRange, LocalDate fabricationYear, int seats) {
+        setUp(id, model, numberPlate);
+        this.brand = brand;
+        this.drivingRange = drivingRange;
+        this.fabricationYear = fabricationYear;
+        this.seats = seats;
+    }
+
+    private void setUp(long id, String model, String numberPlate) {
+        this.id = id;
         this.model = model;
         this.numberPlate = numberPlate;
-        this.range = range;
-        this.yearOfProduction = yearOfProduction;
-        this.maxSeats = maxSeats;
     }
 
     //Getters and setters
@@ -76,36 +80,36 @@ public class GatewayVehicle {
         this.numberPlate = numberPlate;
     }
 
-    public int getRange() {
-        return range;
+    public int getDrivingRange() {
+        return drivingRange;
     }
 
-    public void setRange(int range) {
-        this.range = range;
+    public void setDrivingRange(int drivingRange) {
+        this.drivingRange = drivingRange;
     }
 
-    public Date getYearOfProduction() {
-        return yearOfProduction;
+    public LocalDate getFabricationYear() {
+        return fabricationYear;
     }
 
-    public void setYearOfProduction(Date yearOfProduction) {
-        this.yearOfProduction = yearOfProduction;
+    public void setFabricationYear(LocalDate fabricationYear) {
+        this.fabricationYear = fabricationYear;
     }
 
-    public int getMaxSeats() {
-        return maxSeats;
+    public int getSeats() {
+        return seats;
     }
 
-    public void setMaxSeats(int maxSeats) {
-        this.maxSeats = maxSeats;
+    public void setSeats(int seats) {
+        this.seats = seats;
     }
 
-    public String getPathPhoto() {
-        return pathPhoto;
+    public String getImageId() {
+        return imageId;
     }
 
-    public void setPathPhoto(String pathPhoto) {
-        this.pathPhoto = pathPhoto;
+    public void setImageId(String imageId) {
+        this.imageId = imageId;
     }
 
     //SQL operations
@@ -115,23 +119,23 @@ public class GatewayVehicle {
     public void insert() throws SQLException {
         Connection c = fV.getConnection();
         Statement s = c.createStatement();
-        if (pathPhoto == null) s.executeUpdate("insert into vehicle values(" +
-                id +","+brand+","+model+","+numberPlate+","+range+","+yearOfProduction+","+maxSeats+",null);");
+        if (imageId == null) s.executeUpdate("insert into vehicle values(" +
+                id +","+brand+","+model+","+numberPlate+","+drivingRange+","+fabricationYear+","+seats+",null);");
         else s.executeUpdate("insert into vehicle values(" +
-                id +","+brand+","+model+","+numberPlate+","+range+","+yearOfProduction+","+maxSeats+","+pathPhoto+");");
+                id +","+brand+","+model+","+numberPlate+","+drivingRange+","+fabricationYear+","+seats+","+imageId+");");
 
     }
 
     public void update() throws SQLException {
         Connection c = fV.getConnection();
         Statement s = c.createStatement();
-        if (pathPhoto != null) s.executeUpdate("update vehicle set " +
-                "id="+id +", brand="+ brand+ ", model="+model+ ", numberPlate="+ numberPlate + ", range= "+ range + ", yearOfProduction="+ yearOfProduction +
-                ", maxSeats="+ maxSeats+ ", pathPhoto="+pathPhoto+ ";");
+        if (imageId != null) s.executeUpdate("update vehicle set " +
+                "id="+id +", brand="+ brand+ ", model="+model+ ", numberPlate="+ numberPlate + ", drivingRange= "+ drivingRange + ", fabricationYear="+ fabricationYear +
+                ", seats="+ seats+ ", imageId="+imageId+ ";");
         else {
             s.executeUpdate("update vehicle set " +
-                    "id="+id +", brand="+ brand+ ", model="+model+ ", numberPlate="+ numberPlate + ", range= "+ range + ", yearOfProduction="+ yearOfProduction +
-                    ", maxSeats="+ maxSeats+ ", pathPhoto=null"+ ";");
+                    "id="+id +", brand="+ brand+ ", model="+model+ ", numberPlate="+ numberPlate + ", drivingRange= "+ drivingRange + ", fabricationYear="+ fabricationYear +
+                    ", seats="+ seats+ ", imageId=null"+ ";");
         }
     }
 

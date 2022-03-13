@@ -3,6 +3,7 @@ package elektroGo.back.data.Finders;
 import elektroGo.back.data.Gateways.GatewayVehicle;
 
 import java.sql.*;
+import java.time.LocalDate;
 
 
 public class FinderVehicle {
@@ -51,10 +52,11 @@ public class FinderVehicle {
         String brand = r.getString(2);
         String model = r.getString(3);
         String numberPlate = r.getString(4);
-        int range = r.getInt(5);
-        Date yearOfProduction = r.getDate(6);
-        int maxSeats = r.getInt(7);
-        return new GatewayVehicle(id, brand, model, numberPlate, range, yearOfProduction, maxSeats);
+        int drivingRange = r.getInt(5);
+        Date fabricationYearD = r.getDate(6);
+        LocalDate fabricationYear =  fabricationYearD.toLocalDate();
+        int seats = r.getInt(7);
+        return new GatewayVehicle(id, brand, model, numberPlate, drivingRange, fabricationYear, seats);
     }
 
     //Add necessary finders
