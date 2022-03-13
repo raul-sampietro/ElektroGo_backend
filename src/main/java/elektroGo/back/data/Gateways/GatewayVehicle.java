@@ -1,10 +1,10 @@
 package elektroGo.back.data.Gateways;
 
 import elektroGo.back.data.Finders.FinderVehicle;
+import elektroGo.back.data.Database;
 
-import java.sql.Connection;
+
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.LocalDate;
 
 public class GatewayVehicle {
@@ -117,31 +117,28 @@ public class GatewayVehicle {
     //Review if the next sql sentences are okay
 
     public void insert() throws SQLException {
-        Connection c = fV.getConnection();
-        Statement s = c.createStatement();
-        if (imageId == null) s.executeUpdate("insert into vehicle values(" +
+        Database d = Database.getInstance();
+        if (imageId == null) d.executeSQLUpdate("insert into vehicle values(" +
                 id +","+brand+","+model+","+numberPlate+","+drivingRange+","+fabricationYear+","+seats+",null);");
-        else s.executeUpdate("insert into vehicle values(" +
+        else  d.executeSQLUpdate("insert into vehicle values(" +
                 id +","+brand+","+model+","+numberPlate+","+drivingRange+","+fabricationYear+","+seats+","+imageId+");");
 
     }
 
     public void update() throws SQLException {
-        Connection c = fV.getConnection();
-        Statement s = c.createStatement();
-        if (imageId != null) s.executeUpdate("update vehicle set " +
+        Database d = Database.getInstance();
+        if (imageId != null) d.executeSQLUpdate("update vehicle set " +
                 "id="+id +", brand="+ brand+ ", model="+model+ ", numberPlate="+ numberPlate + ", drivingRange= "+ drivingRange + ", fabricationYear="+ fabricationYear +
                 ", seats="+ seats+ ", imageId="+imageId+ ";");
         else {
-            s.executeUpdate("update vehicle set " +
+            d.executeSQLUpdate("update vehicle set " +
                     "id="+id +", brand="+ brand+ ", model="+model+ ", numberPlate="+ numberPlate + ", drivingRange= "+ drivingRange + ", fabricationYear="+ fabricationYear +
                     ", seats="+ seats+ ", imageId=null"+ ";");
         }
     }
 
     public void remove() throws SQLException {
-        Connection c = fV.getConnection();
-        Statement s = c.createStatement();
-        s.executeUpdate("delete from vehicle where id=" + id + ";");
+        Database d = Database.getInstance();
+        d.executeSQLUpdate("delete from vehicle where id=" + id + ";");
     }
 }

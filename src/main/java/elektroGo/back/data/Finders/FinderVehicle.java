@@ -9,19 +9,8 @@ import java.time.LocalDate;
 public class FinderVehicle {
 
     private static FinderVehicle singletonObject;
-    private Connection conn;
 
-    private FinderVehicle() {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://10.4.41.58/elektrogo",
-                    "test", "test");
-            boolean valid = conn.isValid(50000);
-            System.out.println(valid ? "TEST OK" : "TEST FAIL");
-        } catch (Exception ex) {
-            System.out.println("Error: " + ex);
-        }
-    }
+    private FinderVehicle() {}
 
     public static FinderVehicle getInstance() {
         if (singletonObject == null) {
@@ -30,16 +19,11 @@ public class FinderVehicle {
         return singletonObject;
     }
 
-    public Connection getConnection() {
-        return conn;
-    }
-
     public GatewayVehicle findByID(long idVehicle) {
         GatewayVehicle gV = null;
+        Database d = Database.getInstance();
         try {
-            Statement s = conn.createStatement();
-            String sID = String.valueOf(idVehicle);
-            ResultSet r = s.executeQuery("select * from vehicle where id = " + sID);
+            ResultSet r = d.executeSQLQuery("select * from vehicle where id = " + sID);
             if (r.next()) gV = createGateway(r);
         } catch (SQLException e) {
             e.printStackTrace();
