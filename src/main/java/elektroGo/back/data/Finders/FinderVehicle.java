@@ -1,6 +1,8 @@
 package elektroGo.back.data.Finders;
 
 import elektroGo.back.data.Gateways.GatewayVehicle;
+import elektroGo.back.data.Database;
+
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -22,8 +24,9 @@ public class FinderVehicle {
     public GatewayVehicle findByID(long idVehicle) {
         GatewayVehicle gV = null;
         Database d = Database.getInstance();
+
         try {
-            ResultSet r = d.executeSQLQuery("select * from vehicle where id = " + sID);
+            ResultSet r = d.executeSQLQuery("select * from vehicle where id = " + idVehicle);
             if (r.next()) gV = createGateway(r);
         } catch (SQLException e) {
             e.printStackTrace();

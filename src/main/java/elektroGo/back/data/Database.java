@@ -26,13 +26,23 @@ public class Database {
     }
 
     public void executeSQLUpdate(String sql) {
-        Statement s = c.createStatement();
-        s.executeUpdate(sql);
+        try {
+            Statement s = conn.createStatement();
+            s.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public ResultSet executeSQLQuery(String sql) {
-        Statement s = conn.createStatement();
-        return s.executeQuery(sql);
+        Statement s = null;
+        try {
+            s = conn.createStatement();
+            return s.executeQuery(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 
