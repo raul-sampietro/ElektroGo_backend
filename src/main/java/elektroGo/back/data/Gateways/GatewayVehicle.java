@@ -1,31 +1,44 @@
 package elektroGo.back.data.Gateways;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import elektroGo.back.data.Finders.FinderVehicle;
 import elektroGo.back.data.Database;
 
 
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-public class GatewayVehicle {
-    private long id;
+public class GatewayVehicle implements Gateway{
+    private Long id;
     private String brand;
     private String model;
     private String numberPlate;
-    private int drivingRange;
+    private Integer drivingRange;
     private LocalDate fabricationYear;
-    private int seats;
+    private Integer seats;
     private String imageId;
-    //private Driver driver;
+    private String userName; //CHANGE TYPE OF THIS ATTRIBUTE TO DRIVER WHEN IMPLEMENTED
+
+    public String getuserName() {
+        return userName;
+    }
+
+    public void setuserName(String userName) {
+        this.userName = userName;
+    }
 
     private FinderVehicle fV;
 
-    public GatewayVehicle(long id, String model, String numberPlate) {
-        setUp(id, model, numberPlate);
+    public GatewayVehicle(long id, String model, String numberPlate, String userName) {
+        setUp(id, model, numberPlate, userName);
     }
 
-    public GatewayVehicle(long id, String brand, String model, String numberPlate, int drivingRange, LocalDate fabricationYear, int seats, String imageId) {
-        setUp(id, model, numberPlate);
+    public GatewayVehicle(long id, String brand, String model, String numberPlate, int drivingRange, LocalDate fabricationYear, int seats, String imageId, String userName) {
+        setUp(id, model, numberPlate, userName);
         this.brand = brand;
         this.drivingRange = drivingRange;
         this.fabricationYear = fabricationYear;
@@ -33,18 +46,19 @@ public class GatewayVehicle {
         this.imageId = imageId;
     }
 
-    public GatewayVehicle(long id, String brand, String model, String numberPlate, int drivingRange, LocalDate fabricationYear, int seats) {
-        setUp(id, model, numberPlate);
+    public GatewayVehicle(long id, String brand, String model, String numberPlate, int drivingRange, LocalDate fabricationYear, int seats, String userName) {
+        setUp(id, model, numberPlate, userName);
         this.brand = brand;
         this.drivingRange = drivingRange;
         this.fabricationYear = fabricationYear;
         this.seats = seats;
     }
 
-    private void setUp(long id, String model, String numberPlate) {
+    private void setUp(long id, String model, String numberPlate, String userName) {
         this.id = id;
         this.model = model;
         this.numberPlate = numberPlate;
+        this.userName = userName; //WHEN userName CLASS IMPLEMENTED, CREATE A userName OBJECT HERE
     }
 
     //Getters and setters
@@ -114,31 +128,60 @@ public class GatewayVehicle {
 
     //SQL operations
 
-    //Review if the next sql sentences are okay
+    public void setFullPreparedStatement(PreparedStatement pS) throws SQLException {
+        pS.setLong(1,id);
+        pS.setString(2, brand);
+        pS.setString(3,model);
+        pS.setString(4, numberPlate);
+        if (drivingRange != null) pS.setInt(5,drivingRange); else pS.setString(5, null);
+        if (fabricationYear != null) pS.setDate(6,Date.valueOf(fabricationYear)); else pS.setString(6, null);
+        if (seats != null) pS.setInt(7,seats); else pS.setString(7, null);
+        pS.setString(8, imageId);
+        pS.setString(9, userName);
+    }
+
+    private void setPreparedStatementNoID(PreparedStatement pS) throws SQLException {
+        pS.setString(1, brand);
+        pS.setString(2,model);
+        pS.setString(3, numberPlate);
+        if (drivingRange != null) pS.setInt(4,drivingRange); else pS.setString(4, null);
+        if (fabricationYear != null) pS.setDate(5,Date.valueOf(fabricationYear)); else pS.setString(5, null);
+        if (seats != null) pS.setInt(6,seats); else pS.setString(6, null);
+        pS.setString(7, imageId);
+        pS.setString(8, userName);
+    }
 
     public void insert() throws SQLException {
         Database d = Database.getInstance();
-        if (imageId == null) d.executeSQLUpdate("insert into vehicle values(" +
-                id +","+brand+","+model+","+numberPlate+","+drivingRange+","+fabricationYear+","+seats+",null);");
-        else  d.executeSQLUpdate("insert into vehicle values(" +
-                id +","+brand+","+model+","+numberPlate+","+drivingRange+","+fabricationYear+","+seats+","+imageId+");");
-
+        Connection c = d.getConnection();
+        PreparedStatement pS = c.prepareStatement("INSERT INTO VEHICLE VALUES (?,?,?,?,?,?,?,?,?); ");
+        setFullPreparedStatement(pS);
+        pS.executeUpdate();
     }
 
     public void update() throws SQLException {
         Database d = Database.getInstance();
-        if (imageId != null) d.executeSQLUpdate("update vehicle set " +
-                "id="+id +", brand="+ brand+ ", model="+model+ ", numberPlate="+ numberPlate + ", drivingRange= "+ drivingRange + ", fabricationYear="+ fabricationYear +
-                ", seats="+ seats+ ", imageId="+imageId+ ";");
-        else {
-            d.executeSQLUpdate("update vehicle set " +
-                    "id="+id +", brand="+ brand+ ", model="+model+ ", numberPlate="+ numberPlate + ", drivingRange= "+ drivingRange + ", fabricationYear="+ fabricationYear +
-                    ", seats="+ seats+ ", imageId=null"+ ";");
-        }
+        Connection c = d.getConnection();
+        PreparedStatement pS = c.prepareStatement("UPDATE VEHICLE SET id = ?, brand = ?, model = ?, numberPlate = ?, " +
+                "drivingRange = ?, fabricationYear = ?, seats = ?, imageId = ?, userName = ? ;");
+        setPreparedStatementNoID(pS);
+        pS.executeUpdate();
     }
+
 
     public void remove() throws SQLException {
         Database d = Database.getInstance();
-        d.executeSQLUpdate("delete from vehicle where id=" + id + ";");
+        d.executeSQLUpdate("DELETE FROM VEHICLE WHERE id=" + id + ";");
+    }
+
+    public String json() {
+        ObjectMapper mapper = new ObjectMapper();
+        String json = "";
+        try {
+            json = mapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return json;
     }
 }

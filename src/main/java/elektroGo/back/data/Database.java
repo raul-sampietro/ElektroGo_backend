@@ -25,24 +25,19 @@ public class Database {
         return singletonObject;
     }
 
-    public void executeSQLUpdate(String sql) {
-        try {
-            Statement s = conn.createStatement();
-            s.executeUpdate(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void executeSQLUpdate(String sql) throws SQLException {
+        Statement s = conn.createStatement();
+        s.executeUpdate(sql);
+
     }
 
-    public ResultSet executeSQLQuery(String sql) {
-        Statement s = null;
-        try {
-            s = conn.createStatement();
-            return s.executeQuery(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public ResultSet executeSQLQuery(String sql) throws SQLException {
+        Statement s = conn.createStatement();
+        return s.executeQuery(sql);
+    }
+
+    public Connection getConnection() {
+        return conn;
     }
 
 
