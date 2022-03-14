@@ -1,23 +1,17 @@
 package elektroGo.back.data.Finders;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import elektroGo.back.data.Database;
+import elektroGo.back.data.Gateways.GatewayChargingStations;
+import elektroGo.back.data.Gateways.GatewayVehicle;
+
+import java.math.BigDecimal;
+import java.sql.*;
+import java.util.ArrayList;
 
 public class FinderChargingStations {
     private static FinderChargingStations singletonObject;
-    private Connection conn;
 
-    private FinderChargingStations() {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://10.4.41.58/elektrogo",
-                    "test", "test");
-            boolean valid = conn.isValid(50000);
-            System.out.println(valid ? "TEST OK" : "TEST FAIL");
-        } catch (Exception ex) {
-            System.out.println("Error: " + ex);
-        }
-    }
+    private FinderChargingStations() {}
 
     public static FinderChargingStations getInstance() {
         if (singletonObject == null) {
@@ -26,7 +20,36 @@ public class FinderChargingStations {
         return singletonObject;
     }
 
-    public Connection getConnection() {
-        return conn;
+    public ArrayList<GatewayChargingStations> findAll() throws SQLException {
+        GatewayChargingStations gV = null;
+        Database d = Database.getInstance();
+        Connection conn = d.getConnection();
+        ArrayList<GatewayChargingStations> aL = new ArrayList<>();
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM CHARGINGSTATIONS;");
+        ResultSet r = pS.executeQuery();
+        while (r.next()) {
+            aL.add(createGateway(r));
+        }
+        return aL;
+    }
+
+    public GatewayChargingStations findByID(long idChargingStation) throws SQLException {
+        GatewayChargingStations gV = null;
+        Database d = Database.getInstance();
+        Connection conn = d.getConnection();
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM CHARGINGSTATIONS WHERE id = ?;");
+        pS.setLong(1,idChargingStation);
+        ResultSet r = pS.executeQuery();
+        if (r.next()) gV = createGateway(r);
+
+        return gV;
+    }
+
+    private GatewayChargingStations createGateway(ResultSet r) throws SQLException {
+        Integer id = r.getInt(1);
+        BigDecimal longitude = r.getBigDecimal(2);
+        BigDecimal latitude = r.getBigDecimal(3);
+        Integer numberOfChargers = r.getInt(4);
+        return new GatewayChargingStations(id, longitude, latitude, numberOfChargers);
     }
 }
