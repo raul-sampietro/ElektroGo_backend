@@ -1,5 +1,19 @@
 package elektroGo.back.controller;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHeaders;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+
 class Point {
     String name;
     Double lat;
@@ -46,14 +60,22 @@ public class RouteCalculation {
         stopsNeeded = (int) (distance/range);
         System.out.println("Stops needed: " + stopsNeeded);
 
-        /* TODO Añadir dependencia al .xml
-        OkHttpClient client = new OkHttpClient().newBuilder()
-                .build();
-        Request request = new Request.Builder()
-                .url("https://maps.googleapis.com/maps/api/distancematrix/json?origins=40.6655101%2C-73.89188969999998&destinations=40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626&key=YOUR_API_KEY")
-                .method("GET", null)
-                .build();
-        Response response = client.newCall(request).execute();
-        */
+        String string = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=41.069389%2C1.087369&destinations=41.700801%2C2.847613&key=AIzaSyAPkhi71p6ZV7lE--bNFBtwO3JbqGok-EQ";
+        URI uri = URI.create(string);
+        HttpGet request = new HttpGet(uri);
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        try {
+            CloseableHttpResponse response = httpClient.execute(request);
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                String result = EntityUtils.toString(entity);
+
+                System.out.println("Aqui");
+                System.out.println(result);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
