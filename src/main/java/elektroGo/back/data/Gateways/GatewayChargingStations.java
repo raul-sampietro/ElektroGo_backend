@@ -91,7 +91,7 @@ public class GatewayChargingStations {
     public void update() throws SQLException {
         Database d = Database.getInstance();
         Connection c = d.getConnection();
-        PreparedStatement pS = c.prepareStatement("UPDATE CHARGINGSTATIONS SET longitude = ?, latitude = ?," +
+        PreparedStatement pS = c.prepareStatement("UPDATE CHARGINGSTATIONS SET latitude = ?, longitude = ?," +
                 " numberOfChargers = ? WHERE id = ?;");
         setPreparedStatementNoID(pS);
         pS.setLong(4, id);
