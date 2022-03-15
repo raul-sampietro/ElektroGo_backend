@@ -20,4 +20,5 @@ public class ChargingStationsController {
         ObjectMapper ob = new ObjectMapper();
         return ob.writeValueAsString(ArrayCS);
     }
+
 }
