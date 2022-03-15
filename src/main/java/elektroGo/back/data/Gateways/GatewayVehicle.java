@@ -1,5 +1,6 @@
 package elektroGo.back.data.Gateways;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import elektroGo.back.data.Finders.FinderVehicle;
@@ -21,7 +22,7 @@ public class GatewayVehicle implements Gateway{
     private LocalDate fabricationYear;
     private Integer seats;
     private String imageId;
-    private String userName; //CHANGE TYPE OF THIS ATTRIBUTE TO DRIVER WHEN IMPLEMENTED
+    private String userName;
 
     public String getuserName() {
         return userName;
@@ -32,6 +33,21 @@ public class GatewayVehicle implements Gateway{
     }
 
     private FinderVehicle fV;
+
+    public GatewayVehicle(){}
+
+    public GatewayVehicle(Long id, String brand, String model, String numberPlate, Integer drivingRange, LocalDate fabricationYear, Integer seats, String imageId, String userName, FinderVehicle fV) {
+        this.id = id;
+        this.brand = brand;
+        this.model = model;
+        this.numberPlate = numberPlate;
+        this.drivingRange = drivingRange;
+        this.fabricationYear = fabricationYear;
+        this.seats = seats;
+        this.imageId = imageId;
+        this.userName = userName;
+        this.fV = fV;
+    }
 
     public GatewayVehicle(long id, String model, String numberPlate, String userName) {
         setUp(id, model, numberPlate, userName);
