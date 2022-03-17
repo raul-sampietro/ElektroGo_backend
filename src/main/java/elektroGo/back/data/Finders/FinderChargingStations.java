@@ -34,15 +34,34 @@ public class FinderChargingStations {
     }
 
     public GatewayChargingStations findByID(long idChargingStation) throws SQLException {
-        GatewayChargingStations gV = null;
+        GatewayChargingStations gCS = null;
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
         PreparedStatement pS = conn.prepareStatement("SELECT * FROM CHARGINGSTATIONS WHERE id = ?;");
         pS.setLong(1,idChargingStation);
         ResultSet r = pS.executeQuery();
-        if (r.next()) gV = createGateway(r);
+        if (r.next()) gCS = createGateway(r);
 
-        return gV;
+        return gCS;
+    }
+
+    public ArrayList<GatewayChargingStations> findByCoordinates(BigDecimal latitude1, BigDecimal longitude1, BigDecimal latitude2, BigDecimal longitude2) throws SQLException {
+        GatewayChargingStations gCS = null;
+        Database d = Database.getInstance();
+        Connection conn = d.getConnection();
+        ArrayList<GatewayChargingStations> aL = new ArrayList<>();
+        PreparedStatement pS = conn.prepareStatement("SELECT * " +
+                "FROM CHARGINGSTATIONS " +
+                "WHERE latitude < ? and latitude > ? and longitude < ? and longitude > ?;");
+        pS.setBigDecimal(1,latitude1);
+        pS.setBigDecimal(2,latitude2);
+        pS.setBigDecimal(3,longitude1);
+        pS.setBigDecimal(4,longitude2);
+        ResultSet r = pS.executeQuery();
+        while (r.next()) {
+            aL.add(createGateway(r));
+        }
+        return aL;
     }
 
     private GatewayChargingStations createGateway(ResultSet r) throws SQLException {

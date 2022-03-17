@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -72,6 +73,27 @@ public class ChargingStationsTest {
         FinderChargingStations fV = FinderChargingStations.getInstance();
         GatewayChargingStations gCS = fV.findByID(2);
         String res =  gCS.getId() + " " + gCS.getLatitude() + " " + gCS.getLongitude() + " " + gCS.getNumberOfChargers();
+        d.executeSQLUpdate("delete from CHARGINGSTATIONS where id = 2;");
+        assertEquals("2 41.389256 2.113442 3", res);
+    }
+
+    @Test
+    public void FindByCoordinates() throws SQLException {
+        BigDecimal latitude = BigDecimal.valueOf(41.389256);
+        BigDecimal longitude = BigDecimal.valueOf(2.113442);
+        GatewayChargingStations gCS = new GatewayChargingStations(2, latitude, longitude,3);
+        Database d = Database.getInstance();
+        gCS.insert();
+        FinderChargingStations fCS = FinderChargingStations.getInstance();
+        BigDecimal latitude1 = BigDecimal.valueOf(48.389256);
+        BigDecimal longitude1 = BigDecimal.valueOf(6.113442);
+        BigDecimal latitude2 = BigDecimal.valueOf(39.389256);
+        BigDecimal longitude2 = BigDecimal.valueOf(1.113442);
+        ArrayList<GatewayChargingStations> gCSTest = fCS.findByCoordinates(latitude1, longitude1, latitude2, longitude2);
+        String res = null;
+        for (GatewayChargingStations test: gCSTest) {
+            res = test.getId() +  " " + test.getLatitude() + " " + test.getLongitude() + " " + test.getNumberOfChargers();
+        }
         d.executeSQLUpdate("delete from CHARGINGSTATIONS where id = 2;");
         assertEquals("2 41.389256 2.113442 3", res);
     }
