@@ -1,8 +1,7 @@
 package elektroGo.back.data.Finders;
 
-import elektroGo.back.data.Gateways.Gateway;
-import elektroGo.back.data.Gateways.GatewayVehicle;
 import elektroGo.back.data.Database;
+import elektroGo.back.data.Gateways.GatewayVehicle;
 
 
 import java.sql.*;
@@ -36,45 +35,28 @@ public class FinderVehicle {
         return aL;
     }
 
-    public GatewayVehicle findByID(long idVehicle) throws SQLException {
+    public GatewayVehicle findByNumberPlate(String numberPlate) throws SQLException {
         GatewayVehicle gV = null;
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
-        PreparedStatement pS = conn.prepareStatement("SELECT * FROM VEHICLE WHERE id = ?;");
-        pS.setLong(1,idVehicle);
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM VEHICLE WHERE numberPlate = ?;");
+        pS.setString(1,numberPlate);
         ResultSet r = pS.executeQuery();
         if (r.next()) gV = createGateway(r);
-
         return gV;
     }
 
-    public ArrayList<GatewayVehicle> findByUserName(String userName) throws SQLException {
-        GatewayVehicle gV = null;
-        Database d = Database.getInstance();
-        Connection conn = d.getConnection();
-        ArrayList<GatewayVehicle> aL = new ArrayList<>();
-        PreparedStatement pS = conn.prepareStatement("SELECT * FROM VEHICLE WHERE userName = ?;");
-        pS.setString(1,userName);
-        ResultSet r = pS.executeQuery();
-        while (r.next()) {
-            aL.add(createGateway(r));
-        }
-        return aL;
-    }
-
     private GatewayVehicle createGateway(ResultSet r) throws SQLException {
-        long id = r.getLong(1);
-        String brand = r.getString(2);
-        String model = r.getString(3);
-        String numberPlate = r.getString(4);
-        int drivingRange = r.getInt(5);
-        Date fabricationYearD = r.getDate(6);
+        String brand = r.getString(1);
+        String model = r.getString(2);
+        String numberPlate = r.getString(3);
+        int drivingRange = r.getInt(4);
+        Date fabricationYearD = r.getDate(5);
         LocalDate fabricationYear = null;
         if (fabricationYearD != null) fabricationYear=  fabricationYearD.toLocalDate();
-        int seats = r.getInt(7);
-        String imageId = r.getString(8);
-        String userName = r.getString(9);
-        return new GatewayVehicle(id, brand, model, numberPlate, drivingRange, fabricationYear, seats,imageId, userName);
+        int seats = r.getInt(6);
+        String imageId = r.getString(7);
+        return new GatewayVehicle(brand, model, numberPlate, drivingRange, fabricationYear, seats,imageId);
     }
 
     //Add necessary finders
