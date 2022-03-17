@@ -4,9 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import elektroGo.back.data.Finders.FinderUser;
 import elektroGo.back.data.Gateways.GatewayUser;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -28,6 +26,28 @@ public class UserController {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(lU);
     }
+
+    @PostMapping("/users/create")
+    public void createVehicle(@RequestBody GatewayUser gU) {
+        try {
+            gU.insert();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @PostMapping("/users/delete")
+    public void deleteVehicle(@RequestParam String userName) {
+        FinderUser fU = FinderUser.getInstance();
+        try {
+            GatewayUser gU = fU.findByUserName(userName);
+            if (gU != null) gU.remove();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 
 }
