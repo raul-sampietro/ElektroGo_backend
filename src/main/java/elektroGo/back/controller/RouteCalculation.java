@@ -1,8 +1,19 @@
 package elektroGo.back.controller;
 
+import jdk.jshell.execution.Util;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 class Point {
     String name;
@@ -36,32 +47,48 @@ public class RouteCalculation {
         return Math.asin(Math.sqrt(a));
     }
 
-    static double calculateRoadDistance() { //in kilometers
-        return 195321;
-        /* FUNCIONA -> distance contiene la distancia por carretera
-        String string = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=41.069389%2C1.087369&destinations=41.700801%2C2.847613&key=API_KEY";
-        URI uri = URI.create(string);
+    static double calculateRoadDistanceOriDest(Point ori, Point dest) {
+        // FUNCIONA -> distance contiene la distancia por carretera
+
+        String url = "https://maps.googleapis.com/maps/api/distancematrix/json";
+        url += "?origins=" + ori.lat.toString() + "%2C" + ori.lon.toString();
+        url += "&destinations=" + dest.lat.toString() + "%2C" + dest.lon.toString();
+        url += "&key=" + "";
+
+        //String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=41.069389%2C1.087369&destinations=41.700801%2C2.847613&key=API_KEY";
+        URI uri = URI.create(url);
         HttpGet request = new HttpGet(uri);
         CloseableHttpClient httpClient = HttpClients.createDefault();
+        String distance = "-1";
         try {
             CloseableHttpResponse response = httpClient.execute(request);
-            HttpEntity entity = response.getEntity();
+            //HttpEntity entity = response.getEntity();
             String json_string = EntityUtils.toString(response.getEntity());
             JSONObject temp1 = new JSONObject(json_string);
-            String distance = temp1.getJSONArray("rows").getJSONObject(0).getJSONArray("elements").getJSONObject(0).getJSONObject("distance").get("value").toString();
-            System.out.println("Distance from google= " + distance);
+            JSONArray rows = temp1.getJSONArray("rows");
+            distance = temp1.getJSONArray("rows").getJSONObject(0).getJSONArray("elements").getJSONObject(0).getJSONObject("distance").get("value").toString();
         } catch (IOException e) {
             e.printStackTrace();
         }
-         */
+        return Integer.parseInt(distance);
     }
 
     //Pensado para el rectangulo naive
     static boolean inRectangle(Rectangle rectangle, Point point) {
-        System.out.println("       " + point.lat + ", " + point.lon);
+        //System.out.println("       " + point.lat + ", " + point.lon);
         if (point.lat > rectangle.TR.lat || point.lat < rectangle.BL.lat ||
             point.lon > rectangle.BR.lon || point.lon < rectangle.BL.lon) return false;
         return true;
+    }
+
+    static Rectangle buildRectangle(Point ori, Point dest) {
+        Rectangle rectangle = new Rectangle();
+        //Offset de 0.065 añadido para asegurar una area minima de busqueda
+        rectangle.BL.lat = Math.min(ori.lat, dest.lat) - 0.065; rectangle.BL.lon = Math.min(ori.lon, dest.lon) - 0.065;
+        rectangle.BR.lat = Math.min(ori.lat, dest.lat) - 0.065; rectangle.BR.lon = Math.max(ori.lon, dest.lon) + 0.065;
+        rectangle.TR.lat = Math.max(ori.lat, dest.lat) + 0.065; rectangle.TR.lon = Math.max(ori.lon, dest.lon) + 0.065;
+        rectangle.TL.lat = Math.max(ori.lat, dest.lat) + 0.065; rectangle.TL.lon = Math.min(ori.lon, dest.lon) - 0.065;
+        return rectangle;
     }
 
     static ArrayList<Point> selectPossibleChargers(ArrayList<Point> chargers, Point ori, Point dest) {
@@ -74,11 +101,7 @@ public class RouteCalculation {
 
         //Set rectangle area where chargers should be found
         //First naive version, improve to an oriented rectangle between points
-        Rectangle rectangle = new Rectangle();
-        rectangle.BL.lat = Math.min(ori.lat, dest.lat); rectangle.BL.lon = Math.min(ori.lon, dest.lon);
-        rectangle.BR.lat = Math.min(ori.lat, dest.lat); rectangle.BR.lon = Math.max(ori.lon, dest.lon);
-        rectangle.TR.lat = Math.max(ori.lat, dest.lat); rectangle.TR.lon = Math.max(ori.lon, dest.lon);
-        rectangle.TL.lat = Math.max(ori.lat, dest.lat); rectangle.TL.lon = Math.min(ori.lon, dest.lon);
+        Rectangle rectangle = buildRectangle(ori, dest);
 
         System.out.println("BL = " + rectangle.BL.lat + ", " + rectangle.BL.lon);
         System.out.println("BR = " + rectangle.BR.lat + ", " + rectangle.BR.lon);
@@ -87,38 +110,48 @@ public class RouteCalculation {
 
         ArrayList<Point> candidates = new ArrayList<>();
         for (Point p : chargers) {
-            System.out.println("Checking point: " + p.name);
+            //System.out.println("Checking point: " + p.name);
             if (inRectangle(rectangle, p)) candidates.add(p);
         }
         return candidates;
     }
 
+    static double calculateRoadDistance(Point ori, Point dest, ArrayList<Point> chargers) { //in kilometers
+        return 0;
+    }
+
     public static void main(String[] args) {
-        Point c1 = new Point(); c1.name = "Estació del Nord"; c1.lat = 41.659853; c1.lon = 2.015975;
-        Point c2 = new Point(); c2.name = "Estació de Sans"; c2.lat = 41.379805; c2.lon = 2.141224;
-        Point c3 = new Point(); c3.name = "Cambrils"; c3.lat = 41.069389; c3.lon = 1.087369;
-        Point c4 = new Point(); c4.name = "Buena opcion"; c4.lat = 41.33185; c4.lon = 1.680507;
-        Point c5 = new Point(); c5.name = "Mala opcion"; c5.lat = 41.229957; c5.lon = 1.681126;
-        Point c6 = new Point(); c6.name = "Girona"; c6.lat = 41.069389; c6.lon = 1.08736;
+        Point c1 = new Point(); c1.name = "Terrassa"; c1.lat = 41.659853; c1.lon = 2.015975;
+        Point c2 = new Point(); c2.name = "Barcelona"; c2.lat = 41.379805; c2.lon = 2.141224;
+        Point c3 = new Point(); c3.name = "Salou"; c3.lat = 41.069389; c3.lon = 1.087369;
+        Point c4 = new Point(); c4.name = "Vic"; c4.lat = 41.914522; c4.lon = 2.262188;
+        Point c5 = new Point(); c5.name = "Manresa"; c5.lat = 41.733242; c5.lon = 1.845603;
+        Point c6 = new Point(); c6.name = "Girona"; c6.lat = 41.973401; c6.lon = 2.820924;
         Point c7 = new Point(); c7.name = "Andorra"; c7.lat = 42.497339; c7.lon = 1.507169;
         Point c8 = new Point(); c8.name = "Lleida"; c8.lat = 41.608993; c8.lon = 0.620819;
 
         Point[] list = new Point[]{c1, c2, c3, c4, c5, c6, c7, c8};
         chargers = new ArrayList<>(List.of(list));
 
+
         Point ori = new Point(); ori.name = "Lloret de Mar"; ori.lat = 41.700801; ori.lon = 2.847613;
         Point dest = new Point(); dest.name = "Amposta"; dest.lat = 40.705865; dest.lon = 0.578646;
 
-        range = 150;
+        /*
+        Point ori = new Point(); ori.name = "Lleida"; ori.lat = 41.612853; ori.lon = 0.634403;
+        Point dest = new Point(); dest.name = "Tarrega"; dest.lat = 41.644542; dest.lon = 1.140799;
+        */
+
+        range = 97;
 
         double distance = calculateRawDistance(ori.lon, ori.lat, dest.lon, dest.lat);
-        System.out.println("Distance: " + String.format("%.02f", distance));
+        System.out.println("Raw Distance: " + String.format("%.02f", distance));
 
-        stopsNeeded = (int) (distance/range);
+        double roadDistance = calculateRoadDistanceOriDest(ori, dest)/1000;
+        System.out.println("(API GOOGLE) Road distance: " + roadDistance + " kilometers");
+
+        stopsNeeded = (int) (roadDistance/range);
         System.out.println("Stops needed: " + stopsNeeded);
-
-        double roadDistance = calculateRoadDistance();
-        System.out.println("Road distance: " + roadDistance/1000 + " kilometers");
 
         //List of chargers to consider when computing route
         ArrayList<Point> candidates = selectPossibleChargers(chargers, ori, dest);
@@ -127,6 +160,13 @@ public class RouteCalculation {
             todo pedir a google la matriz de distancia por carretera entre todos los chargers y ori y dest
             Dependiendo del numero de paradas, coger de la matriz las combinacions de origen-chargers-destino
             que sean viables (autonomia y kilometros entre puntos) y de estas coger la mas corta en km
+
+            Por ejemplo: (hacerlo con loop segun n para n >= 2)
+            if (paradas==1)
+                llamar con Origins=ori i Destinations=candidates
+                llamar con Origins=candidates i Destinations=dest
+
+            else if (paradas==2)
         */
     }
 }
