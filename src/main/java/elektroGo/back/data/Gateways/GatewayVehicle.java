@@ -1,8 +1,8 @@
 package elektroGo.back.data.Gateways;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import elektroGo.back.data.Database;
 
 
@@ -131,12 +131,16 @@ public class GatewayVehicle implements Gateway{
 
     public void remove() throws SQLException {
         Database d = Database.getInstance();
-        d.executeSQLUpdate("DELETE FROM VEHICLE WHERE numberPlate=" + numberPlate + ";");
+        Connection c = d.getConnection();
+        PreparedStatement pS = c.prepareStatement("DELETE FROM VEHICLE WHERE numberPlate = ?;");
+        pS.setString(1, numberPlate);
+        pS.executeUpdate();
     }
 
     public String json() {
         ObjectMapper mapper = new ObjectMapper();
         String json = "";
+        mapper.registerModule(new JavaTimeModule());
         try {
             json = mapper.writeValueAsString(this);
         } catch (JsonProcessingException e) {
