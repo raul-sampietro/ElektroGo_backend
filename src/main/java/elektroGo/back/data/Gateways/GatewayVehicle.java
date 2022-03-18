@@ -3,7 +3,6 @@ package elektroGo.back.data.Gateways;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import elektroGo.back.data.Finders.FinderVehicle;
 import elektroGo.back.data.Database;
 
 
@@ -14,7 +13,6 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class GatewayVehicle implements Gateway{
-    private Long id;
     private String brand;
     private String model;
     private String numberPlate;
@@ -22,69 +20,28 @@ public class GatewayVehicle implements Gateway{
     private LocalDate fabricationYear;
     private Integer seats;
     private String imageId;
-    private String userName;
-
-    public String getuserName() {
-        return userName;
-    }
-
-    public void setuserName(String userName) {
-        this.userName = userName;
-    }
-
-    private FinderVehicle fV;
 
     public GatewayVehicle(){}
 
-    public GatewayVehicle(Long id, String brand, String model, String numberPlate, Integer drivingRange, LocalDate fabricationYear, Integer seats, String imageId, String userName, FinderVehicle fV) {
-        this.id = id;
+    public GatewayVehicle(String brand, String model, String numberPlate, Integer drivingRange, LocalDate fabricationYear, Integer seats, String imageId) {
+        setUp(brand, model, numberPlate, drivingRange, fabricationYear, seats);
+        this.imageId = imageId;
+    }
+
+    public GatewayVehicle(String brand, String model, String numberPlate, Integer drivingRange, LocalDate fabricationYear, Integer seats) {
+        setUp(brand, model, numberPlate, drivingRange, fabricationYear, seats);
+    }
+
+    private void setUp(String brand, String model, String numberPlate, Integer drivingRange, LocalDate fabricationYear, Integer seats) {
         this.brand = brand;
         this.model = model;
         this.numberPlate = numberPlate;
         this.drivingRange = drivingRange;
         this.fabricationYear = fabricationYear;
         this.seats = seats;
-        this.imageId = imageId;
-        this.userName = userName;
-        this.fV = fV;
-    }
-
-    public GatewayVehicle(long id, String model, String numberPlate, String userName) {
-        setUp(id, model, numberPlate, userName);
-    }
-
-    public GatewayVehicle(long id, String brand, String model, String numberPlate, int drivingRange, LocalDate fabricationYear, int seats, String imageId, String userName) {
-        setUp(id, model, numberPlate, userName);
-        this.brand = brand;
-        this.drivingRange = drivingRange;
-        this.fabricationYear = fabricationYear;
-        this.seats = seats;
-        this.imageId = imageId;
-    }
-
-    public GatewayVehicle(long id, String brand, String model, String numberPlate, int drivingRange, LocalDate fabricationYear, int seats, String userName) {
-        setUp(id, model, numberPlate, userName);
-        this.brand = brand;
-        this.drivingRange = drivingRange;
-        this.fabricationYear = fabricationYear;
-        this.seats = seats;
-    }
-
-    private void setUp(long id, String model, String numberPlate, String userName) {
-        this.id = id;
-        this.model = model;
-        this.numberPlate = numberPlate;
-        this.userName = userName; //WHEN userName CLASS IMPLEMENTED, CREATE A userName OBJECT HERE
     }
 
     //Getters and setters
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getBrand() {
         return brand;
@@ -144,19 +101,7 @@ public class GatewayVehicle implements Gateway{
 
     //SQL operations
 
-    public void setFullPreparedStatement(PreparedStatement pS) throws SQLException {
-        pS.setLong(1,id);
-        pS.setString(2, brand);
-        pS.setString(3,model);
-        pS.setString(4, numberPlate);
-        if (drivingRange != null) pS.setInt(5,drivingRange); else pS.setString(5, null);
-        if (fabricationYear != null) pS.setDate(6,Date.valueOf(fabricationYear)); else pS.setString(6, null);
-        if (seats != null) pS.setInt(7,seats); else pS.setString(7, null);
-        pS.setString(8, imageId);
-        pS.setString(9, userName);
-    }
-
-    private void setPreparedStatementNoID(PreparedStatement pS) throws SQLException {
+    private void setPreparedStatement(PreparedStatement pS) throws SQLException {
         pS.setString(1, brand);
         pS.setString(2,model);
         pS.setString(3, numberPlate);
@@ -164,14 +109,13 @@ public class GatewayVehicle implements Gateway{
         if (fabricationYear != null) pS.setDate(5,Date.valueOf(fabricationYear)); else pS.setString(5, null);
         if (seats != null) pS.setInt(6,seats); else pS.setString(6, null);
         pS.setString(7, imageId);
-        pS.setString(8, userName);
     }
 
     public void insert() throws SQLException {
         Database d = Database.getInstance();
         Connection c = d.getConnection();
-        PreparedStatement pS = c.prepareStatement("INSERT INTO VEHICLE VALUES (?,?,?,?,?,?,?,?,?); ");
-        setFullPreparedStatement(pS);
+        PreparedStatement pS = c.prepareStatement("INSERT INTO VEHICLE VALUES (?,?,?,?,?,?,?); ");
+        setPreparedStatement(pS);
         pS.executeUpdate();
     }
 
@@ -179,15 +123,15 @@ public class GatewayVehicle implements Gateway{
         Database d = Database.getInstance();
         Connection c = d.getConnection();
         PreparedStatement pS = c.prepareStatement("UPDATE VEHICLE SET brand = ?, model = ?, numberPlate = ?, " +
-                "drivingRange = ?, fabricationYear = ?, seats = ?, imageId = ?, userName = ? ;");
-        setPreparedStatementNoID(pS);
+                "drivingRange = ?, fabricationYear = ?, seats = ?, imageId = ?;");
+        setPreparedStatement(pS);
         pS.executeUpdate();
     }
 
 
     public void remove() throws SQLException {
         Database d = Database.getInstance();
-        d.executeSQLUpdate("DELETE FROM VEHICLE WHERE id=" + id + ";");
+        d.executeSQLUpdate("DELETE FROM VEHICLE WHERE numberPlate=" + numberPlate + ";");
     }
 
     public String json() {
