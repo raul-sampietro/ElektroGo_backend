@@ -20,6 +20,7 @@ public class VehicleController {
             if (fD.findByUserName(userNDriver) != null) {
                 gV.insert();
                 GatewayDriverVehicle gDV = new GatewayDriverVehicle(gV.getNumberPlate(), userNDriver);
+                gDV.insert();
             }
             //Else throw an exception?
         } catch (SQLException e) {
@@ -37,7 +38,7 @@ public class VehicleController {
         }
     }
 
-    @PostMapping("/vehicle/removeDriverVehicle")
+    @PostMapping("/vehicle/deleteDriverVehicle")
     public void removeDriverVehicle(@RequestParam String nPVehicle, @RequestParam String userDriver) {
         FinderDriverVehicle fDV = FinderDriverVehicle.getInstance();
         try {
@@ -66,11 +67,12 @@ public class VehicleController {
     }
 
     @PostMapping("/vehicle/delete")
-    public void deleteVehicle(@RequestParam String numberPlate) {
+    public void deleteVehicle(@RequestParam String numberPlate) { //TEST THIS
         FinderVehicle fV = FinderVehicle.getInstance();
         try {
             GatewayVehicle gV = fV.findByNumberPlate(numberPlate);
             if (gV != null) {
+                System.out.println(gV.json());
                 FinderDriverVehicle fDV = FinderDriverVehicle.getInstance();
                 ArrayList<GatewayDriverVehicle> aL = fDV.findByNumberPlateV(numberPlate);
                 for (GatewayDriverVehicle gDV : aL) gDV.remove();
