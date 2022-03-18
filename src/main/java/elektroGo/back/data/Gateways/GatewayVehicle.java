@@ -3,7 +3,6 @@ package elektroGo.back.data.Gateways;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import elektroGo.back.data.Finders.FinderVehicle;
 import elektroGo.back.data.Database;
 
 
