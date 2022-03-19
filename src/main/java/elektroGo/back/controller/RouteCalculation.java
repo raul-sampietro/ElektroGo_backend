@@ -130,7 +130,7 @@ public class RouteCalculation {
             url += "%7C" + point.lat.toString() + "%2C" + point.lon.toString();
         }
 
-        url += "&key=" + "AIzaSyCYqaBhF93wOe_Rdu-HFNk9-euqhiMhffo";
+        url += "&key=" + "";
 
         //String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=41.069389%2C1.087369&destinations=41.700801%2C2.847613&key=API_KEY";
         URI uri = URI.create(url);
@@ -149,20 +149,63 @@ public class RouteCalculation {
         return rows;
     }
 
+    static void recursiveRoute(int i, int distance, int minDistance, ArrayList<ArrayList<Integer>> matrix, ArrayList<Point> temporal, ArrayList<Point> definitive, ArrayList<Point> candidates, int range) {
+        //matrix[x][0] is always the distance from x to the destination
+        if (matrix.get(i).get(0) > range) { // destination not reachable
+            int distDone = matrix.get(i).get(i+1);
+            temporal.add(candidates.get(i+1));
+            recursiveRoute(i+1, distance+distDone, minDistance, matrix, temporal, definitive, candidates, range);
+        }
+        if (distance < minDistance) {
+            minDistance = distance;
+            definitive = temporal;
+        }
+        temporal = new ArrayList<>();
+    }
+
     static ArrayList<Point> getRoute(Point ori, Point dest, ArrayList<Point> candidates, int stopsNeeded, int range) { //in kilometers
         ArrayList<Point> route = new ArrayList<>();
         candidates.remove(4);
         candidates.remove(3);
         candidates.remove(0);
 
+        range *= 1000;
+
         /*
             matrix es una array de arrays. rows = origins, columns = destinations
             matrix[0][0] es la distancia entre ori y dest
             matrix[1][1], matrix[2][2], etc... es distancia 0
         */
-        JSONArray matrix = calculateRoadDistanceMatrix(ori, dest, candidates);
+        JSONArray jsonArray = calculateRoadDistanceMatrix(ori, dest, candidates);
 
-        
+        //Parsing the matrix returned from the API
+        ArrayList<ArrayList<Integer>> matrix = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); ++i) {
+            JSONArray jsonRow = jsonArray.getJSONObject(0).getJSONArray("elements");
+            ArrayList<Integer> row = new ArrayList<>();
+            for (int j = 0; j < jsonRow.length(); ++j) {
+                row.add((Integer) jsonRow.getJSONObject(j).getJSONObject("distance").get("value"));
+            }
+            matrix.add(row);
+        }
+
+        //get reachable chargers from ori
+        ArrayList<Point> temporal = new ArrayList<>();
+        for (int j = 1; j < matrix.get(0).size(); ++j) {
+            if (matrix.get(0).get(j) < range) {
+                //Reachable
+                temporal.add(candidates.get(j));
+            }
+        }
+
+
+        ArrayList<Point> definitive = new ArrayList<>();
+        recursiveRoute(0,0, Integer.MAX_VALUE, matrix, temporal, definitive, candidates, range);
+
+
+        System.out.println(matrix);
+
+
         return null;
     }
 
@@ -213,6 +256,16 @@ public class RouteCalculation {
                 llamar con Origins=candidates i Destinations=dest
 
             else if (paradas==2)
+
+            Otra opcion a la matriz:
+                Ir paso a paso:
+                    - Empezando por ori, calculando raw distancias hacia los chargers
+                    y cojer a los que se pueda llegar.
+                    (segun el numero de paradas)
+                    - Calcular la distancia de estos chargers a todos los otros que se pueda llegar
+                    (asi hasta que se complete el numero de paradas)
+                    - Acabar calculando la distancia de los puntos de carga anteriores al destino
+                    Escojer de todas las opciones de ruta posible, la que requiera menos distancia total.
         */
 
         ArrayList<Point> route = getRoute(ori, dest, candidates, stopsNeeded, range);
