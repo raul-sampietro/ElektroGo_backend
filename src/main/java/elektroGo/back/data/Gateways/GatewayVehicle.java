@@ -119,12 +119,21 @@ public class GatewayVehicle implements Gateway{
         pS.executeUpdate();
     }
 
+    public void setPreparedStatementNoNP(PreparedStatement pS) throws SQLException {
+        pS.setString(1, brand);
+        pS.setString(2,model);
+        if (drivingRange != null) pS.setInt(3,drivingRange); else pS.setString(3, null);
+        if (fabricationYear != null) pS.setDate(4,Date.valueOf(fabricationYear)); else pS.setString(4, null);
+        if (seats != null) pS.setInt(5,seats); else pS.setString(5, null);
+        pS.setString(6, imageId);
+    }
+
     public void update() throws SQLException {
         Database d = Database.getInstance();
         Connection c = d.getConnection();
-        PreparedStatement pS = c.prepareStatement("UPDATE VEHICLE SET brand = ?, model = ?, numberPlate = ?, " +
+        PreparedStatement pS = c.prepareStatement("UPDATE VEHICLE SET brand = ?, model = ?, " +
                 "drivingRange = ?, fabricationYear = ?, seats = ?, imageId = ?;");
-        setPreparedStatement(pS);
+        setPreparedStatementNoNP(pS);
         pS.executeUpdate();
     }
 
