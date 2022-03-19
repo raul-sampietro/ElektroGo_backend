@@ -48,8 +48,8 @@ public class RouteCalculation {
     }
 
     static double calculateRoadDistanceOriDest(Point ori, Point dest) {
-        // FUNCIONA -> distance contiene la distancia por carretera
-
+        return 259000;
+        /*
         String url = "https://maps.googleapis.com/maps/api/distancematrix/json";
         url += "?origins=" + ori.lat.toString() + "%2C" + ori.lon.toString();
         url += "&destinations=" + dest.lat.toString() + "%2C" + dest.lon.toString();
@@ -71,9 +71,9 @@ public class RouteCalculation {
             e.printStackTrace();
         }
         return Integer.parseInt(distance);
+        */
     }
 
-    //Pensado para el rectangulo naive
     static boolean inRectangle(Rectangle rectangle, Point point) {
         //System.out.println("       " + point.lat + ", " + point.lon);
         if (point.lat > rectangle.TR.lat || point.lat < rectangle.BL.lat ||
@@ -116,8 +116,54 @@ public class RouteCalculation {
         return candidates;
     }
 
-    static double calculateRoadDistance(Point ori, Point dest, ArrayList<Point> chargers) { //in kilometers
-        return 0;
+    static JSONArray calculateRoadDistanceMatrix(Point ori, Point dest, ArrayList<Point> chargers) {
+        String url = "https://maps.googleapis.com/maps/api/distancematrix/json";
+        url += "?origins=" + ori.lat.toString() + "%2C" + ori.lon.toString();
+
+        for (Point point : chargers) {
+            url += "%7C" + point.lat.toString() + "%2C" + point.lon.toString();
+        }
+
+        url += "&destinations=" + dest.lat.toString() + "%2C" + dest.lon.toString();
+
+        for (Point point : chargers) {
+            url += "%7C" + point.lat.toString() + "%2C" + point.lon.toString();
+        }
+
+        url += "&key=" + "AIzaSyCYqaBhF93wOe_Rdu-HFNk9-euqhiMhffo";
+
+        //String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=41.069389%2C1.087369&destinations=41.700801%2C2.847613&key=API_KEY";
+        URI uri = URI.create(url);
+        HttpGet request = new HttpGet(uri);
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        JSONArray rows = new JSONArray();
+        try {
+            CloseableHttpResponse response = httpClient.execute(request);
+            //HttpEntity entity = response.getEntity();
+            String json_string = EntityUtils.toString(response.getEntity());
+            JSONObject temp1 = new JSONObject(json_string);
+            rows = temp1.getJSONArray("rows");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return rows;
+    }
+
+    static ArrayList<Point> getRoute(Point ori, Point dest, ArrayList<Point> candidates, int stopsNeeded, int range) { //in kilometers
+        ArrayList<Point> route = new ArrayList<>();
+        candidates.remove(4);
+        candidates.remove(3);
+        candidates.remove(0);
+
+        /*
+            matrix es una array de arrays. rows = origins, columns = destinations
+            matrix[0][0] es la distancia entre ori y dest
+            matrix[1][1], matrix[2][2], etc... es distancia 0
+        */
+        JSONArray matrix = calculateRoadDistanceMatrix(ori, dest, candidates);
+
+        
+        return null;
     }
 
     public static void main(String[] args) {
@@ -142,7 +188,7 @@ public class RouteCalculation {
         Point dest = new Point(); dest.name = "Tarrega"; dest.lat = 41.644542; dest.lon = 1.140799;
         */
 
-        range = 97;
+        range = 109;
 
         double distance = calculateRawDistance(ori.lon, ori.lat, dest.lon, dest.lat);
         System.out.println("Raw Distance: " + String.format("%.02f", distance));
@@ -168,5 +214,9 @@ public class RouteCalculation {
 
             else if (paradas==2)
         */
+
+        ArrayList<Point> route = getRoute(ori, dest, candidates, stopsNeeded, range);
+
+        System.out.println("Done");
     }
 }
