@@ -37,7 +37,16 @@ public class RouteCalculation {
     static ArrayList<Point> chargers;
     static int stopsNeeded;
     static int range; //in kilometers
+    static ArrayList<ArrayList<Integer>> matrix = new ArrayList<>();
+    static ArrayList<Point> candidates = new ArrayList<>();
+    static ArrayList<Point> definitive = new ArrayList<>();
+    static Integer minDistance;
 
+    // HACER ORIGIN Y DESTINATION VARIBLE DE CLASE
+    // REPASAR TODAS LAS VARIABLES DE LLAMADAS A FUNCIONES
+    // SACAR A UNA CLASE LA LLAMADA A LOS SERVICIOS DE GOOGLE
+    // ACABAR DE ORDENAR TOOD EL CODIGO
+    // EN SU MOMENTO UTILIZAR LOS DATOS DE LA BD
 
     static double calculateRawDistance(Double x1, Double y1, Double x2, Double y2) {
         double p = Math.PI / 180;
@@ -119,17 +128,13 @@ public class RouteCalculation {
     static JSONArray calculateRoadDistanceMatrix(Point ori, Point dest, ArrayList<Point> chargers) {
         String url = "https://maps.googleapis.com/maps/api/distancematrix/json";
         url += "?origins=" + ori.lat.toString() + "%2C" + ori.lon.toString();
-
         for (Point point : chargers) {
             url += "%7C" + point.lat.toString() + "%2C" + point.lon.toString();
         }
-
         url += "&destinations=" + dest.lat.toString() + "%2C" + dest.lon.toString();
-
         for (Point point : chargers) {
             url += "%7C" + point.lat.toString() + "%2C" + point.lon.toString();
         }
-
         url += "&key=" + "";
 
         //String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=41.069389%2C1.087369&destinations=41.700801%2C2.847613&key=API_KEY";
@@ -149,64 +154,50 @@ public class RouteCalculation {
         return rows;
     }
 
-    static void recursiveRoute(int i, int distance, int minDistance, ArrayList<ArrayList<Integer>> matrix, ArrayList<Point> temporal, ArrayList<Point> definitive, ArrayList<Point> candidates, int range) {
-        //matrix[x][0] is always the distance from x to the destination
-        if (matrix.get(i).get(0) > range) { // destination not reachable
-            int distDone = matrix.get(i).get(i+1);
-            temporal.add(candidates.get(i+1));
-            recursiveRoute(i+1, distance+distDone, minDistance, matrix, temporal, definitive, candidates, range);
+    static void backtrack(int i, int distance, ArrayList<Point> temporal) {
+        if (matrix.get(i).get(0) > range) {
+            // Destination not reachable
+            for (int j  = 1; j < matrix.size(); ++j) {
+                int actualDist = matrix.get(i).get(j);
+                if (j > i && actualDist < range) {
+                    temporal.add(candidates.get(j - 1));
+                    backtrack(j, distance + actualDist, temporal);
+                    temporal.clear();
+                }
+            }
         }
-        if (distance < minDistance) {
-            minDistance = distance;
-            definitive = temporal;
+        else {
+            // Destination reachable
+            if (distance < minDistance) {
+                minDistance = distance;
+                definitive = new ArrayList<>(temporal);
+            }
         }
-        temporal = new ArrayList<>();
     }
 
-    static ArrayList<Point> getRoute(Point ori, Point dest, ArrayList<Point> candidates, int stopsNeeded, int range) { //in kilometers
+    static void getRoute(Point ori, Point dest) { //in kilometers
         ArrayList<Point> route = new ArrayList<>();
         candidates.remove(4);
         candidates.remove(3);
-        candidates.remove(0);
-
         range *= 1000;
-
         /*
             matrix es una array de arrays. rows = origins, columns = destinations
             matrix[0][0] es la distancia entre ori y dest
             matrix[1][1], matrix[2][2], etc... es distancia 0
         */
         JSONArray jsonArray = calculateRoadDistanceMatrix(ori, dest, candidates);
-
         //Parsing the matrix returned from the API
-        ArrayList<ArrayList<Integer>> matrix = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); ++i) {
-            JSONArray jsonRow = jsonArray.getJSONObject(0).getJSONArray("elements");
+            JSONArray jsonRow = jsonArray.getJSONObject(i).getJSONArray("elements");
             ArrayList<Integer> row = new ArrayList<>();
             for (int j = 0; j < jsonRow.length(); ++j) {
                 row.add((Integer) jsonRow.getJSONObject(j).getJSONObject("distance").get("value"));
             }
             matrix.add(row);
         }
-
-        //get reachable chargers from ori
+        minDistance = Integer.MAX_VALUE;
         ArrayList<Point> temporal = new ArrayList<>();
-        for (int j = 1; j < matrix.get(0).size(); ++j) {
-            if (matrix.get(0).get(j) < range) {
-                //Reachable
-                temporal.add(candidates.get(j));
-            }
-        }
-
-
-        ArrayList<Point> definitive = new ArrayList<>();
-        recursiveRoute(0,0, Integer.MAX_VALUE, matrix, temporal, definitive, candidates, range);
-
-
-        System.out.println(matrix);
-
-
-        return null;
+        backtrack(0, 0, temporal);
     }
 
     public static void main(String[] args) {
@@ -231,7 +222,7 @@ public class RouteCalculation {
         Point dest = new Point(); dest.name = "Tarrega"; dest.lat = 41.644542; dest.lon = 1.140799;
         */
 
-        range = 109;
+        range = 111;
 
         double distance = calculateRawDistance(ori.lon, ori.lat, dest.lon, dest.lat);
         System.out.println("Raw Distance: " + String.format("%.02f", distance));
@@ -243,7 +234,7 @@ public class RouteCalculation {
         System.out.println("Stops needed: " + stopsNeeded);
 
         //List of chargers to consider when computing route
-        ArrayList<Point> candidates = selectPossibleChargers(chargers, ori, dest);
+        candidates = selectPossibleChargers(chargers, ori, dest);
 
         /*
             todo pedir a google la matriz de distancia por carretera entre todos los chargers y ori y dest
@@ -268,8 +259,7 @@ public class RouteCalculation {
                     Escojer de todas las opciones de ruta posible, la que requiera menos distancia total.
         */
 
-        ArrayList<Point> route = getRoute(ori, dest, candidates, stopsNeeded, range);
-
+        getRoute(ori, dest);
         System.out.println("Done");
     }
 }
