@@ -6,14 +6,11 @@ import elektroGo.back.data.Finders.FinderVehicle;
 import elektroGo.back.data.Gateways.GatewayDriverVehicle;
 import elektroGo.back.data.Gateways.GatewayVehicle;
 import elektroGo.back.exceptions.*;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,12 +24,11 @@ import java.util.ArrayList;
 public class VehicleController {
 
     @PostMapping("/create")
-    public void createVehicle(@RequestBody GatewayVehicle gV, @RequestParam String userNDriver, @RequestParam("imageFile") MultipartFile file ) throws SQLException, IOException {
+    public void createVehicle(@RequestBody GatewayVehicle gV, @RequestParam String userNDriver) throws SQLException {
         FinderDriver fD = FinderDriver.getInstance();
         FinderVehicle fV = FinderVehicle.getInstance();
         if (fV.findByNumberPlate(gV.getNumberPlate()) != null) throw new VehicleAlreadyExists(gV.getNumberPlate());
         if (fD.findByUserName(userNDriver) != null) {
-            System.out.println("Original Image Byte Size - " + file.getBytes().length);
             gV.insert();
             GatewayDriverVehicle gDV = new GatewayDriverVehicle(gV.getNumberPlate(), userNDriver);
             gDV.insert();
