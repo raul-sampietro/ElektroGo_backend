@@ -51,7 +51,7 @@ public class DriverController {
     }
 
     /**
-     * @brief Funció amb metode 'POST' que crearà un Vehicle amb la info requerida
+     * @brief Funció amb metode 'POST' que crearà un Driver amb la info requerida
      * @param gD GatewayDriver amb tota la informació necessaria
      * @pre -
      * @post S'afegeix l'usuari a la BD
