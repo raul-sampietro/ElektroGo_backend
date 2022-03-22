@@ -1,3 +1,11 @@
+/**
+ * @file ChargingStationsController.java
+ * @author Marc Castells
+ * @date 15/03/2022
+ * @brief Implementació del Controller de les estacions de càrrega
+ */
+
+
 package elektroGo.back.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -13,23 +21,24 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * @brief La clase Controller de les estacions de càrrega permetrà la comunicació entre backend i frontend
+ */
 @RestController
 public class ChargingStationsController {
 
+    /**
+     * @brief Metode 'GET' que retorna totes les estacions de càrrega de la base de dades
+     * @pre -
+     * @post -
+     * @return Retorna un array amb l'informació de tots els punts de càrrega
+     */
     @GetMapping("/ChargingStations")
     public String getChargingStations() throws JsonProcessingException, SQLException {
         FinderChargingStations fCS = FinderChargingStations.getInstance();
         ArrayList<GatewayChargingStations> ArrayCS = fCS.findAll();
         ObjectMapper ob = new ObjectMapper();
         return ob.writeValueAsString(ArrayCS);
-    }
-
-    @GetMapping("/ChargingStations/ByID")
-    public String getChargingStation(@RequestParam Integer ChargingStationID) throws JsonProcessingException, SQLException {
-        FinderChargingStations fCS = FinderChargingStations.getInstance();
-        GatewayChargingStations gCS = fCS.findByID(ChargingStationID);
-        ObjectMapper ob = new ObjectMapper();
-        return ob.writeValueAsString(gCS);
     }
 
     @GetMapping("/ChargingStations/ByCoord")
