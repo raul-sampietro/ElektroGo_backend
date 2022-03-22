@@ -78,5 +78,15 @@ public class RestControllerAdvice {
         return ex.getMessage();
     }
 
+    @ExceptionHandler(DriverAlreadyExists.class)
+    public String handleDriverExists(DriverAlreadyExists ex, HttpServletResponse response) {
+        try {
+            response.sendError(439, ex.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ex.getMessage();
+    }
+
 }
 
