@@ -10,7 +10,11 @@ package elektroGo.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import elektroGo.back.data.Finders.FinderDriver;
+import elektroGo.back.data.Finders.FinderUser;
 import elektroGo.back.data.Gateways.GatewayDriver;
+import elektroGo.back.exceptions.DriverNotFound;
+import elektroGo.back.exceptions.UserAlreadyExists;
+import elektroGo.back.exceptions.UserNotFound;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
@@ -29,10 +33,11 @@ public class DriverController {
      * @post -
      * @return Es retorna un String amb la info del usuari demanada
      */
-    @GetMapping("/driver/{userName}")
-    public String getUser(@PathVariable String userName) throws SQLException {
+    @GetMapping("/driver")
+    public String getUser(@RequestParam String userName) throws SQLException {
         FinderDriver fU = FinderDriver.getInstance();
         GatewayDriver gU = fU.findByUserName(userName);
+        if(gU == null)throw new DriverNotFound(userName);
         return gU.json();
     }
 
@@ -57,12 +62,10 @@ public class DriverController {
      * @post S'afegeix l'usuari a la BD
      */
     @PostMapping("/drivers/create")
-    public void createVehicle(@RequestBody GatewayDriver gD) {
-        try {
-            gD.insert();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void createVehicle(@RequestBody GatewayDriver gD) throws SQLException {
+        FinderDriver fU = FinderDriver.getInstance();
+        if (fU.findByUserName(gD.getUserName()) != null) throw new UserAlreadyExists(gD.getUserName());
+        gD.insert();
     }
 
     /**
@@ -77,6 +80,7 @@ public class DriverController {
         try {
             GatewayDriver gD = fD.findByUserName(userName);
             if (gD != null) gD.remove();
+            else throw new DriverNotFound(userName);
         } catch (SQLException e) {
             e.printStackTrace();
         }
