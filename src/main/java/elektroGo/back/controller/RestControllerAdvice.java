@@ -1,6 +1,6 @@
 /**
  * @file RestControllerAdvice.java
- * @author Daniel Pulido
+ * @author Daniel Pulido i Gerard Castell
  * @date 19/03/2022
  * @brief Implementacio del Rest Controller Advice per els codis d'error http.
  */

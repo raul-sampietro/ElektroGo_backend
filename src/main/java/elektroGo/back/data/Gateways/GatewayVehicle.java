@@ -1,3 +1,10 @@
+/**
+ * @file GatewayVehicle.java
+ * @author Daniel Pulido
+ * @date 11/03/2022
+ * @brief Implementacio del Gateway de Vehicle.
+ */
+
 package elektroGo.back.data.Gateways;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -12,26 +19,85 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
+/**
+ * @brief La classe GatewayVehicle implementa el Gateway de Vehicle el qual te els atributs de Vehicle i fa insert/update/delete a la BD
+ */
 public class GatewayVehicle implements Gateway{
+    /**
+     * @brief Marca del Vehicle
+     */
     private String brand;
+    /**
+     * @brief Model del vehicle
+     */
     private String model;
+    /**
+     * @brief Matricula del vehicle
+     */
     private String numberPlate;
+    /**
+     * @brief Autonomia del vehicle
+     */
     private Integer drivingRange;
+    /**
+     * @brief Any de fabricacio del vehicle
+     */
     private LocalDate fabricationYear;
+    /**
+     * @brief Seients del vehicle
+     */
     private Integer seats;
+    /**
+     * @brief Identificador de la imatge del vehicle
+     */
     private String imageId;
 
+    /**
+     * @brief Constructora buida
+     * @post Crea un GatewayVehicle buit
+     */
     public GatewayVehicle(){}
 
+    /**
+     * @brief Constructora de GatewayVehicle amb els parametres indicats a continuacio.
+     * @param brand Marca del vehicle.
+     * @param model Model del vehicle.
+     * @param numberPlate Matricula del vehicle.
+     * @param drivingRange Autonomia del vehicle.
+     * @param fabricationYear Any de fabricacio del vehicle.
+     * @param seats Seients del vehicle.
+     * @param imageId Identificador de la imatge del vehicle.
+     * @post Crea un vehicle amb els parametres indicats previament.
+     */
     public GatewayVehicle(String brand, String model, String numberPlate, Integer drivingRange, LocalDate fabricationYear, Integer seats, String imageId) {
         setUp(brand, model, numberPlate, drivingRange, fabricationYear, seats);
         this.imageId = imageId;
     }
 
+    /**
+     * @brief Constructora de GatewayVehicle amb els parametres indicats a continuacio.
+     * @param brand Marca del vehicle.
+     * @param model Model del vehicle.
+     * @param numberPlate Matricula del vehicle.
+     * @param drivingRange Autonomia del vehicle.
+     * @param fabricationYear Any de fabricacio del vehicle.
+     * @param seats Seients del vehicle.
+     * @post Crea un vehicle amb els parametres indicats previament.
+     */
     public GatewayVehicle(String brand, String model, String numberPlate, Integer drivingRange, LocalDate fabricationYear, Integer seats) {
         setUp(brand, model, numberPlate, drivingRange, fabricationYear, seats);
     }
 
+    /**
+     * @brief Inicialitza els parametres indicats a continuacio.
+     * @param brand Marca del vehicle.
+     * @param model Model del vehicle.
+     * @param numberPlate Matricula del vehicle.
+     * @param drivingRange Autonomia del vehicle.
+     * @param fabricationYear Any de fabricacio del vehicle.
+     * @param seats Seients del vehicle.
+     * @post Inicialitza els l'objecte amb els parametres indicats previament
+     */
     private void setUp(String brand, String model, String numberPlate, Integer drivingRange, LocalDate fabricationYear, Integer seats) {
         this.brand = brand;
         this.model = model;
