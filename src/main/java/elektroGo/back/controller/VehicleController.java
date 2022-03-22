@@ -1,3 +1,10 @@
+/**
+ * @file VehicleController.java
+ * @author Daniel Pulido
+ * @date 15/03/2022
+ * @brief Implementació del Rest Controller de Vehicle.
+ */
+
 package elektroGo.back.controller;
 
 import elektroGo.back.data.Finders.FinderDriver;
@@ -19,10 +26,20 @@ import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * @brief La classe VehicleController mapeja els diferents metodes http de la classe Vehicle.
+ */
 @RestController
 @RequestMapping("/vehicle")
 public class VehicleController {
 
+    /**
+     * @brief Metode per crear un Vehicle donat un json amb la informacio del vehicle excepte la imatge.
+     * @param gV Objecte amb la informacio del vehicle.
+     * @param userNDriver Username del driver del vehicle.
+     * @pre gV i userNDriver no son null.
+     * @post Es crea un nou Vehicle amb la informacio de gV i es relaciona amb el driver identificat amb userNDriver.
+     */
     @PostMapping("/create")
     public void createVehicle(@RequestBody GatewayVehicle gV, @RequestParam String userNDriver) throws SQLException {
         FinderDriver fD = FinderDriver.getInstance();
@@ -37,6 +54,13 @@ public class VehicleController {
 
     }
 
+    /**
+     * @brief Metode per posar imatge al Vehicle identificat per numberPlate.
+     * @param numberPlate Matricula del Vehicle que l'identifica.
+     * @param file Arxiu que conte la imatge.
+     * @pre numberPlate i file no son null.
+     * @post El Vehicle identificat per numberPlate te la imatge continguda a file.
+     */
     @PostMapping("/setImage")
     public void setImage(@RequestParam String numberPlate  ,@RequestParam("image") MultipartFile file) throws IOException, SQLException {
         FinderVehicle fV = FinderVehicle.getInstance();
@@ -68,6 +92,13 @@ public class VehicleController {
         IOUtils.copy(in, response.getOutputStream());
     }*/
 
+    /**
+     * @brief Metode per afegir un driver a un vehicle.
+     * @param nPVehicle Matricula del Vehicle que l'identifica.
+     * @param userDriver Username del driver
+     * @pre nPVehicle i userNDriver no son null
+     * @post Afegeix com a driver el driver identificat per userNDriver al vehicle identificat per nPVehicle
+     */
     @PostMapping("/addDriverVehicle")
     public void addDriverVehicle(@RequestParam String nPVehicle, @RequestParam String userDriver) throws SQLException {
         GatewayDriverVehicle gDV = new GatewayDriverVehicle(nPVehicle,userDriver);
@@ -81,6 +112,13 @@ public class VehicleController {
 
     }
 
+    /**
+     * @brief Metode per eliminar un driver a un vehicle.
+     * @param nPVehicle Matricula del Vehicle que l'identifica.
+     * @param userDriver Username del driver
+     * @pre nPVehicle i userNDriver no son null
+     * @post Elimina com a driver el driver identificat per userNDriver al vehicle identificat per nPVehicle
+     */
     @PostMapping("/deleteDriverVehicle")
     public void removeDriverVehicle(@RequestParam String nPVehicle, @RequestParam String userDriver) {
         FinderDriverVehicle fDV = FinderDriverVehicle.getInstance();
@@ -99,8 +137,13 @@ public class VehicleController {
 
     }
 
-
-        @GetMapping("/read")
+    /**
+     * @brief Metode per llegir un vehicle.
+     * @param numberPlate Matricula del Vehicle que l'identifica.
+     * @pre numberPlate no es null
+     * @return Retorna l'objecte GatewayVehicle identificat per numberPlate
+     */
+    @GetMapping("/read")
     public GatewayVehicle readVehicle(@RequestParam String numberPlate) throws SQLException {
         FinderVehicle fV = FinderVehicle.getInstance();
         GatewayVehicle gV = fV.findByNumberPlate(numberPlate);
@@ -109,6 +152,12 @@ public class VehicleController {
 
     }
 
+    /**
+     * @brief Metode per eliminar un vehicle.
+     * @param numberPlate Matricula del Vehicle que l'identifica.
+     * @pre numberPlate no es null
+     * @post Elimina el Vehicle identificat per numberPlate
+     */
     @PostMapping("/delete")
     public void deleteVehicle(@RequestParam String numberPlate) {
         FinderVehicle fV = FinderVehicle.getInstance();
