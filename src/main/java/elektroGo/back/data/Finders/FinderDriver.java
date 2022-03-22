@@ -28,7 +28,7 @@ public class FinderDriver {
     private static FinderDriver singletonObject;
 
     /**
-     * @brief Creadorà de la clase FinderDriver
+     * @brief Creadora de la clase FinderDriver
      * @pre -
      * @post -
      */
@@ -37,7 +37,7 @@ public class FinderDriver {
 
     //PUBLIC
     /**
-     * @brief Funció que retorna una instáncia Singleton de Finder Driver
+     * @brief Funció que retorna una instancia Singleton de Finder Driver
      * @pre -
      * @post -
      * @return Es retorna un singletonObject per treballar amb aquesta clase

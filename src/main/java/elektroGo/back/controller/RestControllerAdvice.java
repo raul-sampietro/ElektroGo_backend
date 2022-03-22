@@ -103,7 +103,35 @@ public class RestControllerAdvice {
         return ex.getMessage();
     }
 
+    @ExceptionHandler(UserNotFound.class)
+    public String handleUserNotFound(UserNotFound ex, HttpServletResponse response) {
+        try {
+            response.sendError(437, ex.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ex.getMessage();
+    }
 
+    @ExceptionHandler(UserAlreadyExists.class)
+    public String handleUserExists(UserAlreadyExists ex, HttpServletResponse response) {
+        try {
+            response.sendError(438, ex.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ex.getMessage();
+    }
+
+    @ExceptionHandler(DriverAlreadyExists.class)
+    public String handleDriverExists(DriverAlreadyExists ex, HttpServletResponse response) {
+        try {
+            response.sendError(439, ex.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ex.getMessage();
+    }
 
 }
 
