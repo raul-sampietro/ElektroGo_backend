@@ -18,13 +18,13 @@ public class DriverVehicleTest {
 
     private void insertVehicle() throws SQLException {
         GatewayVehicle gV = new GatewayVehicle("testBrand", "testModel", "TestV",
-                666, LocalDate.of(2010, 3, 22), 3);
+                666, 2010, 3);
         gV.insert();
     }
 
     private void insertVehicle2() throws SQLException {
         GatewayVehicle gV = new GatewayVehicle("testBrand", "testModel", "TestV2",
-                666, LocalDate.of(2010, 3, 22), 3);
+                666, 2010, 3);
         gV.insert();
     }
 
