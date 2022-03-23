@@ -2,6 +2,7 @@ package elektroGo.back.data.Finders;
 
 import elektroGo.back.data.Database;
 import elektroGo.back.data.Gateways.GatewayDriverVehicle;
+import elektroGo.back.data.Gateways.GatewayVehicle;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -51,6 +52,24 @@ public class FinderDriverVehicle {
         if (r.next()) gV = createGateway(r);
         return gV;
     }
+
+    public ArrayList<GatewayVehicle> findVehiclesByUser(String userDriver) throws SQLException {
+        Database d = Database.getInstance();
+        Connection conn = d.getConnection();
+        PreparedStatement pS = conn.prepareStatement(
+                "SELECT v.brand, v.model, v.numberPlate , v.drivingRange , v.fabricationYear , v.seats , v.imageId " +
+                "FROM VEHICLE v, DRIVERVEHICLE d " +
+                "WHERE v.numberPlate = d.nPVehicle and d.userDriver = ?;");
+        pS.setString(1,userDriver);
+        ResultSet r = pS.executeQuery();
+        ArrayList<GatewayVehicle> aL = new ArrayList<>();
+        FinderVehicle fV = FinderVehicle.getInstance();
+        while (r.next()) {
+            aL.add(fV.createGateway(r));
+        }
+        return aL;
+    }
+
 
     public ArrayList<GatewayDriverVehicle> findByNumberPlateV(String nPVehicle) throws SQLException {
         GatewayDriverVehicle gDV = null;

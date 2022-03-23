@@ -52,7 +52,7 @@ public class FinderVehicle {
         return gV;
     }
 
-    private GatewayVehicle createGateway(ResultSet r) throws SQLException {
+    public GatewayVehicle createGateway(ResultSet r) throws SQLException {
         String brand = r.getString(1);
         String model = r.getString(2);
         String numberPlate = r.getString(3);
