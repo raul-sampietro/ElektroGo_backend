@@ -1,3 +1,11 @@
+/**
+ * @file DriverTest.java
+ * @author Gerard Castell
+ * @date 12/03/2023
+ * @brief Implementació dels Tests DriverTest
+ */
+
+
 package elektroGo.back;
 
 import elektroGo.back.data.Database;
@@ -13,6 +21,10 @@ import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
+/**
+ * @brief La clase Driver Test es l'encarreaada de fer Testing amb totes les classes que funcionen per els Drivers
+ */
 @SpringBootTest
 public class DriverTest {
     @Test

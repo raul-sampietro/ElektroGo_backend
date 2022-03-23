@@ -1,3 +1,10 @@
+/**
+ * @file FinderVehicle.java
+ * @author Daniel Pulido
+ * @date 11/03/2022
+ * @brief Implementacio del Finder de Vehicle.
+ */
+
 package elektroGo.back.data.Finders;
 
 import elektroGo.back.data.Database;
@@ -5,7 +12,6 @@ import elektroGo.back.data.Gateways.GatewayVehicle;
 
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 
@@ -51,9 +57,7 @@ public class FinderVehicle {
         String model = r.getString(2);
         String numberPlate = r.getString(3);
         int drivingRange = r.getInt(4);
-        Date fabricationYearD = r.getDate(5);
-        LocalDate fabricationYear = null;
-        if (fabricationYearD != null) fabricationYear=  fabricationYearD.toLocalDate();
+        Integer fabricationYear= r.getInt(5);
         int seats = r.getInt(6);
         String imageId = r.getString(7);
         return new GatewayVehicle(brand, model, numberPlate, drivingRange, fabricationYear, seats,imageId);

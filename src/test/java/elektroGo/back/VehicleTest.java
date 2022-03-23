@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -16,7 +14,7 @@ public class VehicleTest {
 
     private GatewayVehicle insertTestVehicleComplet() throws SQLException {
         GatewayVehicle gV = new GatewayVehicle("testBrand", "testModel", "7869",
-                666, LocalDate.of(2010, 3, 22), 3, "idTest");
+                666, 2010, 3, "idTest");
         gV.insert();
         return gV;
     }
@@ -30,12 +28,12 @@ public class VehicleTest {
         String res = gVTest.getBrand() + " " + gVTest.getModel() + " " + gVTest.getNumberPlate() +
                 " "+ gVTest.getDrivingRange() + " " + gVTest.getFabricationYear() + " " + gVTest.getImageId();
         gV.remove();
-        assertEquals("testBrand testModel 7869 666 2010-03-22 idTest", res);
+        assertEquals("testBrand testModel 7869 666 2010 idTest", res);
     }
 
     private GatewayVehicle insertTestVehicle() throws SQLException {
         GatewayVehicle gV = new GatewayVehicle("testBrand", "testModel", "7869",
-                666, LocalDate.of(2010, 3, 22), 3);
+                666, 2010, 3);
         gV.insert();
         return gV;
     }
@@ -49,7 +47,7 @@ public class VehicleTest {
         String res = gVTest.getBrand() + " " + gVTest.getModel() + " " + gVTest.getNumberPlate() +
                 " "+ gVTest.getDrivingRange() + " " + gVTest.getFabricationYear() + " " + gVTest.getImageId();
         gV.remove();
-        assertEquals("testBrand testModel 7869 666 2010-03-22 null", res);
+        assertEquals("testBrand testModel 7869 666 2010 null", res);
     }
 
 
@@ -64,7 +62,7 @@ public class VehicleTest {
             gV = fV.findByNumberPlate(gVIns.getNumberPlate());
             String res = gV.getBrand() + " " + gV.getModel() + " " + gV.getNumberPlate() +
                     " " + gV.getDrivingRange() + " " + gV.getFabricationYear() + " " + gV.getImageId();
-            assertEquals("testBrand testModel 7869 300 2010-03-22 idTest", res);
+            assertEquals("testBrand testModel 7869 300 2010 idTest", res);
         }
         catch (SQLException s) {
             s.printStackTrace();
