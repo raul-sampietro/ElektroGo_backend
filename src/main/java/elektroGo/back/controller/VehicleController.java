@@ -25,6 +25,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @brief La classe VehicleController mapeja els diferents metodes http de la classe Vehicle.
@@ -81,6 +82,12 @@ public class VehicleController {
             throw new IOException("Could not save image file: " + fileName, ioe);
         }
 
+    }
+
+    @GetMapping("/readVehicles")
+    public List<GatewayVehicle> readVehicles(@RequestParam String userName) throws SQLException {
+        FinderDriverVehicle fDV = FinderDriverVehicle.getInstance();
+        return fDV.findVehiclesByUser(userName);
     }
 
     /*
