@@ -13,11 +13,14 @@ import elektroGo.back.data.Finders.FinderVehicle;
 import elektroGo.back.data.Gateways.GatewayDriverVehicle;
 import elektroGo.back.data.Gateways.GatewayVehicle;
 import elektroGo.back.exceptions.*;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -71,7 +74,7 @@ public class VehicleController {
         String fileName = numberPlate+"."+extension;
         gV.setImageId(fileName);
         gV.update();
-        Path uploadPath = Paths.get("src/main/resources/images/vehicle-images/");
+        Path uploadPath = Paths.get("Images/vehicle-images/");
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
@@ -90,14 +93,16 @@ public class VehicleController {
         return fDV.findVehiclesByUser(userName);
     }
 
-    /*
+
     @GetMapping("/getImage")
-    public void getImage(HttpServletResponse response) throws IOException {
-        FileInputStream fIS = new FileInputStream("src/main/resources/images/vehicle-images/TestV.png");
-        InputStream in = new BufferedInputStream(new FileInputStream("user-photos/TestV.png"));
+    public void getImage(HttpServletResponse response, @RequestParam String numberPlate) throws IOException, SQLException {
+        FinderVehicle fV = FinderVehicle.getInstance();
+        GatewayVehicle gV = fV.findByNumberPlate(numberPlate);
+        if (gV == null) throw new VehicleNotFound(numberPlate);
+        InputStream in = new BufferedInputStream(new FileInputStream("Images/vehicle-images/" + gV.getImageId()));
         response.setContentType(MediaType.IMAGE_PNG_VALUE);
         IOUtils.copy(in, response.getOutputStream());
-    }*/
+    }
 
     /**
      * @brief Metode per afegir un driver a un vehicle.
