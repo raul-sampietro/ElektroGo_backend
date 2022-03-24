@@ -196,8 +196,9 @@ public class GatewayVehicle implements Gateway{
         Database d = Database.getInstance();
         Connection c = d.getConnection();
         PreparedStatement pS = c.prepareStatement("UPDATE VEHICLE SET brand = ?, model = ?, " +
-                "drivingRange = ?, fabricationYear = ?, seats = ?, imageId = ?;");
+                "drivingRange = ?, fabricationYear = ?, seats = ?, imageId = ? WHERE numberPlate = ?;");
         setPreparedStatementNoNP(pS);
+        pS.setString(7, numberPlate);
         pS.executeUpdate();
     }
 
