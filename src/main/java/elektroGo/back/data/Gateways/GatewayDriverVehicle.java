@@ -40,11 +40,7 @@ public class GatewayDriverVehicle implements Gateway {
 
     @Override
     public void update() throws SQLException {
-        Database d = Database.getInstance();
-        Connection c = d.getConnection();
-        PreparedStatement pS = c.prepareStatement("UPDATE DRIVERVEHICLE SET nPVehicle = ?, userDriver = ?;");
-        setPreparedStatement(pS);
-        pS.executeUpdate();
+        //Can't update nothing because all atrbiutes are primary key
     }
 
     @Override
