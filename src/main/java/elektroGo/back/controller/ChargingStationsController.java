@@ -1,0 +1,53 @@
+/**
+ * @file ChargingStationsController.java
+ * @author Marc Castells
+ * @date 15/03/2022
+ * @brief Implementacio del Controller de les estacions de càrrega
+ */
+
+package elektroGo.back.controller;
+
+import elektroGo.back.data.Finders.FinderChargingStations;
+import elektroGo.back.data.Gateways.GatewayChargingStations;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+/**
+ * @brief La clase Controller de les estacions de carrega permetrà la comunicació entre backend i frontend
+ */
+@RestController
+public class ChargingStationsController {
+
+    /**
+     * @brief Metode 'GET' que retorna totes les estacions de càrrega de la base de dades
+     * @pre -
+     * @post -
+     * @return Retorna un array amb la informació de tots els punts de càrrega
+     */
+    @GetMapping("/ChargingStations")
+    public ArrayList<GatewayChargingStations> getChargingStations() throws SQLException {
+        FinderChargingStations fCS = FinderChargingStations.getInstance();
+        return fCS.findAll();
+    }
+
+    /**
+     * @brief Metode 'GET' que retorna totes les estacions de càrrega que es trobin dins del quadrat/rectangle format per les coordenades donades
+     * @param latitude1 Latitiud de la primera coordenada
+     * @param longitude1 Longitud de la primera coordenada
+     * @param latitude2 Latitud de la segona coordenada
+     * @param longitude2 Longitud de la segona coordenada
+     * @pre -
+     * @post -
+     * @return Retorna un array amb la informacio de tots els punts de carrega els quals estan situats dins de les coordenades donades
+     */
+    @GetMapping("/ChargingStations/ByCoordinates")
+    public ArrayList<GatewayChargingStations> getChargingStationByCoordinates(@RequestParam BigDecimal latitude1, BigDecimal longitude1, BigDecimal latitude2, BigDecimal longitude2) throws SQLException {
+        FinderChargingStations fCS = FinderChargingStations.getInstance();
+        return fCS.findByCoordinates(latitude1, longitude1, latitude2, longitude2);
+    }
+
+}
