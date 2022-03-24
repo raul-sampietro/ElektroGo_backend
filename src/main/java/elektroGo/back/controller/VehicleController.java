@@ -135,8 +135,13 @@ public class VehicleController {
             if (fV.findByNumberPlate(nPVehicle) == null) throw new VehicleNotFound(nPVehicle);
             if (fD.findByUserName(userDriver) == null) throw new DriverNotFound(userDriver);
             GatewayDriverVehicle gDV = fDV.findByNumberPlateDriver(userDriver, nPVehicle);
-            if ( gDV != null)
+            if ( gDV != null) {
                 gDV.remove();
+                if (fDV.findByNumberPlateV(nPVehicle).isEmpty() ) {
+                    GatewayVehicle gV = fV.findByNumberPlate(nPVehicle);
+                    gV.remove();
+                }
+            }
             else throw new DriverVehicleNotFound(userDriver,nPVehicle);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -171,7 +176,6 @@ public class VehicleController {
         try {
             GatewayVehicle gV = fV.findByNumberPlate(numberPlate);
             if (gV != null) {
-                System.out.println(gV.json());
                 FinderDriverVehicle fDV = FinderDriverVehicle.getInstance();
                 ArrayList<GatewayDriverVehicle> aL = fDV.findByNumberPlateV(numberPlate);
                 for (GatewayDriverVehicle gDV : aL) gDV.remove();
