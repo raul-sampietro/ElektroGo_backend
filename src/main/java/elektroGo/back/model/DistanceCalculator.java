@@ -61,7 +61,6 @@ public class DistanceCalculator {
         for (Point point : chargers) {
             urlDestinations += "%7C" + point.getLatitude().toString() + "%2C" + point.getLongitude().toString();
         }
-        urlKey += "";
         return urlHeader + urlOrigins + urlDestinations + urlKey;
     }
 

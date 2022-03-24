@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/route")
 public class RouteController {
 
     @PostMapping("/calculate")
-    public ArrayList<Point> calculateRoute(@RequestParam int range, @RequestParam Double oriLat, @RequestParam Double oriLon, @RequestParam Double destLat, @RequestParam Double destLon) {
+    public Point[] calculateRoute(@RequestParam int range, @RequestParam Double oriLat, @RequestParam Double oriLon, @RequestParam Double destLat, @RequestParam Double destLon) {
         RouteCalculation routeCalculation = new RouteCalculation(range, oriLat, oriLon, destLat, destLon);
         routeCalculation.execute();
         return routeCalculation.getResult();

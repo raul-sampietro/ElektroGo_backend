@@ -90,22 +90,22 @@ public class RouteCalculation {
         selectPossibleChargers();
     }
 
-    // TODO EN SU MOMENTO UTILIZAR LOS DATOS DE LA BD
     /**
      * @brief Funcio que obte de la base de dades totes les estacions de carrega
      * @post L'atribut  \p chargers conte la llista de totes les estacions de carrega
      */
     private void obtainAllChargers() {
-        Point c1 = new Point("Terrassa", 41.659853, 2.015975);
+        // TODO EN SU MOMENTO UTILIZAR LOS DATOS DE LA BD
+        //Point c1 = new Point("Terrassa", 41.659853, 2.015975);
         Point c2 = new Point("Barcelona", 41.379805, 2.141224);
         Point c3 = new Point("Salou", 41.069389, 1.087369);
         Point c4 = new Point("Vic", 41.914522, 2.262188);
         Point c5 = new Point("Manresa", 41.733242, 1.845603);
         Point c6 = new Point("Girona", 41.973401, 2.820924);
         Point c7 = new Point("Andorra", 42.497339, 1.507169);
-        Point c8 = new Point("Lleida", 41.608993, 0.620819);
+        //Point c8 = new Point("Lleida", 41.608993, 0.620819);
 
-        Point[] list = new Point[]{c1, c2, c3, c4, c5, c6, c7, c8};
+        Point[] list = new Point[]{/*c1,*/ c2, c3, c4, c5, c6, c7/*,c8*/};
         chargers = new ArrayList<>(List.of(list));
     }
 
@@ -117,8 +117,9 @@ public class RouteCalculation {
      * @return Retorna cert si el \p punt esta dintre de l'area delimitada pel \p rectangle, fals en cas contrari
      */
     private boolean inRectangle(Rectangle rectangle, Point point) {
-        return point.getLatitude() <= rectangle.TR.getLatitude() && point.getLatitude() >= rectangle.BL.getLatitude() &&
-                point.getLongitude() <= rectangle.BR.getLongitude() && point.getLongitude() >= rectangle.BL.getLongitude();
+        if (point.getLatitude() > rectangle.TR.getLatitude() || point.getLatitude() < rectangle.BL.getLatitude() ||
+                point.getLongitude() > rectangle.BR.getLongitude() || point.getLongitude() < rectangle.BL.getLongitude()) return false;
+        return true;
     }
 
     /**
@@ -131,9 +132,9 @@ public class RouteCalculation {
         Rectangle rectangle = new Rectangle();
         //Offset de 0.065 añadido para asegurar una area minima de busqueda
         rectangle.BL = new Point(Math.min(ori.getLatitude(), dest.getLatitude()) - 0.065, Math.min(ori.getLongitude(), dest.getLongitude()) - 0.065);
-        rectangle.BR = new Point(Math.min(ori.getLatitude(), dest.getLatitude()) - 0.065, Math.min(ori.getLongitude(), dest.getLongitude()) + 0.065);
-        rectangle.TR = new Point(Math.min(ori.getLatitude(), dest.getLatitude()) + 0.065, Math.min(ori.getLongitude(), dest.getLongitude()) + 0.065);
-        rectangle.TL = new Point(Math.min(ori.getLatitude(), dest.getLatitude()) + 0.065, Math.min(ori.getLongitude(), dest.getLongitude()) - 0.065);
+        rectangle.BR = new Point(Math.min(ori.getLatitude(), dest.getLatitude()) - 0.065, Math.max(ori.getLongitude(), dest.getLongitude()) + 0.065);
+        rectangle.TR = new Point(Math.max(ori.getLatitude(), dest.getLatitude()) + 0.065, Math.max(ori.getLongitude(), dest.getLongitude()) + 0.065);
+        rectangle.TL = new Point(Math.max(ori.getLatitude(), dest.getLatitude()) + 0.065, Math.min(ori.getLongitude(), dest.getLongitude()) - 0.065);
         return rectangle;
     }
 
@@ -199,8 +200,8 @@ public class RouteCalculation {
      * @pre S'ha executat abans la funcio execute()
      * @return Retorna la llista de carregadors pels quals s'ha de passar per anar de l'origen al desti
      */
-    public ArrayList<Point> getResult() {
-        return definitive;
+    public Point[] getResult() {
+        return definitive.toArray(new Point[0]);
     }
 
 }
