@@ -1,3 +1,9 @@
+/**
+ * @file GatewayChargingStations.java
+ * @author Marc Castells
+ * @date 13/03/2022
+ * @brief Implementacio del Gateway de les estacions de carrega
+ */
 package elektroGo.back.data.Gateways;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,20 +16,56 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+/**
+ * @brief La classe Gateway de les estacions de carrega que permet crear la classe i comunicar-se amb la base de dades
+ */
 public class GatewayChargingStations {
+
+    /**
+     * @brief Identificador de l'estacio de carrega
+     */
     private Integer id;
+
+    /**
+     * @brief Latitud del punt on esta situada l'estacio de carrega
+     */
     private BigDecimal latitude;
+
+    /**
+     * @brief Longitud del punt on esta situada l'estacio de carrega
+     */
     private BigDecimal longitude;
+
+    /**
+     * @brief Numero de carregadors que hi ha a l'estacio de carrega
+     */
     private Integer numberOfChargers;
 
+    /**
+     * @brief Singleton amb el FinderChargingStations
+     */
     private FinderChargingStations fcs;
 
     //CONSTRUCTORS
 
+    /**
+     * @brief Creadora buida de la classe GatewayChargingStations
+     * @pre -
+     * @post Es crea un GatewayChargingStations buit
+     */
     public GatewayChargingStations() {
 
     }
 
+    /**
+     * @brief Creadora de la classe GatewayChargingStations
+     * @param id Identificador de l'estacio de carrega
+     * @param latitude Latitud del punt on esta situada l'estacio de carrega
+     * @param longitude Longitud del punt on esta situada l'estacio de carrega
+     * @param numberOfChargers Numero de carregadors que hi ha a l'estacio de carrega
+     * @pre -
+     * @post -
+     */
     public GatewayChargingStations(Integer id, BigDecimal latitude, BigDecimal longitude, Integer numberOfChargers) {
         this.id = id;
         this.latitude = latitude;
@@ -66,7 +108,16 @@ public class GatewayChargingStations {
         this.numberOfChargers = numberOfChargers;
     }
 
+
+
     //SQL SENTENCES
+
+    /**
+     * @brief Col·loca tota la info requerida (id, latitude, longitude, numberOfChargers) al PreparedStatement
+     * @param pS PreparedStatement al que volem col·locar la info
+     * @pre S'ens passa un pS
+     * @post el pS queda assignat amb la info requerida
+     */
     private void setFullPreparedStatement(PreparedStatement pS) throws SQLException {
         pS.setInt(1,id);
         pS.setBigDecimal(2, latitude);
@@ -74,12 +125,23 @@ public class GatewayChargingStations {
         if (numberOfChargers != null) pS.setInt(4,numberOfChargers); else pS.setString(4, null);
     }
 
+    /**
+     * @brief Col·loca tota la info requerida (latitude, longitude, numberOfChargers) al PreparedStatement
+     * @param pS PreparedStatement al que volem col·locar la info
+     * @pre S'ens passa un pS
+     * @post el pS queda assignat amb la info requerida
+     */
     private void setPreparedStatementNoID(PreparedStatement pS) throws SQLException {
         pS.setBigDecimal(1, latitude);
         pS.setBigDecimal(2,longitude);
         if (numberOfChargers != null) pS.setInt(3,numberOfChargers); else pS.setString(3, null);
     }
 
+    /**
+     * @brief Funció d'insertar l'estacio de carrega a la base de dades
+     * @pre -
+     * @post Queda l'estacio de carrega afegida a la base de dades
+     */
     public void insert() throws SQLException {
         Database d = Database.getInstance();
         Connection c = d.getConnection();
@@ -88,6 +150,11 @@ public class GatewayChargingStations {
         pS.executeUpdate();
     }
 
+    /**
+     * @brief Funció que actualitza l'estacio de carrega a la base de dades
+     * @pre -
+     * @post Queda l'estacio de carrega actualitzada a la base de dades
+     */
     public void update() throws SQLException {
         Database d = Database.getInstance();
         Connection c = d.getConnection();
@@ -98,12 +165,22 @@ public class GatewayChargingStations {
         pS.executeUpdate();
     }
 
-
+    /**
+     * @brief Funció que elimina l'estacio de carrega de la base de dades
+     * @pre -
+     * @post L'estacio de carrega es eliminada de la base de dades
+     */
     public void remove() throws SQLException {
         Database d = Database.getInstance();
         d.executeSQLUpdate("DELETE FROM CHARGINGSTATIONS WHERE id=" + id + ";");
     }
 
+    /**
+     * @brief Funcio converteix en un String json un GatewayChargingStation
+     * @pre -
+     * @post El GatewayChargingStation esta en format String json
+     * @return Es retorna el String Json amb la info del GatewayChargingStation
+     */
     public String json() {
         ObjectMapper mapper = new ObjectMapper();
         String json = "";

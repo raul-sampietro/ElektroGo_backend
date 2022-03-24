@@ -1,18 +1,42 @@
+/**
+ * @file FinderChargingStations.java
+ * @author Marc Castells
+ * @date 13/03/2022
+ * @brief Implementacio del Finder de les estacions de càrrega
+ */
+
 package elektroGo.back.data.Finders;
 
 import elektroGo.back.data.Database;
 import elektroGo.back.data.Gateways.GatewayChargingStations;
-import elektroGo.back.data.Gateways.GatewayVehicle;
-
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 
+
+/**
+ * @brief La classe Finder de les estacions de carrega que ens permet fet totes les cerques a la base de dades
+ */
 public class FinderChargingStations {
+
+    /**
+     * @brief Singleton del Finder
+     */
     private static FinderChargingStations singletonObject;
 
+    /**
+     * @brief Creadora de la clase FinderChargingStations
+     * @pre -
+     * @post -
+     */
     private FinderChargingStations() {}
 
+    /**
+     * @brief Funcio que retorna una instancia Singleton de FinderChargingStations
+     * @pre -
+     * @post -
+     * @return Es retorna un singletonObject per treballar amb aquesta classe
+     */
     public static FinderChargingStations getInstance() {
         if (singletonObject == null) {
             singletonObject = new FinderChargingStations();
@@ -20,8 +44,14 @@ public class FinderChargingStations {
         return singletonObject;
     }
 
+    /**
+     * @brief Retorna tots els punts de carrega que hi ha a la base de dades
+     * @pre -
+     * @post -
+     * @return Retorna un array amb tots els punts de carrega
+     */
     public ArrayList<GatewayChargingStations> findAll() throws SQLException {
-        GatewayChargingStations gV = null;
+        GatewayChargingStations gCS = null;
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
         ArrayList<GatewayChargingStations> aL = new ArrayList<>();
@@ -33,6 +63,13 @@ public class FinderChargingStations {
         return aL;
     }
 
+    /**
+     * @brief Retorna el punt de carrega seguint l'id donat
+     * @param idChargingStation id del punt de carrega
+     * @pre -
+     * @post -
+     * @return Retorna el punt de carrega amb tota la seva informacio
+     */
     public GatewayChargingStations findByID(long idChargingStation) throws SQLException {
         GatewayChargingStations gCS = null;
         Database d = Database.getInstance();
@@ -45,6 +82,16 @@ public class FinderChargingStations {
         return gCS;
     }
 
+    /**
+     * @brief Retorna tots els punts de carrega dins del quadrat format per dues coordenades
+     * @param latitude1 latitud de la coordenada superior
+     * @param longitude1 longitud de la coordenada superior
+     * @param latitude2 latitud de la coordenada inferior
+     * @param longitude2 longitud de la coordenada inferior
+     * @pre -
+     * @post -
+     * @return Retorna un array amb tots els punts de carrega que es troben dins les coordenades
+     */
     public ArrayList<GatewayChargingStations> findByCoordinates(BigDecimal latitude1, BigDecimal longitude1, BigDecimal latitude2, BigDecimal longitude2) throws SQLException {
         GatewayChargingStations gCS = null;
         Database d = Database.getInstance();
@@ -64,6 +111,13 @@ public class FinderChargingStations {
         return aL;
     }
 
+    /**
+     * @brief Crear un gateway amb els parametres passats
+     * @param r ResultSet que contindra tots el parametres per poder crear el Gateway (id, longitud, latitude, numberOfChargers)
+     * @pre -
+     * @post -
+     * @return Retorna un GatewayChargingStations amb els parametres donats
+     */
     private GatewayChargingStations createGateway(ResultSet r) throws SQLException {
         Integer id = r.getInt(1);
         BigDecimal longitude = r.getBigDecimal(2);
