@@ -9,7 +9,6 @@ package elektroGo.back.data.Gateways;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import elektroGo.back.data.Database;
 
 
@@ -214,7 +213,6 @@ public class GatewayVehicle implements Gateway{
     public String json() {
         ObjectMapper mapper = new ObjectMapper();
         String json = "";
-        mapper.registerModule(new JavaTimeModule());
         try {
             json = mapper.writeValueAsString(this);
         } catch (JsonProcessingException e) {

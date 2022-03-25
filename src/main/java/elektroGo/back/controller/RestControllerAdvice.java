@@ -18,6 +18,17 @@ import javax.servlet.http.HttpServletResponse;
 @org.springframework.web.bind.annotation.RestControllerAdvice
 public class RestControllerAdvice {
 
+
+    private String handleError(RuntimeException ex, HttpServletResponse response, int httpCode) {
+        try {
+            response.sendError(httpCode, ex.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(ex.getClass().getCanonicalName()+": " + ex.getMessage());
+        return ex.getMessage();
+    }
+
     /**
      * @brief Handler per capturar la excepcio DriverNotFound
      * @param ex Excepcio capturada
@@ -27,12 +38,7 @@ public class RestControllerAdvice {
      */
     @ExceptionHandler(DriverNotFound.class)
     public String handleDriverNotFound(DriverNotFound ex, HttpServletResponse response) {
-        try {
-            response.sendError(432, ex.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ex.getMessage();
+        return handleError(ex,response,432);
     }
 
     /**
@@ -44,12 +50,7 @@ public class RestControllerAdvice {
      */
     @ExceptionHandler(DriverVehicleAlreadyExists.class)
     public String handleDriverVehicleAlreadyExists(DriverVehicleAlreadyExists ex, HttpServletResponse response) {
-        try {
-            response.sendError(433, ex.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ex.getMessage();
+        return handleError(ex,response,433);
     }
 
     /**
@@ -61,12 +62,7 @@ public class RestControllerAdvice {
      */
     @ExceptionHandler(DriverVehicleNotFound.class)
     public String handleDriverVehicleNotFound(DriverVehicleNotFound ex, HttpServletResponse response) {
-        try {
-            response.sendError(434, ex.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ex.getMessage();
+        return handleError(ex,response,434);
     }
 
     /**
@@ -78,12 +74,7 @@ public class RestControllerAdvice {
      */
     @ExceptionHandler(VehicleAlreadyExists.class)
     public String handleVehicleAlreadyExists(VehicleAlreadyExists ex, HttpServletResponse response) {
-        try {
-            response.sendError(435, ex.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ex.getMessage();
+        return handleError(ex,response,435);
     }
 
     /**
@@ -95,43 +86,29 @@ public class RestControllerAdvice {
      */
     @ExceptionHandler(VehicleNotFound.class)
     public String handleVehicleNotFound(VehicleNotFound ex, HttpServletResponse response) {
-        try {
-            response.sendError(436, ex.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ex.getMessage();
+        return handleError(ex,response,436);
     }
 
     @ExceptionHandler(UserNotFound.class)
     public String handleUserNotFound(UserNotFound ex, HttpServletResponse response) {
-        try {
-            response.sendError(437, ex.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ex.getMessage();
+        return handleError(ex, response, 437);
     }
 
     @ExceptionHandler(UserAlreadyExists.class)
     public String handleUserExists(UserAlreadyExists ex, HttpServletResponse response) {
-        try {
-            response.sendError(438, ex.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ex.getMessage();
+        return handleError(ex,response,438);
     }
 
     @ExceptionHandler(DriverAlreadyExists.class)
     public String handleDriverExists(DriverAlreadyExists ex, HttpServletResponse response) {
-        try {
-            response.sendError(439, ex.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ex.getMessage();
+        return handleError(ex, response, 439);
     }
+
+    @ExceptionHandler(WrongVehicleInfo.class)
+    public String handleWrongVehicleInfo(WrongVehicleInfo ex, HttpServletResponse response) {
+        return handleError(ex, response, 440);
+    }
+
 
 }
 
