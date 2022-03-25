@@ -18,7 +18,13 @@ import javax.servlet.http.HttpServletResponse;
 @org.springframework.web.bind.annotation.RestControllerAdvice
 public class RestControllerAdvice {
 
-
+    /**
+     * @brief Metode que extreu el comportament comu de tots els handlers
+     * @param ex Excepcio capturada
+     * @param response Response http per setejar els codis d'error
+     * @post Envia l'error http corresponent al client
+     * @return Retorna l'error de la excepcio
+     */
     private String handleError(RuntimeException ex, HttpServletResponse response, int httpCode) {
         try {
             response.sendError(httpCode, ex.getMessage());
@@ -104,6 +110,13 @@ public class RestControllerAdvice {
         return handleError(ex, response, 439);
     }
 
+    /**
+     * @brief Handler per capturar la excepcio WrongVehicleInfo
+     * @param ex Excepcio capturada
+     * @param response Response http per setejar els codis d'error
+     * @post Envia l'error http corresponent al client
+     * @return Retorna l'error de la excepcio
+     */
     @ExceptionHandler(WrongVehicleInfo.class)
     public String handleWrongVehicleInfo(WrongVehicleInfo ex, HttpServletResponse response) {
         return handleError(ex, response, 440);

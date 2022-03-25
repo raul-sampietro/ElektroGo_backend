@@ -164,6 +164,12 @@ public class GatewayVehicle implements Gateway{
 
     //SQL operations
 
+    /**
+     * @brief Operacio per setejar un prepared statement amb els atributs de l'objecte
+     * @pre pS conte una sentencia SQL amb prepared statement a la qual falten per establir tots els parametres els quals son els atributs de la classe en l'ordre en que es declaren
+     * @param pS Objecte prepared statement amb una sentencia SQL
+     * @post Estableix els parametres de la sentencia SQL de pS amb els atributs de l'objecte
+     */
     private void setPreparedStatement(PreparedStatement pS) throws SQLException {
         pS.setString(1, brand);
         pS.setString(2,model);
@@ -174,14 +180,12 @@ public class GatewayVehicle implements Gateway{
         pS.setString(7, imageId);
     }
 
-    public void insert() throws SQLException {
-        Database d = Database.getInstance();
-        Connection c = d.getConnection();
-        PreparedStatement pS = c.prepareStatement("INSERT INTO VEHICLE VALUES (?,?,?,?,?,?,?); ");
-        setPreparedStatement(pS);
-        pS.executeUpdate();
-    }
-
+    /**
+     * @brief Operacio per setejar un prepared statement amb els atributs de l'objecte
+     * @pre pS conte una sentencia SQL amb prepared statement a la qual falten per establir tots els parametres els quals son els atributs de la classe en l'ordre en que es declaren sense la matricula
+     * @param pS Objecte prepared statement amb una sentencia SQL
+     * @post Estableix els parametres de la sentencia SQL de pS amb els atributs de l'objecte
+     */
     public void setPreparedStatementNoNP(PreparedStatement pS) throws SQLException {
         pS.setString(1, brand);
         pS.setString(2,model);
@@ -191,6 +195,24 @@ public class GatewayVehicle implements Gateway{
         pS.setString(6, imageId);
     }
 
+    /**
+     * @brief Insert de l'objecte en la BD
+     * @pre Els atributs de l'objecte no son nuls
+     * @post Es fa un insert en la BD amb els atributs de l'objecte
+     */
+    public void insert() throws SQLException {
+        Database d = Database.getInstance();
+        Connection c = d.getConnection();
+        PreparedStatement pS = c.prepareStatement("INSERT INTO VEHICLE VALUES (?,?,?,?,?,?,?); ");
+        setPreparedStatement(pS);
+        pS.executeUpdate();
+    }
+
+    /**
+     * @brief Update de l'objecte en la BD
+     * @pre Els atributs de l'objecte no son nuls
+     * @post Es fa un update en la BD amb els atributs de l'objecte
+     */
     public void update() throws SQLException {
         Database d = Database.getInstance();
         Connection c = d.getConnection();
@@ -201,7 +223,11 @@ public class GatewayVehicle implements Gateway{
         pS.executeUpdate();
     }
 
-
+    /**
+     * @brief Borra l'objecte de la BD
+     * @pre Els atributs de l'objecte no son nuls
+     * @post L'objecte es esborrat de la BD
+     */
     public void remove() throws SQLException {
         Database d = Database.getInstance();
         Connection c = d.getConnection();
@@ -210,6 +236,11 @@ public class GatewayVehicle implements Gateway{
         pS.executeUpdate();
     }
 
+    /**
+     * @brief Passa l'objecte a JSON
+     * @pre cert
+     * @return Retorna l'objecte en format JSON amb un String
+     */
     public String json() {
         ObjectMapper mapper = new ObjectMapper();
         String json = "";

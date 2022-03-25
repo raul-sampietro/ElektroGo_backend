@@ -92,13 +92,25 @@ public class VehicleController {
 
     }
 
+    /**
+     * @brief Metode per llegir els Vehicle de l'usuari "userName"
+     * @param userName userName del driver del que es volen saber els seus vehicles
+     * @pre userName no es null
+     * @return Llistat de vehicles de l'usuari "userName"
+     */
     @GetMapping("/readVehicles")
     public List<GatewayVehicle> readVehicles(@RequestParam String userName) throws SQLException {
         FinderDriverVehicle fDV = FinderDriverVehicle.getInstance();
         return fDV.findVehiclesByUser(userName);
     }
 
-
+    /**
+     * @brief Metode per rebre la imatge del Vehicle identificat per numberPlate.
+     * @param response resposta http on es posa la imatge
+     * @param numberPlate Matricula del Vehicle que l'identifica.
+     * @pre numberPlate es son null.
+     * @post La imatge demanada esta al response, per tant el client la rep
+     */
     @GetMapping("/getImage")
     public void getImage(HttpServletResponse response, @RequestParam String numberPlate) throws IOException, SQLException {
         FinderVehicle fV = FinderVehicle.getInstance();
@@ -178,7 +190,7 @@ public class VehicleController {
      * @brief Metode per eliminar un vehicle.
      * @param numberPlate Matricula del Vehicle que l'identifica.
      * @pre numberPlate no es null
-     * @post Elimina el Vehicle identificat per numberPlate
+     * @post Elimina el Vehicle identificat per numberPlate i les associacions que tenia amb drivers
      */
     @PostMapping("/delete")
     public void deleteVehicle(@RequestParam String numberPlate) {
