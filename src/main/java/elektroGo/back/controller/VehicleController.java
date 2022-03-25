@@ -42,20 +42,25 @@ public class VehicleController {
      * @param gV Objecte amb la informacio del vehicle.
      * @param userNDriver Username del driver del vehicle.
      * @pre gV i userNDriver no son null.
-     * @post Es crea un nou Vehicle amb la informacio de gV i es relaciona amb el driver identificat amb userNDriver.
+     * @post Es crea un nou Vehicle amb la informacio de gV en cas que no existeixi el vehicle i es relaciona amb el driver identificat amb userNDriver.
      */
     @PostMapping("/create")
     public void createVehicle(@RequestBody GatewayVehicle gV, @RequestParam String userNDriver) throws SQLException {
         FinderDriver fD = FinderDriver.getInstance();
         FinderVehicle fV = FinderVehicle.getInstance();
-        if (fV.findByNumberPlate(gV.getNumberPlate()) != null) throw new VehicleAlreadyExists(gV.getNumberPlate());
-        if (fD.findByUserName(userNDriver) != null) {
-            gV.insert();
-            GatewayDriverVehicle gDV = new GatewayDriverVehicle(gV.getNumberPlate(), userNDriver);
-            gDV.insert();
+        FinderDriverVehicle fDV = FinderDriverVehicle.getInstance();
+        if (fDV.findByNumberPlateDriver(userNDriver, gV.getNumberPlate()) != null) throw new DriverVehicleAlreadyExists(userNDriver, gV.getNumberPlate());
+        if (fD.findByUserName(userNDriver) == null) throw new DriverNotFound(userNDriver);
+        GatewayVehicle gVComp = fV.findByNumberPlate(gV.getNumberPlate());
+        if (gVComp == null) gV.insert();
+        else {
+            //Set gateway ImageId to null so json method of both gateways should return the same String
+            //This change won't affect this Vehicle imageId in database
+            gVComp.setImageId(null);
+            if (!gV.json().equals(gVComp.json())) throw new WrongVehicleInfo(gV.getNumberPlate());
         }
-        else throw new DriverNotFound(userNDriver);
-
+        GatewayDriverVehicle gDV = new GatewayDriverVehicle(gV.getNumberPlate(), userNDriver);
+        gDV.insert();
     }
 
     /**
