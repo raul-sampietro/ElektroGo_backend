@@ -67,7 +67,6 @@ public class RouteCalculation {
      */
     private final DistanceCalculator distanceCalculator = new DistanceCalculator();
 
-    // todo HACER TEST UNITARIOS
     // todo hacer una funcion de inicializacion de la lista de carrgadores para no tener que importarla de la
     //  de la bd cada vez que se quiera calcular una ruta (dejar en la creadora solo obtainAllChargers().
     //  origin, destination, range, candidates, definitive, minDistance y matrix inicializar para cada calculo
