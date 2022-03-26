@@ -43,7 +43,16 @@ public class DistanceCalculator {
     /**
      * @brief Contingut de la url que especifica la API KEY
      */
-    private String urlKey = "&key=";
+    private final String urlKey = "&key=";
+
+    /**
+     * @brief Funcio que inicialitza la part de la url corresponent a les adreces d'origen i desti
+     * @post Aquestes parts de la url queden inicialitzades
+     */
+    private void clearUrl() {
+        urlOrigins = "?origins=";
+        urlDestinations = "&destinations=";
+    }
 
     /**
      * @brief Funcio que crea la url de la API de Google Maps amb l'origen, el desti i les estacions de carrega
@@ -53,6 +62,7 @@ public class DistanceCalculator {
      * @return Retorna la url creada
      */
     private String createUrl(Point ori, Point dest, ArrayList<Point> chargers) {
+        clearUrl();
         urlOrigins += ori.getLatitude().toString() + "%2C" + ori.getLongitude().toString();
         for (Point point : chargers) {
             urlOrigins += "%7C" + point.getLatitude().toString() + "%2C" + point.getLongitude().toString();
