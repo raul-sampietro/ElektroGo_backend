@@ -122,6 +122,18 @@ public class RestControllerAdvice {
         return handleError(ex, response, 440);
     }
 
+    /**
+     * @brief Handler per capturar la excepcio DestinationNotReachable
+     * @param ex Excepcio capturada
+     * @param response Response http per setejar els codis d'error
+     * @post Envia l'error http corresponent al client
+     * @return Retorna l'error de la excepcio
+     */
+    @ExceptionHandler(DestinationNotReachable.class)
+    public String handleDestinationNotReachable(DestinationNotReachable ex, HttpServletResponse response) {
+        return handleError(ex, response, 441);
+    }
+
 
 }
 

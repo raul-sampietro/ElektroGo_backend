@@ -187,11 +187,18 @@ public class RouteCalculation {
      * @pre S'ha executat abans la funcio selectPossibleChargers()
      * @post L'atribut \p definitive conte la llista, en ordre, de carregadors pels quals s'ha de passar per poder fer la ruta entre l'origen i el desti
      */
-    public void execute() {
+    public boolean execute() {
         matrix = distanceCalculator.calculateRoadDistanceMatrix(origin, destination, candidates);
         minDistance = Integer.MAX_VALUE;
         ArrayList<Point> temporal = new ArrayList<>();
         backtrack(0, 0, temporal);
+        if (definitive.size() == 0) {
+            //Check if there is no route possible or the route requires no stops
+            ArrayList<ArrayList<Integer>> aux;
+            aux = distanceCalculator.calculateRoadDistanceMatrix(origin, destination, new ArrayList<>());
+            if (aux.get(0).get(0) > range) return false;
+        }
+        return true;
     }
 
     /**
@@ -199,8 +206,14 @@ public class RouteCalculation {
      * @pre S'ha executat abans la funcio execute()
      * @return Retorna la llista de carregadors pels quals s'ha de passar per anar de l'origen al desti
      */
-    public Point[] getResult() {
-        return definitive.toArray(new Point[0]);
+    public ArrayList<Double> getResult() {
+        Point[] array = definitive.toArray(new Point[0]);
+        ArrayList<Double> result = new ArrayList<>();
+        for (Point p : array) {
+            result.add(p.getLatitude());
+            result.add(p.getLongitude());
+        }
+        return result;
     }
 
 }
