@@ -34,9 +34,12 @@ public class RouteController {
      */
     @GetMapping("/calculate")
     public ArrayList<Double> calculateRoute(@RequestParam Double oriLat, @RequestParam Double oriLon, @RequestParam Double destLat, @RequestParam Double destLon, @RequestParam int range) {
+        throw new DestinationNotReachable();
+        /*
         RouteCalculation routeCalculation = new RouteCalculation(range, oriLat, oriLon, destLat, destLon);
         if (!routeCalculation.execute()) throw new DestinationNotReachable();
         else return routeCalculation.getResult();
+         */
     }
 
 }
