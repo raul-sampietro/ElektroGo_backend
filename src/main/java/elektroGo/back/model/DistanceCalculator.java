@@ -43,7 +43,7 @@ public class DistanceCalculator {
     /**
      * @brief Contingut de la url que especifica la API KEY
      */
-    private final String urlKey = "&key=AIzaSyAtLmtlr7yfJ9y2uhVkD0Te6dmUlfx-VLA";
+    private final String urlKey = "&key=AIzaSyAiyxJ3v3rLn9MjAjNn9WxcbSMlPKQ97RY";
 
     /**
      * @brief Funcio que inicialitza la part de la url corresponent a les adreces d'origen i desti
