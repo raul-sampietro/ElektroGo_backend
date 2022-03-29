@@ -69,7 +69,7 @@ public class VehicleController {
         GatewayDriverVehicle gDV = new GatewayDriverVehicle(gV.getNumberPlate(), userNDriver);
         gDV.insert();
         System.out.println("Relation inserted");
-        System.out.println("End creation vehicle method");
+        System.out.println("End creation vehicle method\n\n\n");
     }
 
     /**
