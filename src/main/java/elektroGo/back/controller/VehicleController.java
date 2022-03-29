@@ -103,7 +103,7 @@ public class VehicleController {
         } catch (IOException ioe) {
             throw new IOException("Could not save image file: " + fileName, ioe);
         }
-        System.out.println("End setting image");
+        System.out.println("End setting image\n\n\n");
 
     }
 
@@ -117,7 +117,7 @@ public class VehicleController {
     public List<GatewayVehicle> readVehicles(@RequestParam String userName) throws SQLException {
         System.out.println("Starting readVehicles method with userName '" + userName + "' ...");
         FinderDriverVehicle fDV = FinderDriverVehicle.getInstance();
-        System.out.println("Returning the vehicles... (End of method)");
+        System.out.println("Returning the vehicles... (End of method)\n\n\n");
         return fDV.findVehiclesByUser(userName);
     }
 
@@ -137,7 +137,7 @@ public class VehicleController {
         InputStream in = new BufferedInputStream(new FileInputStream("Images/vehicle-images/" + gV.getImageId()));
         response.setContentType(MediaType.IMAGE_PNG_VALUE);
         IOUtils.copy(in, response.getOutputStream());
-        System.out.println("getImage method ended");
+        System.out.println("getImage method ended\n\n\n");
     }
 
     /**
@@ -158,7 +158,7 @@ public class VehicleController {
         if (fD.findByUserName(userDriver) == null) throw new DriverNotFound(userDriver);
         if (fDV.findByNumberPlateDriver(userDriver, nPVehicle) != null) throw new DriverVehicleAlreadyExists(userDriver, nPVehicle);
         gDV.insert();
-        System.out.println("addDriverVehicle method ended");
+        System.out.println("addDriverVehicle method ended\n\n\n");
     }
 
     /**
@@ -195,7 +195,7 @@ public class VehicleController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("removeDriverVehicle method ended");
+        System.out.println("removeDriverVehicle method ended\n\n\n");
 
     }
 
@@ -211,7 +211,7 @@ public class VehicleController {
         FinderVehicle fV = FinderVehicle.getInstance();
         GatewayVehicle gV = fV.findByNumberPlate(numberPlate);
         if (gV == null) throw new VehicleNotFound(numberPlate);
-        System.out.println("Returning the vehicle (end of method)");
+        System.out.println("Returning the vehicle (end of method)\n\n\n");
         return gV;
     }
 
@@ -238,6 +238,7 @@ public class VehicleController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        System.out.println("End of method deleteVehicle \n\n\n");
     }
 
 
