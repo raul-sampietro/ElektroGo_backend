@@ -10,7 +10,7 @@ package elektroGo.back.data.Gateways;
 import java.sql.SQLException;
 
 /**
- * @brief La interficie Gateway implementa el Gateway de Vehicle el qual te els atributs de Vehicle i fa insert/update/delete a la BD
+ * @brief La interficie Gateway implementa el Gateway que fa insert/update/delete a la BD
  */
 public interface Gateway {
 

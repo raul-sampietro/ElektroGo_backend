@@ -19,7 +19,7 @@ import java.sql.SQLException;
 /**
  * @brief La classe Gateway de les estacions de carrega que permet crear la classe i comunicar-se amb la base de dades
  */
-public class GatewayChargingStations {
+public class GatewayChargingStations implements Gateway{
 
     /**
      * @brief Identificador de l'estacio de carrega
