@@ -69,7 +69,6 @@ public class GatewayDriverVehicle implements Gateway {
 
     /**
      * @brief No fa res, s'ha de posar perque tots els gateways han de tenir aquesta operacio
-     * @pre cert
      * @post No fa res, ja que tots els atributs de la classe son clau primaria
      */
     public void update() throws SQLException {

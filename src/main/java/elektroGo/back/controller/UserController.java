@@ -27,8 +27,6 @@ public class UserController {
     /**
      * @brief Funció amb metode 'GET' que retorna la informació del user amb el username corresponen
      * @param userName Usuari del que volem agafar la info
-     * @pre -
-     * @post -
      * @return Es retorna un String amb la info del usuari demanada
      */
     @GetMapping("/user")
@@ -41,8 +39,6 @@ public class UserController {
 
     /**
      * @brief Funció amb metode 'GET' que retorna la informació de tots els Users a la BD
-     * @pre -
-     * @post -
      * @return Es retorna un String amb la info dels usuaris
      */
     @GetMapping("/users")
@@ -56,7 +52,6 @@ public class UserController {
     /**
      * @brief Funció amb metode 'POST' que crearà un User amb la info requerida
      * @param gU GatewayUser amb tota la informació necessaria
-     * @pre -
      * @post S'afegeix l'usuari a la BD
      */
     @PostMapping("/users/create")
@@ -69,7 +64,6 @@ public class UserController {
     /**
      * @brief Funció amb metode 'POST' que demana que s'esborri un User de la BD
      * @param userName Usuari que volem eliminar
-     * @pre -
      * @post El usuari s'elimina de la BD
      */
     @PostMapping("/users/delete")

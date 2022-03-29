@@ -19,7 +19,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
- * @brief La classe Gateway Driver es la classe que representa els Drivers i a més fa comunicacions amb la BD
+ * @brief La classe GatewayDriver implementa el Gateway de Driver el qual te els atributs de Driver i fa insert/update/delete a la BD
  */
 public class GatewayDriver implements Gateway{
 
@@ -36,8 +36,8 @@ public class GatewayDriver implements Gateway{
     /**
      * @brief Creadora de la Clase Gateway Driver amb el userName
      * @param userName Usuari del qual volem crear el GW
-     * @pre -
      * @post Es crea un nou GWDriver amb els valors indicats
+     * @return Retorna la instancia del gateway que s'acaba de crear
      */
     public GatewayDriver(String userName) {
         setUp(userName);
@@ -46,7 +46,6 @@ public class GatewayDriver implements Gateway{
     /**
      * @brief Funció encarregada d'assignar els valors username al Driver crear
      * @param userName que assignarem al propi Driver
-     * @pre -
      * @post El userName del Driver s'actualitza
      */
     private void setUp(String userName) {
@@ -74,7 +73,6 @@ public class GatewayDriver implements Gateway{
     }
     /**
      * @brief Funció inserta a la BD un Driver
-     * @pre -
      * @post A la BD queda agefit el Driver
      */
     public void insert() throws SQLException {
@@ -88,7 +86,6 @@ public class GatewayDriver implements Gateway{
     //UNUSED AT THE MOMENT
     /**
      * @brief Funció fa un update a un Driver de la BD
-     * @pre -
      * @post Es fa un Update del Driver
      */
     public void update() throws SQLException {
@@ -101,7 +98,6 @@ public class GatewayDriver implements Gateway{
 
     /**
      * @brief Funció elimina un Driver de la DB
-     * @pre -
      * @post A la BD queda eliminat el Driver
      */
     public void remove() throws SQLException {
@@ -111,7 +107,6 @@ public class GatewayDriver implements Gateway{
 
     /**
      * @brief Funció converteix en un String json un GatewayDriver
-     * @pre -
      * @post El GWDriver esta en format String json
      * @return es retorna el String Json amb la info del GWDriver
      */

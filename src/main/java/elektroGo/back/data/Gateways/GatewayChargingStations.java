@@ -17,7 +17,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
- * @brief La classe Gateway de les estacions de carrega que permet crear la classe i comunicar-se amb la base de dades
+ * @brief La classe GatewayChargingStations implementa el Gateway de ChargingStations el qual te els atributs de ChargingStations i fa insert/update/delete a la BD
  */
 public class GatewayChargingStations implements Gateway{
 
@@ -50,8 +50,7 @@ public class GatewayChargingStations implements Gateway{
 
     /**
      * @brief Creadora buida de la classe GatewayChargingStations
-     * @pre -
-     * @post Es crea un GatewayChargingStations buit
+     * @return Retorna la instancia del gateway que s'acaba de crear
      */
     public GatewayChargingStations() {
 
@@ -63,8 +62,7 @@ public class GatewayChargingStations implements Gateway{
      * @param latitude Latitud del punt on esta situada l'estacio de carrega
      * @param longitude Longitud del punt on esta situada l'estacio de carrega
      * @param numberOfChargers Numero de carregadors que hi ha a l'estacio de carrega
-     * @pre -
-     * @post -
+     * @return Retorna la instancia del gateway que s'acaba de crear
      */
     public GatewayChargingStations(Integer id, BigDecimal latitude, BigDecimal longitude, Integer numberOfChargers) {
         this.id = id;
@@ -139,7 +137,6 @@ public class GatewayChargingStations implements Gateway{
 
     /**
      * @brief Funció d'insertar l'estacio de carrega a la base de dades
-     * @pre -
      * @post Queda l'estacio de carrega afegida a la base de dades
      */
     public void insert() throws SQLException {
@@ -152,7 +149,6 @@ public class GatewayChargingStations implements Gateway{
 
     /**
      * @brief Funció que actualitza l'estacio de carrega a la base de dades
-     * @pre -
      * @post Queda l'estacio de carrega actualitzada a la base de dades
      */
     public void update() throws SQLException {
@@ -167,7 +163,6 @@ public class GatewayChargingStations implements Gateway{
 
     /**
      * @brief Funció que elimina l'estacio de carrega de la base de dades
-     * @pre -
      * @post L'estacio de carrega es eliminada de la base de dades
      */
     public void remove() throws SQLException {
@@ -177,7 +172,6 @@ public class GatewayChargingStations implements Gateway{
 
     /**
      * @brief Funcio converteix en un String json un GatewayChargingStation
-     * @pre -
      * @post El GatewayChargingStation esta en format String json
      * @return Es retorna el String Json amb la info del GatewayChargingStation
      */

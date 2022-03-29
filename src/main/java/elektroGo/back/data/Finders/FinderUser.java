@@ -5,7 +5,6 @@
  * @brief Implementació de la classe FinderUser
  */
 
-
 package elektroGo.back.data.Finders;
 
 import elektroGo.back.data.Gateways.GatewayUser;
@@ -18,28 +17,24 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
- * @brief La classe Finder User es l'encarregada de conectarse amb la BD y retornar GW User.
+ * @brief La classe FinderUser es l'encarregada de conectar-se amb la BD y retornar GW User.
  */
 public class FinderUser {
 
     //PRIVATE
     /**
-     * @brief FinderUser, es un singleton
+     * @brief Singleton del FinderUser
      */
     private static FinderUser singletonObject;
 
     /**
      * @brief Creadorà de la clase FinderUser
-     * @pre -
-     * @post -
      */
     private FinderUser() {}
 
     //PUBLIC
     /**
-     * @brief Funció que retorna una instancia Singleton de Finder User
-     * @pre -
-     * @post -
+     * @brief Funció que retorna una instancia Singleton de FinderUser
      * @return Es retorna un singletonObject per treballar amb aquesta classe
      */
     public static FinderUser getInstance() {
@@ -51,8 +46,6 @@ public class FinderUser {
 
     /**
      * @brief Funció que agafa tots els users de la BD i els posa a un Array
-     * @pre -
-     * @post -
      * @return Es retorna un array de GatewayUsers amb tota la info dels Users
      */
     public ArrayList<GatewayUser> findAll() throws SQLException {
@@ -70,8 +63,6 @@ public class FinderUser {
     /**
      * @brief Funció que agafa un user de la BD i el retorna
      * @param userName Usuari del qual volem agafar la info
-     * @pre -
-     * @post -
      * @return Es retorna un GatewayUser amb tota la info del User
      */
     public GatewayUser findByUserName(String userName) throws SQLException {
@@ -88,8 +79,6 @@ public class FinderUser {
     /**
      * @brief Funció que crea un GatewayUser i el retorna
      * @param r que és un ResultSet amb la info d'un User
-     * @pre -
-     * @post -
      * @return Es retorna un GatewayUser amb tota la info del User creat.
      */
     private GatewayUser createGateway(ResultSet r) throws SQLException {

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 
 /**
- * @brief La classe Finder de les estacions de carrega que ens permet fet totes les cerques a la base de dades
+ * @brief La classe FinderChargingStations es l'encarregada de conectar-se amb la BD y retornar GW Driver
  */
 public class FinderChargingStations {
 
@@ -26,15 +26,11 @@ public class FinderChargingStations {
 
     /**
      * @brief Creadora de la clase FinderChargingStations
-     * @pre -
-     * @post -
      */
     private FinderChargingStations() {}
 
     /**
      * @brief Funcio que retorna una instancia Singleton de FinderChargingStations
-     * @pre -
-     * @post -
      * @return Es retorna un singletonObject per treballar amb aquesta classe
      */
     public static FinderChargingStations getInstance() {
@@ -46,8 +42,6 @@ public class FinderChargingStations {
 
     /**
      * @brief Retorna tots els punts de carrega que hi ha a la base de dades
-     * @pre -
-     * @post -
      * @return Retorna un array amb tots els punts de carrega
      */
     public ArrayList<GatewayChargingStations> findAll() throws SQLException {
@@ -66,8 +60,6 @@ public class FinderChargingStations {
     /**
      * @brief Retorna el punt de carrega seguint l'id donat
      * @param idChargingStation id del punt de carrega
-     * @pre -
-     * @post -
      * @return Retorna el punt de carrega amb tota la seva informacio
      */
     public GatewayChargingStations findByID(long idChargingStation) throws SQLException {
@@ -88,8 +80,6 @@ public class FinderChargingStations {
      * @param longitude1 longitud de la coordenada superior
      * @param latitude2 latitud de la coordenada inferior
      * @param longitude2 longitud de la coordenada inferior
-     * @pre -
-     * @post -
      * @return Retorna un array amb tots els punts de carrega que es troben dins les coordenades
      */
     public ArrayList<GatewayChargingStations> findByCoordinates(BigDecimal latitude1, BigDecimal longitude1, BigDecimal latitude2, BigDecimal longitude2) throws SQLException {
@@ -114,8 +104,6 @@ public class FinderChargingStations {
     /**
      * @brief Crear un gateway amb els parametres passats
      * @param r ResultSet que contindra tots el parametres per poder crear el Gateway (id, longitud, latitude, numberOfChargers)
-     * @pre -
-     * @post -
      * @return Retorna un GatewayChargingStations amb els parametres donats
      */
     private GatewayChargingStations createGateway(ResultSet r) throws SQLException {
