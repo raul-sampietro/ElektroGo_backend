@@ -7,6 +7,11 @@
 
 package elektroGo.back.model;
 
+import elektroGo.back.data.Finders.FinderChargingStations;
+import elektroGo.back.data.Gateways.Gateway;
+import elektroGo.back.data.Gateways.GatewayChargingStations;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,18 +99,19 @@ public class RouteCalculation {
      * @post L'atribut  \p chargers conte la llista de totes les estacions de carrega
      */
     private void obtainAllChargers() {
-        // TODO EN SU MOMENTO UTILIZAR LOS DATOS DE LA BD
-        //Point c1 = new Point("Terrassa", 41.659853, 2.015975);
-        Point c2 = new Point("Barcelona", 41.379805, 2.141224);
-        Point c3 = new Point("Salou", 41.069389, 1.087369);
-        Point c4 = new Point("Vic", 41.914522, 2.262188);
-        Point c5 = new Point("Manresa", 41.733242, 1.845603);
-        Point c6 = new Point("Girona", 41.973401, 2.820924);
-        Point c7 = new Point("Andorra", 42.497339, 1.507169);
-        //Point c8 = new Point("Lleida", 41.608993, 0.620819);
-
-        Point[] list = new Point[]{/*c1,*/ c2, c3, c4, c5, c6, c7/*,c8*/};
-        chargers = new ArrayList<>(List.of(list));
+        FinderChargingStations fCS = FinderChargingStations.getInstance();
+        ArrayList<GatewayChargingStations> gCSs = new ArrayList<>();
+        try {
+            gCSs = fCS.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        ArrayList<Point> temporal = new ArrayList<>();
+        for (GatewayChargingStations g : gCSs) {
+            Point p = new Point(g.getLatitude().doubleValue(), g.getLongitude().doubleValue());
+            temporal.add(p);
+        }
+        chargers = temporal;
     }
 
     /**
