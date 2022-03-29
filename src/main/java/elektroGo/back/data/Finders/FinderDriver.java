@@ -16,7 +16,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 /**
- * @brief La classe Finder Driver es l'encarregada de conectarse amb la BD y retornar GW Driver.
+ * @brief La classe FinderDriver es l'encarregada de conectar-se amb la BD y retornar GW Driver.
  */
 
 public class FinderDriver {
@@ -29,8 +29,6 @@ public class FinderDriver {
 
     /**
      * @brief Creadora de la clase FinderDriver
-     * @pre -
-     * @post -
      */
     private FinderDriver() {
     }
@@ -38,8 +36,6 @@ public class FinderDriver {
     //PUBLIC
     /**
      * @brief Funció que retorna una instancia Singleton de Finder Driver
-     * @pre -
-     * @post -
      * @return Es retorna un singletonObject per treballar amb aquesta clase
      */
     public static FinderDriver getInstance() {
@@ -51,8 +47,6 @@ public class FinderDriver {
 
     /**
      * @brief Funció que agafa tots els drivers de la BD i els posa a un Array
-     * @pre -
-     * @post -
      * @return Es retorna un array de GatewayDrivers amb tota la info dels Drivers
      */
     public ArrayList<GatewayDriver> findAll() throws SQLException {
@@ -70,8 +64,6 @@ public class FinderDriver {
     /**
      * @brief Funció que agafa un drivers de la BD i el retorna
      * @param userName Usuari del qual volem agafar la info
-     * @pre -
-     * @post -
      * @return Es retorna un GatewayDriver amb tota la info del Driver
      */
     public GatewayDriver findByUserName(String userName) throws SQLException {
@@ -88,8 +80,6 @@ public class FinderDriver {
     /**
      * @brief Funció que crea un GatewayDriver i el retorna
      * @param r que es un ResultSet amb la info de un Driver
-     * @pre -
-     * @post -
      * @return Es retorna un GatewayDriver amb tota la info del Driver creat.
      */
     private GatewayDriver createGateway(ResultSet r) throws SQLException {

@@ -17,7 +17,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
- * @brief La classe Gateway User es la classe que representa els Users i a més fa comunicacions amb la BD
+ * @brief La classe GatewayUser implementa el Gateway de User el qual te els atributs de User i fa insert/update/delete a la BD
  */
 public class GatewayUser implements Gateway{
 
@@ -42,7 +42,6 @@ public class GatewayUser implements Gateway{
     /**
      * @brief Creadora de la Clase Gateway User amb el userName
      * @param userName Usuari del qual volem crear el GW
-     * @pre -
      * @post Es crea un nou GWUser amb els valors indicats
      */
     public GatewayUser(String userName, String mail, String password) {
@@ -52,7 +51,6 @@ public class GatewayUser implements Gateway{
     /**
      * @brief Funció encarregada d'assignar els valors username, mail i password al User crear
      * @param userName que assignarem al propi User
-     * @pre -
      * @post El userName del User s'actualitza
      */
     private void setUp(String userName, String mail, String password) {
@@ -103,7 +101,6 @@ public class GatewayUser implements Gateway{
 
     /**
      * @brief Funció inserta a la BD un User
-     * @pre -
      * @post A la BD queda agefit el User
      */
     public void insert() throws SQLException {
@@ -116,7 +113,6 @@ public class GatewayUser implements Gateway{
 
     /**
      * @brief Funció fa un update a un User de la BD
-     * @pre -
      * @post Es fa un Update del User
      */
     public void update() throws SQLException {
@@ -129,7 +125,6 @@ public class GatewayUser implements Gateway{
 
     /**
      * @brief Funció elimina un User de la DB
-     * @pre -
      * @post A la BD queda eliminat el User
      */
     public void remove() throws SQLException {
@@ -139,7 +134,6 @@ public class GatewayUser implements Gateway{
 
     /**
      * @brief Funció converteix en un String json un GatewayDriver
-     * @pre -
      * @post El GWDriver esta en format String json
      * @return es retorna el String Json amb la info del GWDriver
      */

@@ -17,15 +17,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * @brief La clase Controller de les estacions de carrega permetrà la comunicació entre backend i frontend
+ * @brief La classe ChargingStationsController permet la comunicació entre back-end i front-end alhora de tractar les estacions de carrega
  */
 @RestController
 public class ChargingStationsController {
 
     /**
      * @brief Metode 'GET' que retorna totes les estacions de càrrega de la base de dades
-     * @pre -
-     * @post -
      * @return Retorna un array amb la informació de tots els punts de càrrega
      */
     @GetMapping("/ChargingStations")
@@ -40,8 +38,6 @@ public class ChargingStationsController {
      * @param longitude1 Longitud de la primera coordenada
      * @param latitude2 Latitud de la segona coordenada
      * @param longitude2 Longitud de la segona coordenada
-     * @pre -
-     * @post -
      * @return Retorna un array amb la informacio de tots els punts de carrega els quals estan situats dins de les coordenades donades
      */
     @GetMapping("/ChargingStations/ByCoordinates")

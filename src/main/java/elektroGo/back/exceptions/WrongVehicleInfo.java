@@ -1,5 +1,8 @@
 package elektroGo.back.exceptions;
 
+/**
+ * @brief La classe WrongVehicleInfo implementa una RuntimeException
+ */
 public class WrongVehicleInfo  extends RuntimeException{
     public WrongVehicleInfo(){
         super();

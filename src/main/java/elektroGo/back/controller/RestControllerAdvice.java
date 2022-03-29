@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @brief Classe del Rest Controller Advice la qual captura les excepcions i envia els codis d'error corresponents
+ * @brief La classe RestControllerAdvice captura les excepcions i envia els codis d'error corresponents
  */
 @org.springframework.web.bind.annotation.RestControllerAdvice
 public class RestControllerAdvice {
@@ -23,7 +23,7 @@ public class RestControllerAdvice {
      * @param ex Excepcio capturada
      * @param response Response http per setejar els codis d'error
      * @post Envia l'error http corresponent al client
-     * @return Retorna l'error de la excepcio
+     * @return Retorna l'error de l'excepcio
      */
     private String handleError(RuntimeException ex, HttpServletResponse response, int httpCode) {
         try {
@@ -36,11 +36,11 @@ public class RestControllerAdvice {
     }
 
     /**
-     * @brief Handler per capturar la excepcio DriverNotFound
+     * @brief Handler per capturar l'excepcio DriverNotFound
      * @param ex Excepcio capturada
      * @param response Response http per setejar els codis d'error
      * @post Envia l'error http corresponent al client
-     * @return Retorna l'error de la excepcio
+     * @return Retorna l'error de l'excepcio
      */
     @ExceptionHandler(DriverNotFound.class)
     public String handleDriverNotFound(DriverNotFound ex, HttpServletResponse response) {
@@ -48,11 +48,11 @@ public class RestControllerAdvice {
     }
 
     /**
-     * @brief Handler per capturar la excepcio DriverVehicleAlreadyExists
+     * @brief Handler per capturar l'excepcio DriverVehicleAlreadyExists
      * @param ex Excepcio capturada
      * @param response Response http per setejar els codis d'error
      * @post Envia l'error http corresponent al client
-     * @return Retorna l'error de la excepcio
+     * @return Retorna l'error de l'excepcio
      */
     @ExceptionHandler(DriverVehicleAlreadyExists.class)
     public String handleDriverVehicleAlreadyExists(DriverVehicleAlreadyExists ex, HttpServletResponse response) {
@@ -60,11 +60,11 @@ public class RestControllerAdvice {
     }
 
     /**
-     * @brief Handler per capturar la excepcio DriverVehicleNotFound
+     * @brief Handler per capturar l'excepcio DriverVehicleNotFound
      * @param ex Excepcio capturada
      * @param response Response http per setejar els codis d'error
      * @post Envia l'error http corresponent al client
-     * @return Retorna l'error de la excepcio
+     * @return Retorna l'error de l'excepcio
      */
     @ExceptionHandler(DriverVehicleNotFound.class)
     public String handleDriverVehicleNotFound(DriverVehicleNotFound ex, HttpServletResponse response) {
@@ -72,11 +72,11 @@ public class RestControllerAdvice {
     }
 
     /**
-     * @brief Handler per capturar la excepcio VehicleAlreadyExists
+     * @brief Handler per capturar l'excepcio VehicleAlreadyExists
      * @param ex Excepcio capturada
      * @param response Response http per setejar els codis d'error
      * @post Envia l'error http corresponent al client
-     * @return Retorna l'error de la excepcio
+     * @return Retorna l'error de l'excepcio
      */
     @ExceptionHandler(VehicleAlreadyExists.class)
     public String handleVehicleAlreadyExists(VehicleAlreadyExists ex, HttpServletResponse response) {
@@ -84,38 +84,59 @@ public class RestControllerAdvice {
     }
 
     /**
-     * @brief Handler per capturar la excepcio VehicleNotFound
+     * @brief Handler per capturar l'excepcio VehicleNotFound
      * @param ex Excepcio capturada
      * @param response Response http per setejar els codis d'error
      * @post Envia l'error http corresponent al client
-     * @return Retorna l'error de la excepcio
+     * @return Retorna l'error de l'excepcio
      */
     @ExceptionHandler(VehicleNotFound.class)
     public String handleVehicleNotFound(VehicleNotFound ex, HttpServletResponse response) {
         return handleError(ex,response,436);
     }
 
+    /**
+     * @brief Handler per capturar l'excepcio UserNotFound
+     * @param ex Excepcio capturada
+     * @param response Response http per setejar els codis d'error
+     * @post Envia l'error http corresponent al client
+     * @return Retorna l'error de l'excepcio
+     */
     @ExceptionHandler(UserNotFound.class)
     public String handleUserNotFound(UserNotFound ex, HttpServletResponse response) {
         return handleError(ex, response, 437);
     }
 
+    /**
+     * @brief Handler per capturar l'excepcio UserAlreadyExists
+     * @param ex Excepcio capturada
+     * @param response Response http per setejar els codis d'error
+     * @post Envia l'error http corresponent al client
+     * @return Retorna l'error de l'excepcio
+     */
     @ExceptionHandler(UserAlreadyExists.class)
     public String handleUserExists(UserAlreadyExists ex, HttpServletResponse response) {
         return handleError(ex,response,438);
     }
 
+    /**
+     * @brief Handler per capturar l'excepcio DriverAlreadyExists
+     * @param ex Excepcio capturada
+     * @param response Response http per setejar els codis d'error
+     * @post Envia l'error http corresponent al client
+     * @return Retorna l'error de l'excepcio
+     */
     @ExceptionHandler(DriverAlreadyExists.class)
     public String handleDriverExists(DriverAlreadyExists ex, HttpServletResponse response) {
         return handleError(ex, response, 439);
     }
 
     /**
-     * @brief Handler per capturar la excepcio WrongVehicleInfo
+     * @brief Handler per capturar l'excepcio WrongVehicleInfo
      * @param ex Excepcio capturada
      * @param response Response http per setejar els codis d'error
      * @post Envia l'error http corresponent al client
-     * @return Retorna l'error de la excepcio
+     * @return Retorna l'error de l'excepcio
      */
     @ExceptionHandler(WrongVehicleInfo.class)
     public String handleWrongVehicleInfo(WrongVehicleInfo ex, HttpServletResponse response) {
@@ -123,11 +144,11 @@ public class RestControllerAdvice {
     }
 
     /**
-     * @brief Handler per capturar la excepcio DestinationNotReachable
+     * @brief Handler per capturar l'excepcio DestinationNotReachable
      * @param ex Excepcio capturada
      * @param response Response http per setejar els codis d'error
      * @post Envia l'error http corresponent al client
-     * @return Retorna l'error de la excepcio
+     * @return Retorna l'error de l'excepcio
      */
     @ExceptionHandler(DestinationNotReachable.class)
     public String handleDestinationNotReachable(DestinationNotReachable ex, HttpServletResponse response) {

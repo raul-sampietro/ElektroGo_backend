@@ -1,5 +1,8 @@
 package elektroGo.back.exceptions;
 
+/**
+ * @brief La classe DriverAlreadyExists implementa una RuntimeException
+ */
 public class DriverAlreadyExists extends RuntimeException{
 
     public DriverAlreadyExists() {

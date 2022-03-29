@@ -29,8 +29,6 @@ public class DriverController {
     /**
      * @brief Funció amb metode 'GET' que retorna la informació del driver amb el username corresponen
      * @param userName Usuari del que volem agafar la info
-     * @pre -
-     * @post -
      * @return Es retorna un String amb la info del usuari demanada
      */
     @GetMapping("/driver")
@@ -43,8 +41,6 @@ public class DriverController {
 
     /**
      * @brief Funció amb metode 'GET' que retorna la informació de tots els Drivers a la BD
-     * @pre -
-     * @post -
      * @return Es retorna un String amb la info dels usuaris
      */
     @GetMapping("/drivers")
@@ -58,7 +54,6 @@ public class DriverController {
     /**
      * @brief Funció amb metode 'POST' que crearà un Driver amb la info requerida
      * @param gD GatewayDriver amb tota la informació necessaria
-     * @pre -
      * @post S'afegeix l'usuari a la BD
      */
     @PostMapping("/drivers/create")
@@ -71,7 +66,6 @@ public class DriverController {
     /**
      * @brief Funció amb metode 'POST' que demana que s'esborri un Driver de la BD
      * @param userName Usuari que volem eliminar
-     * @pre -
      * @post El usuari s'elimina de la BD
      */
     @PostMapping("/drivers/delete")

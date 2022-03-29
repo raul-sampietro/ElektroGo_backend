@@ -1,5 +1,8 @@
 package elektroGo.back.exceptions;
 
+/**
+ * @brief La classe DriverNotFound implementa una RuntimeException
+ */
 public class DriverNotFound extends RuntimeException {
 
     public DriverNotFound(){
