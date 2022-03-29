@@ -1,5 +1,8 @@
 package elektroGo.back.exceptions;
 
+/**
+ * @brief La classe UserNotFound implementa una RuntimeException
+ */
 public class UserNotFound extends RuntimeException {
 
     public UserNotFound(){
