@@ -46,7 +46,7 @@ public class VehicleController {
      */
     @PostMapping("/create")
     public void createVehicle(@RequestBody GatewayVehicle gV, @RequestParam String userNDriver) throws SQLException {
-        System.out.println("Creating vehicle, vehicle arrived with this information:" + gV.json() + "\nAnd with this userDriver " + userNDriver);
+        System.out.println("\nCreating vehicle, vehicle arrived with this information:" + gV.json() + "\nAnd with username of driver " + "'" +userNDriver+"'");
         FinderDriver fD = FinderDriver.getInstance();
         FinderVehicle fV = FinderVehicle.getInstance();
         FinderDriverVehicle fDV = FinderDriverVehicle.getInstance();
@@ -65,11 +65,11 @@ public class VehicleController {
             if (!gV.json().equals(gVComp.json())) throw new WrongVehicleInfo(gV.getNumberPlate());
         }
         System.out.println("Creating new relation with the vehicle identified by numberPlate = "+ gV.getNumberPlate() +
-                " and driver indentified by username= " + userNDriver);
+                " and driver identified by username = " + userNDriver);
         GatewayDriverVehicle gDV = new GatewayDriverVehicle(gV.getNumberPlate(), userNDriver);
         gDV.insert();
         System.out.println("Relation inserted");
-        System.out.println("End creation vehicle method\n\n\n");
+        System.out.println("End creation vehicle method");
     }
 
     /**
@@ -81,7 +81,7 @@ public class VehicleController {
      */
     @PostMapping("/setImage")
     public void setImage(@RequestParam String numberPlate  ,@RequestParam("image") MultipartFile file) throws IOException, SQLException {
-        System.out.println("Setting image with original filename '" + file.getOriginalFilename() + "' with size "+ file.getSize() + " bytes");
+        System.out.println("\nSetting image with original filename '" + file.getOriginalFilename() + "' with size "+ file.getSize() + " bytes");
         FinderVehicle fV = FinderVehicle.getInstance();
         GatewayVehicle gV = fV.findByNumberPlate(numberPlate);
         if (gV == null) throw new VehicleNotFound(numberPlate);
@@ -103,7 +103,7 @@ public class VehicleController {
         } catch (IOException ioe) {
             throw new IOException("Could not save image file: " + fileName, ioe);
         }
-        System.out.println("End setting image\n\n\n");
+        System.out.println("End setting image");
 
     }
 
@@ -115,9 +115,9 @@ public class VehicleController {
      */
     @GetMapping("/readVehicles")
     public List<GatewayVehicle> readVehicles(@RequestParam String userName) throws SQLException {
-        System.out.println("Starting readVehicles method with userName '" + userName + "' ...");
+        System.out.println("\nStarting readVehicles method with userName '" + userName + "' ...");
         FinderDriverVehicle fDV = FinderDriverVehicle.getInstance();
-        System.out.println("Returning the vehicles... (End of method)\n\n\n");
+        System.out.println("Returning the vehicles... (End of method)");
         return fDV.findVehiclesByUser(userName);
     }
 
@@ -130,14 +130,14 @@ public class VehicleController {
      */
     @GetMapping("/getImage")
     public void getImage(HttpServletResponse response, @RequestParam String numberPlate) throws IOException, SQLException {
-        System.out.println("Starting getImage method");
+        System.out.println("\nStarting getImage method");
         FinderVehicle fV = FinderVehicle.getInstance();
         GatewayVehicle gV = fV.findByNumberPlate(numberPlate);
         if (gV == null) throw new VehicleNotFound(numberPlate);
         InputStream in = new BufferedInputStream(new FileInputStream("Images/vehicle-images/" + gV.getImageId()));
         response.setContentType(MediaType.IMAGE_PNG_VALUE);
         IOUtils.copy(in, response.getOutputStream());
-        System.out.println("getImage method ended\n\n\n");
+        System.out.println("getImage method ended.");
     }
 
     /**
@@ -149,7 +149,7 @@ public class VehicleController {
      */
     @PostMapping("/addDriverVehicle")
     public void addDriverVehicle(@RequestParam String nPVehicle, @RequestParam String userDriver) throws SQLException {
-        System.out.println("Starting addDriverVehicle method...");
+        System.out.println("\nStarting addDriverVehicle method...");
         GatewayDriverVehicle gDV = new GatewayDriverVehicle(nPVehicle,userDriver);
         FinderDriverVehicle fDV = FinderDriverVehicle.getInstance();
         FinderVehicle fV = FinderVehicle.getInstance();
@@ -158,7 +158,7 @@ public class VehicleController {
         if (fD.findByUserName(userDriver) == null) throw new DriverNotFound(userDriver);
         if (fDV.findByNumberPlateDriver(userDriver, nPVehicle) != null) throw new DriverVehicleAlreadyExists(userDriver, nPVehicle);
         gDV.insert();
-        System.out.println("addDriverVehicle method ended\n\n\n");
+        System.out.println("addDriverVehicle method ended");
     }
 
     /**
@@ -170,7 +170,7 @@ public class VehicleController {
      */
     @PostMapping("/deleteDriverVehicle")
     public void removeDriverVehicle(@RequestParam String nPVehicle, @RequestParam String userDriver) {
-        System.out.println("Inicianting the delete of the relation between vehicle with numberPlate '" + nPVehicle + "' and" +
+        System.out.println("\nInicianting the delete of the relation between vehicle with numberPlate '" + nPVehicle + "' and" +
                 "driver '" + userDriver + "' ...");
         FinderDriverVehicle fDV = FinderDriverVehicle.getInstance();
         FinderVehicle fV = FinderVehicle.getInstance();
@@ -195,7 +195,7 @@ public class VehicleController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("removeDriverVehicle method ended\n\n\n");
+        System.out.println("removeDriverVehicle method ended");
 
     }
 
@@ -207,11 +207,11 @@ public class VehicleController {
      */
     @GetMapping("/read")
     public GatewayVehicle readVehicle(@RequestParam String numberPlate) throws SQLException {
-        System.out.println("Starting readVehicle method with numberPlate '" + numberPlate + "' ...");
+        System.out.println("\nStarting readVehicle method with numberPlate '" + numberPlate + "' ...");
         FinderVehicle fV = FinderVehicle.getInstance();
         GatewayVehicle gV = fV.findByNumberPlate(numberPlate);
         if (gV == null) throw new VehicleNotFound(numberPlate);
-        System.out.println("Returning the vehicle (end of method)\n\n\n");
+        System.out.println("Returning the vehicle (end of method)");
         return gV;
     }
 
@@ -223,7 +223,7 @@ public class VehicleController {
      */
     @PostMapping("/delete")
     public void deleteVehicle(@RequestParam String numberPlate) {
-        System.out.println("Intiating deleteVehicle method...");
+        System.out.println("\nIntiating deleteVehicle method...");
         System.out.println("Vehicle that will be deleted is identified by " + numberPlate);
         FinderVehicle fV = FinderVehicle.getInstance();
         try {
@@ -238,7 +238,7 @@ public class VehicleController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("End of method deleteVehicle \n\n\n");
+        System.out.println("End of method deleteVehicle.");
     }
 
 
