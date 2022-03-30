@@ -1,3 +1,10 @@
+/**
+ * @file VehicleAlreadyExists.java
+ * @author Daniel Pulido
+ * @date 12/03/2022
+ * @brief Implementació de l'excepcio VehicleAlreadyExists
+ */
+
 package elektroGo.back.exceptions;
 
 /**

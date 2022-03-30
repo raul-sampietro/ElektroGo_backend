@@ -1,3 +1,10 @@
+/**
+ * @file DriverNotFound.java
+ * @author Gerard Castell
+ * @date 15/03/2023
+ * @brief Implementació de l'excepcio DriverNotFound
+ */
+
 package elektroGo.back.exceptions;
 
 /**

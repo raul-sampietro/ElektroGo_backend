@@ -1,3 +1,10 @@
+/**
+ * @file UserAlreadyExists.java
+ * @author Gerard Castell
+ * @date 12/03/2023
+ * @brief Implementació de l'excepcio UserAlreadyExists
+ */
+
 package elektroGo.back.exceptions;
 
 /**
