@@ -1,8 +1,8 @@
 package elektroGo.back;
 
 import elektroGo.back.data.Database;
-import elektroGo.back.data.Finders.FinderVehicle;
-import elektroGo.back.data.Gateways.GatewayVehicle;
+import elektroGo.back.data.finders.FinderVehicle;
+import elektroGo.back.data.gateways.GatewayVehicle;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

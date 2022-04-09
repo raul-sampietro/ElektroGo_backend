@@ -9,9 +9,9 @@
 package elektroGo.back;
 
 import elektroGo.back.data.Database;
-import elektroGo.back.data.Finders.FinderDriver;
+import elektroGo.back.data.finders.FinderDriver;
 
-import elektroGo.back.data.Gateways.GatewayDriver;
+import elektroGo.back.data.gateways.GatewayDriver;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

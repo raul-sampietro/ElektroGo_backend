@@ -7,15 +7,12 @@
 package elektroGo.back;
 
 import elektroGo.back.data.Database;
-import elektroGo.back.data.Finders.FinderUser;
-import elektroGo.back.data.Finders.FinderVehicle;
-import elektroGo.back.data.Gateways.GatewayUser;
-import elektroGo.back.data.Gateways.GatewayVehicle;
+import elektroGo.back.data.finders.FinderUser;
+import elektroGo.back.data.gateways.GatewayUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 

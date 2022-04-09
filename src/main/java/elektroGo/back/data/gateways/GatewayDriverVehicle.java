@@ -5,7 +5,7 @@
  * @brief Implementacio del Gateway de VehicleDriver.
  */
 
-package elektroGo.back.data.Gateways;
+package elektroGo.back.data.gateways;
 
 import elektroGo.back.data.Database;
 import java.sql.Connection;

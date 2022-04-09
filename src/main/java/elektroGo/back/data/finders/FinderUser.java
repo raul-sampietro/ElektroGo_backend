@@ -5,15 +5,13 @@
  * @brief Implementació de la classe FinderUser
  */
 
-package elektroGo.back.data.Finders;
+package elektroGo.back.data.finders;
 
-import elektroGo.back.data.Gateways.GatewayUser;
-import elektroGo.back.data.Gateways.GatewayVehicle;
+import elektroGo.back.data.gateways.GatewayUser;
 import elektroGo.back.data.Database;
 
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**

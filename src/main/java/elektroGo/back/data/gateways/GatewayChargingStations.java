@@ -4,12 +4,12 @@
  * @date 13/03/2022
  * @brief Implementacio del Gateway de les estacions de carrega
  */
-package elektroGo.back.data.Gateways;
+package elektroGo.back.data.gateways;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import elektroGo.back.data.Database;
-import elektroGo.back.data.Finders.FinderChargingStations;
+import elektroGo.back.data.finders.FinderChargingStations;
 
 import java.math.BigDecimal;
 import java.sql.Connection;

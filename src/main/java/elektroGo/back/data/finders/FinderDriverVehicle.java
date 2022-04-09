@@ -5,11 +5,11 @@
  * @brief Implementacio del Finder de DriverVehicle
  */
 
-package elektroGo.back.data.Finders;
+package elektroGo.back.data.finders;
 
 import elektroGo.back.data.Database;
-import elektroGo.back.data.Gateways.GatewayDriverVehicle;
-import elektroGo.back.data.Gateways.GatewayVehicle;
+import elektroGo.back.data.gateways.GatewayDriverVehicle;
+import elektroGo.back.data.gateways.GatewayVehicle;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

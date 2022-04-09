@@ -4,12 +4,12 @@
  * @date 10/03/2023
  * @brief Implementació de la classe GatewayUser
  */
-package elektroGo.back.data.Gateways;
+package elektroGo.back.data.gateways;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import elektroGo.back.data.Database;
-import elektroGo.back.data.Finders.FinderUser;
+import elektroGo.back.data.finders.FinderUser;
 
 
 import java.sql.Connection;

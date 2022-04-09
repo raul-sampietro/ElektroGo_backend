@@ -1,14 +1,13 @@
 package elektroGo.back;
 
-import elektroGo.back.data.Finders.FinderDriverVehicle;
-import elektroGo.back.data.Finders.FinderVehicle;
-import elektroGo.back.data.Gateways.GatewayDriverVehicle;
-import elektroGo.back.data.Gateways.GatewayVehicle;
+import elektroGo.back.data.finders.FinderDriverVehicle;
+import elektroGo.back.data.finders.FinderVehicle;
+import elektroGo.back.data.gateways.GatewayDriverVehicle;
+import elektroGo.back.data.gateways.GatewayVehicle;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;

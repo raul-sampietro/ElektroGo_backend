@@ -7,11 +7,11 @@
 
 package elektroGo.back.controller;
 
-import elektroGo.back.data.Finders.FinderDriver;
-import elektroGo.back.data.Finders.FinderDriverVehicle;
-import elektroGo.back.data.Finders.FinderVehicle;
-import elektroGo.back.data.Gateways.GatewayDriverVehicle;
-import elektroGo.back.data.Gateways.GatewayVehicle;
+import elektroGo.back.data.finders.FinderDriver;
+import elektroGo.back.data.finders.FinderDriverVehicle;
+import elektroGo.back.data.finders.FinderVehicle;
+import elektroGo.back.data.gateways.GatewayDriverVehicle;
+import elektroGo.back.data.gateways.GatewayVehicle;
 import elektroGo.back.exceptions.*;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.http.MediaType;

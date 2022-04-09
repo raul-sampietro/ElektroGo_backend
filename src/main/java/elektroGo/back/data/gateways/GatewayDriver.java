@@ -5,12 +5,12 @@
  * @brief Implementació de la classe GatewayDriver
  */
 
-package elektroGo.back.data.Gateways;
+package elektroGo.back.data.gateways;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import elektroGo.back.data.Database;
-import elektroGo.back.data.Finders.FinderDriver;
+import elektroGo.back.data.finders.FinderDriver;
 
 
 

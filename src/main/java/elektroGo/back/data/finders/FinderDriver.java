@@ -6,9 +6,9 @@
  */
 
 
-package elektroGo.back.data.Finders;
+package elektroGo.back.data.finders;
 
-import elektroGo.back.data.Gateways.GatewayDriver;
+import elektroGo.back.data.gateways.GatewayDriver;
 import elektroGo.back.data.Database;
 
 

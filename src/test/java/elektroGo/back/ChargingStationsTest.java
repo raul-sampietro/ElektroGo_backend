@@ -1,8 +1,8 @@
 package elektroGo.back;
 
 import elektroGo.back.data.Database;
-import elektroGo.back.data.Finders.FinderChargingStations;
-import elektroGo.back.data.Gateways.GatewayChargingStations;
+import elektroGo.back.data.finders.FinderChargingStations;
+import elektroGo.back.data.gateways.GatewayChargingStations;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

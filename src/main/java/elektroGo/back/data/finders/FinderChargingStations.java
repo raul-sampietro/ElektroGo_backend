@@ -5,10 +5,10 @@
  * @brief Implementacio del Finder de les estacions de càrrega
  */
 
-package elektroGo.back.data.Finders;
+package elektroGo.back.data.finders;
 
 import elektroGo.back.data.Database;
-import elektroGo.back.data.Gateways.GatewayChargingStations;
+import elektroGo.back.data.gateways.GatewayChargingStations;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;

@@ -9,8 +9,8 @@ package elektroGo.back.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import elektroGo.back.data.Finders.FinderUser;
-import elektroGo.back.data.Gateways.GatewayUser;
+import elektroGo.back.data.finders.FinderUser;
+import elektroGo.back.data.gateways.GatewayUser;
 import elektroGo.back.exceptions.UserAlreadyExists;
 import elektroGo.back.exceptions.UserNotFound;
 import org.springframework.web.bind.annotation.*;

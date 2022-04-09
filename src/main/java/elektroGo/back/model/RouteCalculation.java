@@ -7,13 +7,11 @@
 
 package elektroGo.back.model;
 
-import elektroGo.back.data.Finders.FinderChargingStations;
-import elektroGo.back.data.Gateways.Gateway;
-import elektroGo.back.data.Gateways.GatewayChargingStations;
+import elektroGo.back.data.finders.FinderChargingStations;
+import elektroGo.back.data.gateways.GatewayChargingStations;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 class Rectangle {
     Point BL;

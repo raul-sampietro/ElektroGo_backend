@@ -9,12 +9,10 @@ package elektroGo.back.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import elektroGo.back.data.Finders.FinderDriver;
-import elektroGo.back.data.Finders.FinderUser;
-import elektroGo.back.data.Gateways.GatewayDriver;
+import elektroGo.back.data.finders.FinderDriver;
+import elektroGo.back.data.gateways.GatewayDriver;
 import elektroGo.back.exceptions.DriverNotFound;
 import elektroGo.back.exceptions.UserAlreadyExists;
-import elektroGo.back.exceptions.UserNotFound;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;

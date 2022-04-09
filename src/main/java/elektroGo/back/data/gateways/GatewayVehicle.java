@@ -5,7 +5,7 @@
  * @brief Implementacio del Gateway de Vehicle.
  */
 
-package elektroGo.back.data.Gateways;
+package elektroGo.back.data.gateways;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

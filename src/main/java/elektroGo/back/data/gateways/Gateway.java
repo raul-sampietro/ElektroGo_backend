@@ -5,7 +5,7 @@
  * @brief Interficie dels Gateways.
  */
 
-package elektroGo.back.data.Gateways;
+package elektroGo.back.data.gateways;
 
 import java.sql.SQLException;
 
