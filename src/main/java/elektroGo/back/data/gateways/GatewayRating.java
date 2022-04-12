@@ -141,7 +141,7 @@ public class GatewayRating implements Gateway{
     public void update() throws SQLException {
         Database d = Database.getInstance();
         Connection c = d.getConnection();
-        PreparedStatement pS = c.prepareStatement("UPDATE RATING SET points = ?, comment = ?, " +
+        PreparedStatement pS = c.prepareStatement("UPDATE RATING SET points = ?, comment = ?" +
                "WHERE userWhoRates = ? and ratedUser = ?;");
         setPreparedStatementNoPK(pS);
         pS.setString(3, userWhoRates);
