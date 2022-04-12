@@ -76,7 +76,7 @@ public class FinderVehicle {
     /**
      * @brief Crear un gateway amb els parametres passats
      * @param r ResultSet que contindra tots el parametres per poder crear el Gateway (brand, model, numberPlate, drivingRange, fabricationYear, seats, imageId)
-     * @return Retorna un GatewayChargingStations amb els parametres donats
+     * @return Retorna un GatewayVehicle amb els parametres donats
      */
     public GatewayVehicle createGateway(ResultSet r) throws SQLException {
         String brand = r.getString(1);

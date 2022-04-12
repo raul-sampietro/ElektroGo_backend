@@ -1,3 +1,10 @@
+/**
+ * @file GatewayRating.java
+ * @author Daniel Pulido
+ * @date 12/04/2022
+ * @brief Implementacio del Gateway de Rating.
+ */
+
 package elektroGo.back.data.gateways;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -8,13 +15,46 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+/**
+ * @brief La classe GatewayRating implementa el Gateway de Rating el qual te els atributs de Rating i fa insert/update/delete a la BD
+ */
 public class GatewayRating implements Gateway{
 
+    /**
+     * @brief Usuari que fa la valoracio
+     */
     String userWhoRates;
+
+    /**
+     * @brief Usuari valorat
+     */
     String ratedUser;
+
+    /**
+     * @brief Puntuacio de la valoracio
+     */
     int points;
+
+    /**
+     * @brief Comentari de la valoracio
+     */
     String comment;
 
+    /**
+     * @brief Constructora buida
+     * @post Crea un GatewayRating buit
+     */
+    public GatewayRating() {
+    }
+
+    /**
+     * @brief Constructora de GatewayRating amb els parametres indicats a continuacio.
+     * @param userWhoRates Usuari que valora
+     * @param ratedUser Usuari valorat
+     * @param points Puntuacio de la valoracio
+     * @param comment Comentari de la valoracio
+     * @post Es crea un GatewayRating amb els parametres especificats
+     */
     public GatewayRating(String userWhoRates, String ratedUser, int points, String comment) {
         this.userWhoRates = userWhoRates;
         this.ratedUser = ratedUser;
