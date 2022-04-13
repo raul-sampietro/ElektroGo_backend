@@ -31,7 +31,7 @@ public class ChatsController {
      * @return Retorna el llistat de tots els missatges
      */
     @GetMapping("/findAll")
-    public ArrayList<GatewayChats> getAll(@RequestParam String userA, @RequestParam String userB) throws SQLException {
+    public ArrayList<GatewayChats> getAll() throws SQLException {
         FinderChats fC = FinderChats.getInstance();
         return fC.findAll();
     }

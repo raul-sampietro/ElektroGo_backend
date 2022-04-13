@@ -66,7 +66,7 @@ public class FinderChats {
         Connection conn = d.getConnection();
         PreparedStatement pS = conn.prepareStatement("" +
                 "SELECT * FROM CHATS WHERE sender = ? and receiver = ?" +
-                "UNION" +
+                "UNION " +
                 "SELECT * FROM CHATS WHERE sender = ? and receiver = ?" +
                 "ORDER BY sentAt;");
         pS.setString(1,userA);
