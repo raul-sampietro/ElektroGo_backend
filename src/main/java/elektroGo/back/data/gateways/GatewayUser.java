@@ -118,7 +118,7 @@ public class GatewayUser implements Gateway{
     public void update() throws SQLException {
         Database d = Database.getInstance();
         Connection c = d.getConnection();
-        PreparedStatement pS = c.prepareStatement("UPDATE USERS SET userName = ?, mail = ?, password = ?;");
+        PreparedStatement pS = c.prepareStatement("UPDATE USERS SET mail = ?, password = ? WHERE userName = ?;");
         setFullPreparedStatement(pS);
         pS.executeUpdate();
     }
