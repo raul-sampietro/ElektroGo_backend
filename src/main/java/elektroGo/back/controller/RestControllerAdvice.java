@@ -155,6 +155,30 @@ public class RestControllerAdvice {
         return handleError(ex, response, 441);
     }
 
+    /**
+     * @brief Handler per capturar l'excepcio TripNotFound
+     * @param ex Excepcio capturada
+     * @param response Response http per setejar els codis d'error
+     * @post Envia l'error http corresponent al client
+     * @return Retorna l'error de l'excepcio
+     */
+    @ExceptionHandler(TripNotFound.class)
+    public String handleTripNotFound(TripNotFound ex, HttpServletResponse response) {
+        return handleError(ex, response, 443);
+    }
+
+    /**
+     * @brief Handler per capturar l'excepcio TripAlreadyExists
+     * @param ex Excepcio capturada
+     * @param response Response http per setejar els codis d'error
+     * @post Envia l'error http corresponent al client
+     * @return Retorna l'error de l'excepcio
+     */
+    @ExceptionHandler(TripAlreadyExists.class)
+    public String handleTripAlreadyExists(TripAlreadyExists ex, HttpServletResponse response) {
+        return handleError(ex,response,444);
+    }
+
 
 }
 
