@@ -30,7 +30,7 @@ public class DriverController {
      * @return Es retorna un String amb la info del usuari demanada
      */
     @GetMapping("/driver")
-    public String getUser(@RequestParam String userName) throws SQLException {
+    public String getDriver(@RequestParam String userName) throws SQLException {
         FinderDriver fU = FinderDriver.getInstance();
         GatewayDriver gU = fU.findByUserName(userName);
         if(gU == null)throw new DriverNotFound(userName);
@@ -42,7 +42,7 @@ public class DriverController {
      * @return Es retorna un String amb la info dels usuaris
      */
     @GetMapping("/drivers")
-    public String getUsers() throws SQLException, JsonProcessingException {
+    public String getDrivers() throws SQLException, JsonProcessingException {
         FinderDriver fU = FinderDriver.getInstance();
         ArrayList<GatewayDriver> lU = fU.findAll();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -55,7 +55,7 @@ public class DriverController {
      * @post S'afegeix l'usuari a la BD
      */
     @PostMapping("/drivers/create")
-    public void createVehicle(@RequestBody GatewayDriver gD) throws SQLException {
+    public void createDriver(@RequestBody GatewayDriver gD) throws SQLException {
         FinderDriver fU = FinderDriver.getInstance();
         if (fU.findByUserName(gD.getUserName()) != null) throw new UserAlreadyExists(gD.getUserName());
         gD.insert();
@@ -67,7 +67,7 @@ public class DriverController {
      * @post El usuari s'elimina de la BD
      */
     @PostMapping("/drivers/delete")
-    public void deleteVehicle(@RequestParam String userName) {
+    public void deleteDriver(@RequestParam String userName) {
         FinderDriver fD = FinderDriver.getInstance();
         try {
             GatewayDriver gD = fD.findByUserName(userName);
