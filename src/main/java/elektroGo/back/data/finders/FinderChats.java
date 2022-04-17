@@ -91,9 +91,9 @@ public class FinderChats {
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
         PreparedStatement pS = conn.prepareStatement("" +
-                "SELECT sender FROM CHATS WHERE receiver = ? GROUP BY sender" +
+                "SELECT sender as user FROM CHATS WHERE receiver = ? GROUP BY sender" +
                 "UNION " +
-                "SELECT receiver FROM CHATS WHERE sender = ? GROUP BY receiver;");
+                "SELECT receiver as user FROM CHATS WHERE sender = ? GROUP BY receiver;");
         pS.setString(1,user);
         pS.setString(2,user);
         ResultSet r = pS.executeQuery();
