@@ -9,6 +9,7 @@ package elektroGo.back.data.finders;
 
 import elektroGo.back.data.Database;
 import elektroGo.back.data.gateways.GatewayChats;
+import elektroGo.back.model.Chat;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -79,6 +80,29 @@ public class FinderChats {
             aL.add(this.createGateway(r));
         }
         return aL;
+    }
+
+    /**
+     * @brief Funció que agafa tots els chats de l'usuari
+     * @param user nom de l'usuari
+     * @return Es retorna un llistat de chats
+     */
+    public ArrayList<Chat> findByUser(String user) throws SQLException {
+        Database d = Database.getInstance();
+        Connection conn = d.getConnection();
+        PreparedStatement pS = conn.prepareStatement("" +
+                "SELECT sender FROM CHATS WHERE receiver = ? GROUP BY sender" +
+                "UNION " +
+                "SELECT receiver FROM CHATS WHERE sender = ? GROUP BY receiver;");
+        pS.setString(1,user);
+        pS.setString(2,user);
+        ResultSet r = pS.executeQuery();
+        ArrayList<Chat> chats = new ArrayList<>();
+        while (r.next()) {
+            String userB = r.getString(1);
+            chats.add(new Chat(user, userB, findByConversation(user, userB)));
+        }
+        return chats;
     }
 
     /**

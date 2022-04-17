@@ -9,6 +9,7 @@ package elektroGo.back.controller;
 
 import elektroGo.back.data.finders.FinderChats;
 import elektroGo.back.data.gateways.GatewayChats;
+import elektroGo.back.model.Chat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,6 +47,17 @@ public class ChatsController {
     public ArrayList<GatewayChats> getChatByConversation(@RequestParam String userA, @RequestParam String userB) throws SQLException {
         FinderChats fC = FinderChats.getInstance();
         return fC.findByConversation(userA, userB);
+    }
+
+    /**
+     * @brief Metode 'GET' que retorna tots els chats que l'usuari te
+     * @param user nom de l'usuari
+     * @return Retorna el llistat de chats
+     */
+    @GetMapping("/findByUser")
+    public ArrayList<Chat> getChatByConversation(@RequestParam String user) throws SQLException {
+        FinderChats fC = FinderChats.getInstance();
+        return fC.findByUser(user);
     }
 
 }
