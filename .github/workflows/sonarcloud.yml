@@ -28,6 +28,11 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+      - name: VPN connection
+        env:
+          VPN_USER: ${{ secrets.VPN_USER }}
+          VPN_PASS: ${{ secrets.VPN_PASS }}
+        run: f5fpc -s -x -t https://upclink.upc.edu -u "$VPN_USER" -p "$VPN_PASS"
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
