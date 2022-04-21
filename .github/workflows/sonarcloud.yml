@@ -19,7 +19,7 @@ jobs:
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
         with:
-          path: ~/.sonar/cache
+          path: ~/.sonar/cacheraul-sampietro-patch-1
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
       - name: Cache Maven packages
@@ -32,7 +32,7 @@ jobs:
         env:
           VPN_USER: ${{ secrets.VPN_USER }}
           VPN_PASS: ${{ secrets.VPN_PASS }}
-        run: f5fpc -s -x -t https://upclink.upc.edu -u "$VPN_USER" -p "$VPN_PASS"
+        run: f5fpc -s -x -u "$VPN_USER" -p "$VPN_PASS" -t https://upclink.upc.edu
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
