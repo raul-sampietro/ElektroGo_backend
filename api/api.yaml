@@ -1,0 +1,125 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: ElektroGo
+  description: "Documentació OpenAPI per a l'API REST desenvolupada a partir de l'aplicació **ElektroGo**. <br> Per tal de poder executar les operacions cal estar conectat a la VPN de l'UPC. Totes les operacions requereixen d'una api_key. En cas de no tenir-ne la podeu solicitar a qualsevol membre de l'equip."
+servers:
+  - url: 'https://10.4.41.58:8080/'
+paths:
+  /car-pooling:
+    get:
+      tags:
+      - Car pooling
+      summary: Donades unes coordenades (lat i lon) rep la informació de tots els punts de car pooling vigents dins d'un radi determinat.
+      operationId: getCarPooling
+      parameters:
+      - name: lat
+        in: query
+        description: Latitud de l'origen
+        required: true
+        schema:
+          type: number
+      - name: lon
+        in: query
+        description: Longitud de l'origen
+        required: true
+        schema:
+          type: number
+      - name: R
+        in: query
+        description: Radi de l'àrea a analitzar. En cas de no usar aquest paràmetre el radi per defecte és 25km.
+        required: false
+        schema:
+          type: number
+      - name: k
+        in: query
+        description: api_key per poder fer servir la API.
+        required: true
+        schema:
+          type: number
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarPooling'
+components:
+  schemas:
+    CarPooling:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        startDate:
+          type: string
+          format: date
+          example: "13/07/2022"
+        startTime:
+          type: string
+          format: time 24h
+          example: "12:00"
+        offeredSeats:
+          type: integer
+          example: 4
+        occupiedSeats:
+          type: integer
+          example: 2
+        restrictions:
+          type: string
+          example: 'No es pot fumar dins del vehícle'
+        details:
+          type: string
+          example: 'Acostumo a conduir bastant ràpid'
+        latitudeOrigin: 
+          type: number
+          example: 41.3894
+        longitudeOrigin:
+          type: number
+          example: 2.1134
+        originString:
+          type: string
+          example: "FIB Facultat d'Informàtica de Barcelona, C/Jordi Girona, 1-3, 08034 Barcelona"
+        latitudeDestination: 
+          type: number
+          example: 41.9611
+        longitudeDestination:
+          type: number
+          example: 2.8279
+        destinationString:
+          type: string
+          example: "Estadi Montilivi, Avinguda de Montilivi, 141, 17003 Girona"
+        vehicleNumberPlate:
+          type: string
+          example: "2001MMO"
+          
+    ErrorResult:
+      type: object
+      properties:
+        status:
+          type: integer
+          enum: [400, 401, 403, 404]
+        error: 
+          type: string
+          enum: ["Bad Request", "Unauthorized", "Forbidden", "Not Found", "Conflict"]
+        message: 
+          type: string
+  examples:
+    error401:
+      value:
+        status: 401
+        error: "Unauthorized"
+        message: "No has introduït cap API-Key"
+    error403:
+      value:
+        status: 403
+        error: "Forbidden"
+        message: "La API-Key introduïda no és vàlida"
+    error404:
+      value:
+        status: 404
+        error: "Not Found"
+        message: "No s'ha trobat cap punt de car-pooling dins del radi introduït"
