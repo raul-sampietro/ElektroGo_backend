@@ -10,14 +10,17 @@ package elektroGo.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import elektroGo.back.data.finders.FinderRating;
+import elektroGo.back.data.finders.FinderReport;
 import elektroGo.back.data.finders.FinderUser;
 import elektroGo.back.data.gateways.GatewayRating;
+import elektroGo.back.data.gateways.GatewayReport;
 import elektroGo.back.data.gateways.GatewayUser;
 import elektroGo.back.exceptions.RatingNotFound;
 import elektroGo.back.exceptions.UserAlreadyExists;
 import elektroGo.back.exceptions.UserNotFound;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -159,6 +162,49 @@ public class UserController {
         System.out.println("Rating removed successfully, end of method");
     }
 
+    @GetMapping("/users/reports")
+    public List<GatewayReport> reportsUser(@RequestParam String userWhoReports) throws SQLException {
+        System.out.println("\nStarting reportsUser method with userWhoReports : '" + userWhoReports + "'");
+        FinderReport fR = FinderReport.getInstance();
+        FinderUser fU = FinderUser.getInstance();
+        if ( fU.findByUserName(userWhoReports) == null) throw new UserNotFound(userWhoReports);
+        List<GatewayReport> l = fR.findByUserWhoReports(userWhoReports);
+        System.out.println("Returning reports with userWhoReports: '" + userWhoReports + "' that are:" );
+        for (GatewayReport g : l) System.out.println(g.json());
+        return l;
+    }
 
+    @GetMapping("/users/reported")
+    public List<GatewayReport> reportedUser(@RequestParam String reportedUser) throws SQLException {
+        System.out.println("\nStarting reportsUser method with reportedUser : '" + reportedUser + "'");
+        FinderReport fR = FinderReport.getInstance();
+        FinderUser fU = FinderUser.getInstance();
+        if ( fU.findByUserName(reportedUser) == null) throw new UserNotFound(reportedUser);
+        List<GatewayReport> l = fR.findByReportedUser(reportedUser);
+        System.out.println("Returning reports with reportedUser: '" + reportedUser + "' that are:" );
+        for (GatewayReport g : l) System.out.println(g.json());
+        return l;
+    }
 
+    @PostMapping("/users/report")
+    public void reportUser(@RequestBody GatewayReport gR) throws SQLException {
+        System.out.println("\nStarting reportUser method with report:");
+        gR.json();
+        FinderUser fU = FinderUser.getInstance();
+        if ( fU.findByUserName(gR.getUserWhoReports()) == null) throw new UserNotFound(gR.getUserWhoReports());
+        if ( fU.findByUserName(gR.getReportedUser()) == null) throw new UserNotFound(gR.getReportedUser());
+        FinderReport fR = FinderReport.getInstance();
+        //Report doesn't already exist
+        if (fR.findByPrimaryKey(gR.getUserWhoReports(), gR.getReportedUser()) == null) {
+            System.out.println("Report doesn't already exist, creating new report...");
+            gR.insert();
+            System.out.println("Report created, end of method");
+        }
+        //Report exists
+        else {
+            System.out.println("Report already exists, creating new report...");
+            gR.update();
+            System.out.println("Report updated, end of method");
+        }
+    }
 }
