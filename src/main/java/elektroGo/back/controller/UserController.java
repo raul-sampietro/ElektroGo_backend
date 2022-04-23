@@ -16,6 +16,7 @@ import elektroGo.back.data.gateways.GatewayRating;
 import elektroGo.back.data.gateways.GatewayReport;
 import elektroGo.back.data.gateways.GatewayUser;
 import elektroGo.back.exceptions.RatingNotFound;
+import elektroGo.back.exceptions.ReportNotFound;
 import elektroGo.back.exceptions.UserAlreadyExists;
 import elektroGo.back.exceptions.UserNotFound;
 import org.springframework.web.bind.annotation.*;
@@ -162,7 +163,7 @@ public class UserController {
         System.out.println("Rating removed successfully, end of method");
     }
 
-    @GetMapping("/users/reports")
+    @GetMapping("/user/reports")
     public List<GatewayReport> reportsUser(@RequestParam String userWhoReports) throws SQLException {
         System.out.println("\nStarting reportsUser method with userWhoReports : '" + userWhoReports + "'");
         FinderReport fR = FinderReport.getInstance();
@@ -174,7 +175,7 @@ public class UserController {
         return l;
     }
 
-    @GetMapping("/users/reported")
+    @GetMapping("/user/reported")
     public List<GatewayReport> reportedUser(@RequestParam String reportedUser) throws SQLException {
         System.out.println("\nStarting reportsUser method with reportedUser : '" + reportedUser + "'");
         FinderReport fR = FinderReport.getInstance();
@@ -186,10 +187,10 @@ public class UserController {
         return l;
     }
 
-    @PostMapping("/users/report")
+    @PostMapping("/user/report")
     public void reportUser(@RequestBody GatewayReport gR) throws SQLException {
         System.out.println("\nStarting reportUser method with report:");
-        gR.json();
+        System.out.println(gR.json());
         FinderUser fU = FinderUser.getInstance();
         if ( fU.findByUserName(gR.getUserWhoReports()) == null) throw new UserNotFound(gR.getUserWhoReports());
         if ( fU.findByUserName(gR.getReportedUser()) == null) throw new UserNotFound(gR.getReportedUser());
@@ -202,9 +203,20 @@ public class UserController {
         }
         //Report exists
         else {
-            System.out.println("Report already exists, creating new report...");
+            System.out.println("Report already exists, updating report...");
             gR.update();
             System.out.println("Report updated, end of method");
         }
+    }
+
+    @PostMapping("/user/unreport")
+    public void unreportUser(@RequestParam String userWhoReports, @RequestParam String reportedUser) throws SQLException {
+        System.out.println("\nStarting unreportUser method with userWhoReports: '" + userWhoReports + "' and reportedUser: '" + reportedUser + "'");
+        FinderReport fR = FinderReport.getInstance();
+        GatewayReport gR = fR.findByPrimaryKey(userWhoReports, reportedUser);
+        if (gR == null) throw new ReportNotFound(userWhoReports, reportedUser);
+        gR.remove();
+        if (fR.findByPrimaryKey(userWhoReports, reportedUser) == null) System.out.println("Report removed successfully, end of method");
+        else System.out.println("ERROR, couldn't delete the report");
     }
 }
