@@ -36,5 +36,7 @@ jobs:
         VPN_USER: ${{ secrets.VPN_USER }}
         VPN_PASS: ${{ secrets.VPN_PASS }}
       run: f5fpc -s -x -u "$VPN_USER" -p "$VPN_PASS" -t https://upclink.upc.edu
+    - name: f5fpc --info
+      run: f5fpc --info
     - name: Build with Maven
       run: mvn -B package --file pom.xml
