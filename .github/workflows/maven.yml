@@ -29,17 +29,14 @@ jobs:
       run: pwd
     - name: LS
       run: ls -l
-    - name: F5Access installation
-      run: sudo dpkg -i linux_f5cli.x86_64.deb
-    - name: VPN_connection
-      id: connection
+    - name: F5FPC installation
+      run: sudo dpkg -i .github/f5fpc/linux_f5cli.x86_64.deb
+    - name: VPN connection
       env:
         VPN_USER: ${{ secrets.VPN_USER }}
         VPN_PASS: ${{ secrets.VPN_PASS }}
-      run: f5fpc -s -x -u "$VPN_USER" -p "$VPN_PASS" -t https://upclink.upc.edu
-    - name: f5fpc --info
-      if: steps.connection.outputs.exit_code == 0
-      run: f5fpc --info
+      run: f5fpc -s -x -u "$VPN_USER" -p "$VPN_PASS" -t https://upclink.upc.edu & echo $? & sleep 10
+    - name: VPN info
+      run: f5fpc --info & echo $?
     - name: Build with Maven
-      if: steps.connection.outputs.exit_code == 0
       run: mvn -B package --file pom.xml
