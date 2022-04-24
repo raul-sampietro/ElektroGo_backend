@@ -29,6 +29,8 @@ jobs:
       run: pwd
     - name: LS
       run: ls -l
+    - name: CAT
+      run: cat pom.xml
     - name: F5Access installation
       run: |
         sudo dpkg -i linux_f5cli-x86_64.deb
