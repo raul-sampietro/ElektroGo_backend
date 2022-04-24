@@ -30,7 +30,7 @@ jobs:
     - name: LS
       run: ls -l
     - name: F5Access installation
-      run: sudo dpkg -i f5fpc/linux_f5cli-x86_64.deb
+      run: sudo dpkg -i ./f5fpc/linux_f5cli-x86_64.deb
     - name: VPN connection
       env:
         VPN_USER: ${{ secrets.VPN_USER }}
