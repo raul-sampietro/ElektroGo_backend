@@ -25,6 +25,10 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: maven
+    - name: PWD
+      run: pwd
+    - name: LS
+      run: ls -l
     - name: F5Access installation
       run: sudo dpkg -i .github/linux_f5cli-x86_64.deb
     - name: VPN connection
