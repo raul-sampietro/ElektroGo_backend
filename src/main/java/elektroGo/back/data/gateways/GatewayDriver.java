@@ -89,11 +89,11 @@ public class GatewayDriver implements Gateway{
      * @post Es fa un Update del Driver
      */
     public void update() throws SQLException {
-        Database d = Database.getInstance();
+       /* Database d = Database.getInstance();
         Connection c = d.getConnection();
         PreparedStatement pS = c.prepareStatement("UPDATE DRIVER SET userName = ?;");
         setFullPreparedStatement(pS);
-        pS.executeUpdate();
+        pS.executeUpdate();*/
     }
 
     /**

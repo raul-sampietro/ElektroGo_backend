@@ -63,7 +63,7 @@ public class UserController {
      * @post S'afegeix l'usuari a la BD
      */
     @PostMapping("/users/create")
-    public void createVehicle(@RequestBody GatewayUser gU) throws SQLException {
+    public void createUser(@RequestBody GatewayUser gU) throws SQLException {
         FinderUser fU = FinderUser.getInstance();
         if (fU.findByUserName(gU.getUserName()) != null) throw new UserAlreadyExists(gU.getUserName());
         gU.insert();
@@ -75,7 +75,7 @@ public class UserController {
      * @post El usuari s'elimina de la BD
      */
     @PostMapping("/users/delete")
-    public void deleteVehicle(@RequestParam String userName) {
+    public void deleteUser(@RequestParam String userName) {
         FinderUser fU = FinderUser.getInstance();
         try {
             GatewayUser gU = fU.findByUserName(userName);
