@@ -28,9 +28,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TripTest {
     @Test
     public void createTripTest1() throws SQLException {
-        GatewayTrip gT = new GatewayTrip("2", LocalDate.of(2001, 2, 12), new Time(12,0,0),
-                5,0, "null", LocalDate.of(2001, 2,10),
-                "1234aas", new BigDecimal("41.3000"),new BigDecimal("41.0000"));
+        GatewayTrip gT = new GatewayTrip(/*"2",*/ LocalDate.of(2001, 2, 12), new Time(12,0,0),
+                5,0, "null","null", LocalDate.of(2001, 2,10),
+                "1234aas","bcn", "gir",new BigDecimal("41.3000"),new BigDecimal("41.0000"),new BigDecimal("41.3000"),new BigDecimal("41.0000"));
         Database d = Database.getInstance();
         gT.insert();
         FinderTrip fT = FinderTrip.getInstance();
@@ -42,8 +42,8 @@ public class TripTest {
 
     private GatewayTrip insertTestTrip() throws SQLException {
         GatewayTrip gT = new GatewayTrip("2", LocalDate.of(2001, 2, 12), new Time(12,0,0),
-                5,0, "null", LocalDate.of(2001, 2,10),
-                "1234aas", new BigDecimal("41.3000"),new BigDecimal("41.0000"));
+                5,0, "null", "null",LocalDate.of(2001, 2,10),
+                "1234aas","bcn" ,"gir",new BigDecimal("41.3000"),new BigDecimal("41.0000"), new BigDecimal("41.3000"),new BigDecimal("41.0000"));
         gT.insert();
         return gT;
     }

@@ -13,6 +13,7 @@ import elektroGo.back.exceptions.TripAlreadyExists;
 import elektroGo.back.exceptions.TripNotFound;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -21,13 +22,13 @@ import java.util.ArrayList;
  */
 @RestController
 public class TripController {
-
+    String password = "test";
     /**
      * @brief Funció amb metode 'GET' que retorna la informació del trip amb el id corresponen
      * @param id Trip del que volem agafar la info
      * @return Es retorna un String amb la info del trip demanada
      */
-    @GetMapping("/trip")
+    @GetMapping("/car-pooling")
     public GatewayTrip getTrip(@RequestParam String id) throws SQLException {
         FinderTrip fT = FinderTrip.getInstance();
         GatewayTrip gT = fT.findById(id);
@@ -39,7 +40,7 @@ public class TripController {
      * @brief Funció amb metode 'GET' que retorna la informació de tots els Users a la BD
      * @return Es retorna un String amb la info dels usuaris
      */
-    @GetMapping("/trips")
+    @GetMapping("/car-pooling")
     public ArrayList<GatewayTrip> getTrips() throws SQLException, JsonProcessingException {
         FinderTrip fT = FinderTrip.getInstance();
         return fT.findAll();
@@ -50,7 +51,7 @@ public class TripController {
      * @param gT GatewayTrip amb tota la informació necessaria
      * @post S'afegeix el trip a la BD
      */
-    @PostMapping("/trip/create")
+    @PostMapping("/car-pooling/create")
     public void createTrip(@RequestBody GatewayTrip gT) throws SQLException {
         FinderTrip fT = FinderTrip.getInstance();
         if (fT.findById(gT.getId()) != null) throw new TripAlreadyExists(gT.getId());
@@ -62,7 +63,7 @@ public class TripController {
      * @post El trip s'elimina de la BD
      */
 
-    @PostMapping("/trip/delete")
+    @PostMapping("/car-pooling/delete")
     public void deleteTrip(@RequestParam String id) {
         FinderTrip fU = FinderTrip.getInstance();
         try {
@@ -72,6 +73,14 @@ public class TripController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @GetMapping("/car-pooling")
+    public ArrayList<GatewayTrip> getTripByCord(@RequestParam BigDecimal latitude, @RequestParam BigDecimal longitude, @RequestParam BigDecimal Radi,  @RequestParam String key) throws SQLException {
+        FinderTrip fT = FinderTrip.getInstance();
+        ArrayList<GatewayTrip> corT = fT.findByCoordinates(latitude.subtract(Radi),latitude.add(Radi),longitude.subtract(Radi), longitude.add(Radi));
+        if(corT == null)throw new TripNotFound();
+        return corT;
     }
 
 
