@@ -19,20 +19,20 @@ public class ChargingStationsTest {
     public void createChargingStationsTest() throws SQLException {
         BigDecimal latitude = BigDecimal.valueOf(41.389256);
         BigDecimal longitude = BigDecimal.valueOf(2.113442);
-        GatewayChargingStations gCS = new GatewayChargingStations(2, latitude, longitude,3);
+        GatewayChargingStations gCS = new GatewayChargingStations(999, latitude, longitude,3);
         Database d = Database.getInstance();
         gCS.insert();
         FinderChargingStations fCS = FinderChargingStations.getInstance();
-        GatewayChargingStations gCSTest = fCS.findByID(2);
+        GatewayChargingStations gCSTest = fCS.findByID(999);
         String res = gCSTest.getId() + " " + gCSTest.getLatitude() + " " + gCSTest.getLongitude() + " " + gCSTest.getNumberOfChargers();
-        d.executeSQLUpdate("delete from CHARGINGSTATIONS where id = 2;");
-        assertEquals("2 41.389256 2.113442 3", res);
+        d.executeSQLUpdate("delete from CHARGINGSTATIONS where id = 999;");
+        assertEquals("999 41.3893 2.11344 3", res);
     }
 
     private GatewayChargingStations insertTestChargingStation() throws SQLException {
         BigDecimal latitude = BigDecimal.valueOf(41.389256);
         BigDecimal longitude = BigDecimal.valueOf(2.113442);
-        GatewayChargingStations gCS = new GatewayChargingStations(2, latitude, longitude,3);
+        GatewayChargingStations gCS = new GatewayChargingStations(999, latitude, longitude,3);
         gCS.insert();
         return gCS;
     }
@@ -43,17 +43,18 @@ public class ChargingStationsTest {
         Database d = Database.getInstance();
         try {
             FinderChargingStations fCS = FinderChargingStations.getInstance();
-            GatewayChargingStations gCS = fCS.findByID(2);
+            GatewayChargingStations gCS = fCS.findByID(999);
             gCS.setNumberOfChargers(5);
             gCS.update();
-            gCS = fCS.findByID(2);
+            gCS = fCS.findByID(999);
             String res = gCS.getId() + " " + gCS.getLatitude() + " " + gCS.getLongitude() + " " + gCS.getNumberOfChargers();
-            assertEquals("2 41.389256 2.113442 5", res);
+            assertEquals("999 41.3893 2.11344 5", res);
         }
         catch (SQLException s) {
             s.printStackTrace();
         }
-        d.executeSQLUpdate("delete from CHARGINGSTATIONS where id = 2;");
+        d.executeSQLUpdate("delete from CHARGINGSTATIONS where id = 999;");
+
     }
 
     @Test
@@ -62,7 +63,7 @@ public class ChargingStationsTest {
         Database d = Database.getInstance();
         gCS.remove();
         FinderChargingStations fCS = FinderChargingStations.getInstance();
-        GatewayChargingStations gVEmpty = fCS.findByID(2);
+        GatewayChargingStations gVEmpty = fCS.findByID(999);
         assertNull(gVEmpty);
     }
 
@@ -71,17 +72,17 @@ public class ChargingStationsTest {
         Database d = Database.getInstance();
         insertTestChargingStation();
         FinderChargingStations fV = FinderChargingStations.getInstance();
-        GatewayChargingStations gCS = fV.findByID(2);
+        GatewayChargingStations gCS = fV.findByID(999);
         String res =  gCS.getId() + " " + gCS.getLatitude() + " " + gCS.getLongitude() + " " + gCS.getNumberOfChargers();
-        d.executeSQLUpdate("delete from CHARGINGSTATIONS where id = 2;");
-        assertEquals("2 41.389256 2.113442 3", res);
+        d.executeSQLUpdate("delete from CHARGINGSTATIONS where id = 999;");
+        assertEquals("999 41.3893 2.11344 3", res);
     }
 
     @Test
     public void FindByCoordinates() throws SQLException {
         BigDecimal latitude = BigDecimal.valueOf(41.389256);
         BigDecimal longitude = BigDecimal.valueOf(2.113442);
-        GatewayChargingStations gCS = new GatewayChargingStations(2, latitude, longitude,3);
+        GatewayChargingStations gCS = new GatewayChargingStations(999, latitude, longitude,3);
         Database d = Database.getInstance();
         gCS.insert();
         FinderChargingStations fCS = FinderChargingStations.getInstance();
@@ -94,8 +95,8 @@ public class ChargingStationsTest {
         for (GatewayChargingStations test: gCSTest) {
             res = test.getId() +  " " + test.getLatitude() + " " + test.getLongitude() + " " + test.getNumberOfChargers();
         }
-        d.executeSQLUpdate("delete from CHARGINGSTATIONS where id = 2;");
-        assertEquals("2 41.389256 2.113442 3", res);
+        d.executeSQLUpdate("delete from CHARGINGSTATIONS where id = 999;");
+        assertEquals("999 41.3893 2.11344 3", res);
     }
 
 }
