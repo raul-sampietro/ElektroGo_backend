@@ -7,6 +7,8 @@
 package elektroGo.back.data.gateways;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import elektroGo.back.data.Database;
 import java.sql.Time;
 import java.math.BigDecimal;
@@ -41,6 +43,15 @@ public class GatewayTrip implements Gateway{
     private Integer ocupiedSeats;
     private String restrictions;
     private String details;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     private LocalDate cancelDate;
     private String npVehicle;
     private String origin;
@@ -49,8 +60,9 @@ public class GatewayTrip implements Gateway{
     private BigDecimal LongitudeOrigin;
     private BigDecimal LatitudeDestination;
     private BigDecimal LongitudeDestination;
+    private String userName;
 
-
+    public GatewayTrip(){}
     /**
      * @brief Creadora de la Clase GatewayTrip amb tots els seus respectius parametres
      * @param id per identificar el viatge
@@ -70,7 +82,8 @@ public class GatewayTrip implements Gateway{
      * @param latitudeD latitude desti
      * @post Es crea un nou GWTrip amb els valors indicats
      */
-    public GatewayTrip(Integer id, LocalDate startDate, Time startTime, Integer oferredSeats, Integer ocupiedSeats, String restrictions, String details, LocalDate cancelDate, String npVehicle,String origin, String destination, BigDecimal latitudeO, BigDecimal longitudeO,BigDecimal latitudeD, BigDecimal longitudeD) {
+
+    public GatewayTrip(Integer id, LocalDate startDate, Time startTime, Integer oferredSeats, Integer ocupiedSeats, String restrictions, String details, LocalDate cancelDate, String npVehicle,String origin, String destination, BigDecimal latitudeO, BigDecimal longitudeO,BigDecimal latitudeD, BigDecimal longitudeD,String userName) {
         this.id = id;
         this.startDate = startDate;
         this.startTime = startTime;
@@ -86,9 +99,10 @@ public class GatewayTrip implements Gateway{
         this.LongitudeOrigin = longitudeO;
         this.LatitudeDestination = latitudeD;
         this.LongitudeDestination = longitudeD;
+        this.userName = userName;
     }
 
-    public GatewayTrip(LocalDate startDate, Time startTime, Integer oferredSeats, Integer ocupiedSeats, String restrictions, String details, LocalDate cancelDate, String npVehicle,String origin, String destination, BigDecimal latitudeO, BigDecimal longitudeO,BigDecimal latitudeD, BigDecimal longitudeD) {
+    public GatewayTrip(LocalDate startDate, Time startTime, Integer oferredSeats, Integer ocupiedSeats, String restrictions, String details, LocalDate cancelDate, String npVehicle,String origin, String destination, BigDecimal latitudeO, BigDecimal longitudeO,BigDecimal latitudeD, BigDecimal longitudeD, String userName) {
         this.startDate = startDate;
         this.startTime = startTime;
         this.oferredSeats = oferredSeats;
@@ -103,6 +117,7 @@ public class GatewayTrip implements Gateway{
         this.LongitudeOrigin = longitudeO;
         this.LatitudeDestination = latitudeD;
         this.LongitudeDestination = longitudeD;
+        this.userName = userName;
     }
 
 
@@ -149,20 +164,21 @@ public class GatewayTrip implements Gateway{
      * @post el pS queda assignat amb la info requerida
      */
     public void setFullPreparedStatement(PreparedStatement pS) throws SQLException {
-        pS.setDate(2, Date.valueOf(startDate));
-        pS.setTime(3,startTime);
-        pS.setInt(4,oferredSeats);
-        pS.setInt(5,ocupiedSeats);
-        pS.setString(6,restrictions);
-        pS.setString(7,details);
-        pS.setDate(8, Date.valueOf(cancelDate));
-        pS.setString(9,npVehicle);
-        pS.setString(10,origin);
-        pS.setString(11,destination);
-        pS.setString(12, String.valueOf(LatitudeOrigin));
-        pS.setString(13, String.valueOf(LongitudeOrigin));
-        pS.setString(14, String.valueOf(LatitudeOrigin));
-        pS.setString(15, String.valueOf(LongitudeOrigin));
+        pS.setDate(1, Date.valueOf(startDate));
+        pS.setTime(2,startTime);
+        pS.setInt(3,oferredSeats);
+        pS.setInt(4,ocupiedSeats);
+        pS.setString(5,restrictions);
+        pS.setString(6,details);
+        pS.setDate(7, Date.valueOf(cancelDate));
+        pS.setString(8,npVehicle);
+        pS.setString(9,origin);
+        pS.setString(10,destination);
+        pS.setString(11, String.valueOf(LatitudeOrigin));
+        pS.setString(12, String.valueOf(LongitudeOrigin));
+        pS.setString(13, String.valueOf(LatitudeOrigin));
+        pS.setString(14, String.valueOf(LongitudeOrigin));
+        pS.setString(15,userName);
     }
 
     public void setFullPreparedStatementUpdate(PreparedStatement pS) throws SQLException {
@@ -180,6 +196,7 @@ public class GatewayTrip implements Gateway{
         pS.setString(12, String.valueOf(LongitudeOrigin));
         pS.setString(13, String.valueOf(LatitudeDestination));
         pS.setString(14, String.valueOf(LongitudeDestination));
+        pS.setString(16,userName);
         pS.setInt(15,id);
     }
 
@@ -191,7 +208,7 @@ public class GatewayTrip implements Gateway{
     public void insert() throws SQLException {
         Database d = Database.getInstance();
         Connection c = d.getConnection();
-        PreparedStatement pS = c.prepareStatement("INSERT INTO TRIP VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?); ");
+        PreparedStatement pS = c.prepareStatement("INSERT INTO TRIP(startDate,startTime,oferredSeats,ocupiedSeats,restrictions, details,CancelDate,nPVehicle,origin,destination,LatitudeOrigin,LongitudeOrigin,LatitudeDestination,LongitudeDestination,userName) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?); ");
         setFullPreparedStatement(pS);
         pS.executeUpdate();
     }
@@ -205,7 +222,7 @@ public class GatewayTrip implements Gateway{
         Connection c = d.getConnection();
         PreparedStatement pS = c.prepareStatement("UPDATE TRIP SET startDate = ?, startTime = ?, oferredSeats = ?," +
                 "ocupiedSeats = ?, restrictions = ?, details = ?, CancelDate = ?, nPVehicle = ?, origin = ?, destination = ?," +
-                " LatitudeOrigin = ?, LongitudeOrigin = ?, LatitudeDestination = ?, LongitudeDestination = ? WHERE id = ?");
+                " LatitudeOrigin = ?, LongitudeOrigin = ?, LatitudeDestination = ?, LongitudeDestination = ?, userName = ? WHERE id = ?");
         setFullPreparedStatementUpdate(pS);
         pS.executeUpdate();
     }
@@ -226,6 +243,8 @@ public class GatewayTrip implements Gateway{
      */
     public String json() {
         ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         String json = "";
         try {
             json = mapper.writeValueAsString(this);

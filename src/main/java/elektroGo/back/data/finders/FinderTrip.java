@@ -65,12 +65,12 @@ public class FinderTrip {
      * @param id del qual volem agafar la info
      * @return Es retorna un GatewayTrip amb tota la info del Trip
      */
-    public GatewayTrip findById(String id) throws SQLException {
+    public GatewayTrip findById(Integer id) throws SQLException {
         GatewayTrip gT = null;
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
         PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP WHERE id = ?;");
-        pS.setString(1, id);
+        pS.setInt(1, id);
         ResultSet r = pS.executeQuery();
         if (r.next()) gT = createGateway(r);
         return gT;
@@ -80,12 +80,12 @@ public class FinderTrip {
      * @brief Funció que agafa tots els trips de la BD i els posa a un Array
      * @return Es retorna un array de GatewayTrips amb tota la info dels Trips
      */
-    public ArrayList<GatewayTrip> findByCoordinates(BigDecimal lat1, BigDecimal long1, BigDecimal lat2, BigDecimal long2) throws SQLException {
+    public ArrayList<GatewayTrip> findByCoordinates(BigDecimal lat1,BigDecimal lat2,BigDecimal long1 ,BigDecimal long2) throws SQLException {
         GatewayTrip gT = null;
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
         ArrayList<GatewayTrip> corT = new ArrayList<>();
-        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP WHERE LatitudeOrigin < ? and latitudeOrigin > ? and longitudeOrigin < ? and LongitudeOrigin > ?;");
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ?;");
         pS.setBigDecimal(1,lat1);
         pS.setBigDecimal(2,lat2);
         pS.setBigDecimal(3,long1);
@@ -118,8 +118,9 @@ public class FinderTrip {
         BigDecimal longitudeOrigin = r.getBigDecimal(13);
         BigDecimal latitudeDestination = r.getBigDecimal(14);
         BigDecimal longitudeDestination = r.getBigDecimal(15);
+        String userName = r.getString(16);
         return new GatewayTrip(id,startDate,startTime, oferredSeats ,ocupiedSeats,restrictions,details, cancelDate,
-                npVehicle, origin, destination,latitudeOrigin, longitudeOrigin, latitudeDestination, longitudeDestination);
+                npVehicle, origin, destination,latitudeOrigin, longitudeOrigin, latitudeDestination, longitudeDestination, userName);
     }
 
 }

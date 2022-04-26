@@ -33,7 +33,7 @@ public class TripController {
      * @return Es retorna un String amb la info del trip demanada
      */
     @GetMapping("/car-pooling")
-    public GatewayTrip getTrip(@RequestParam String id) throws SQLException {
+    public GatewayTrip getTrip(@RequestParam Integer id) throws SQLException {
         FinderTrip fT = FinderTrip.getInstance();
         GatewayTrip gT = fT.findById(id);
         if(gT == null)throw new TripNotFound(id);
@@ -44,7 +44,7 @@ public class TripController {
      * @brief Funció amb metode 'GET' que retorna la informació de tots els Users a la BD
      * @return Es retorna un String amb la info dels usuaris
      */
-    @GetMapping("/car-pooling")
+    @GetMapping("/car-poolings")
     public ArrayList<GatewayTrip> getTrips() throws SQLException, JsonProcessingException {
         FinderTrip fT = FinderTrip.getInstance();
         return fT.findAll();
@@ -57,6 +57,8 @@ public class TripController {
      */
     @PostMapping("/car-pooling/create")
     public void createTrip(@RequestBody GatewayTrip gT) throws SQLException {
+        System.out.println(gT.json());
+        System.out.println(gT.getUserName());
         FinderTrip fT = FinderTrip.getInstance();
         //if (fT.findById(gT.getId()) != null) throw new TripAlreadyExists(gT.getId());
         gT.insert();
@@ -68,7 +70,7 @@ public class TripController {
      */
 
     @PostMapping("/car-pooling/delete")
-    public void deleteTrip(@RequestParam String id) {
+    public void deleteTrip(@RequestParam Integer id) {
         FinderTrip fU = FinderTrip.getInstance();
         try {
             GatewayTrip gU = fU.findById(id);
@@ -84,8 +86,12 @@ public class TripController {
         if(!Objects.equals(key, password))throw new InvalidKey();
         FinderTrip fT = FinderTrip.getInstance();
         BigDecimal radiLat = Radi.multiply(BigDecimal.valueOf(0.00904371));
+        System.out.println(radiLat);
         BigDecimal radiLong = BigDecimal.valueOf(Radi.doubleValue()/(111.320*cos(latitude.doubleValue())));
-        ArrayList<GatewayTrip> corT = fT.findByCoordinates(latitude.subtract(radiLat),latitude.add(radiLat),longitude.subtract(radiLong), longitude.add(radiLong));
+        System.out.println(radiLong);
+        BigDecimal a = new BigDecimal("0.5");
+        System.out.println(latitude.subtract(a));
+        ArrayList<GatewayTrip> corT = fT.findByCoordinates(latitude.subtract(a),latitude.add(a),longitude.subtract(a), longitude.add(a));
         if(corT == null)throw new TripNotFound();
         return corT;
     }

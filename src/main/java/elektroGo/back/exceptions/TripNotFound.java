@@ -17,7 +17,7 @@ public class TripNotFound extends RuntimeException {
         super();
     }
 
-    public TripNotFound(String id) {
+    public TripNotFound(Integer id) {
         super("Trip with id " + id + " was not found");
     }
 }
