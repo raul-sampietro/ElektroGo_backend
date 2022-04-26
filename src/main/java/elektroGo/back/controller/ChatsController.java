@@ -55,7 +55,7 @@ public class ChatsController {
      * @return Retorna el llistat de chats
      */
     @GetMapping("/findByUser")
-    public ArrayList<Chat> getChatByConversation(@RequestParam String user) throws SQLException {
+    public ArrayList<String> getChatByConversation(@RequestParam String user) throws SQLException {
         FinderChats fC = FinderChats.getInstance();
         return fC.findByUser(user);
     }

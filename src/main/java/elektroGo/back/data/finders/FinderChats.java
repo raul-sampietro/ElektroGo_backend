@@ -87,7 +87,7 @@ public class FinderChats {
      * @param user nom de l'usuari
      * @return Es retorna un llistat de chats
      */
-    public ArrayList<Chat> findByUser(String user) throws SQLException {
+    public ArrayList<String> findByUser(String user) throws SQLException {
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
         PreparedStatement pS = conn.prepareStatement("" +
@@ -97,10 +97,10 @@ public class FinderChats {
         pS.setString(1,user);
         pS.setString(2,user);
         ResultSet r = pS.executeQuery();
-        ArrayList<Chat> chats = new ArrayList<>();
+        ArrayList<String> chats = new ArrayList<>();
         while (r.next()) {
             String userB = r.getString(1);
-            chats.add(new Chat(user, userB, findByConversation(user, userB)));
+            chats.add(userB);
         }
         return chats;
     }
