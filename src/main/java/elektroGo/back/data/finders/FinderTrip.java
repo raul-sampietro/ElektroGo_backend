@@ -103,7 +103,7 @@ public class FinderTrip {
      * @return Es retorna un GatewayTrip amb tota la info del Trip creat.
      */
     private GatewayTrip createGateway(ResultSet r) throws SQLException {
-        String id = r.getString(1);
+        Integer id = r.getInt(1);
         LocalDate startDate = r.getDate(2).toLocalDate();
         Time startTime = r.getTime(3);
         Integer oferredSeats = r.getInt(4);

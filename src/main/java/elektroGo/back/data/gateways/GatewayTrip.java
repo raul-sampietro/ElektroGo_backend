@@ -34,7 +34,7 @@ public class GatewayTrip implements Gateway{
      * 	Latitude varchar(100),
      * 	Longitude varchar(100),
      */
-    private String id;
+    private Integer id;
     private LocalDate startDate;
     private Time startTime;
     private Integer oferredSeats;
@@ -70,7 +70,7 @@ public class GatewayTrip implements Gateway{
      * @param latitudeD latitude desti
      * @post Es crea un nou GWTrip amb els valors indicats
      */
-    public GatewayTrip(String id, LocalDate startDate, Time startTime, Integer oferredSeats, Integer ocupiedSeats, String restrictions, String details, LocalDate cancelDate, String npVehicle,String origin, String destination, BigDecimal latitudeO, BigDecimal longitudeO,BigDecimal latitudeD, BigDecimal longitudeD) {
+    public GatewayTrip(Integer id, LocalDate startDate, Time startTime, Integer oferredSeats, Integer ocupiedSeats, String restrictions, String details, LocalDate cancelDate, String npVehicle,String origin, String destination, BigDecimal latitudeO, BigDecimal longitudeO,BigDecimal latitudeD, BigDecimal longitudeD) {
         this.id = id;
         this.startDate = startDate;
         this.startTime = startTime;
@@ -108,8 +108,8 @@ public class GatewayTrip implements Gateway{
 
     //Getters and Setters
 
-    public String getId() {return id;}
-    public void setId(String id) {this.id = id;}
+    public Integer getId() {return id;}
+    public void setId(Integer id) {this.id = id;}
     public LocalDate getStartDate() {return startDate;}
     public void setStartDate(LocalDate startDate) {this.startDate = startDate;}
     public Time getStartTime() {return startTime;}
@@ -180,7 +180,7 @@ public class GatewayTrip implements Gateway{
         pS.setString(12, String.valueOf(LongitudeOrigin));
         pS.setString(13, String.valueOf(LatitudeDestination));
         pS.setString(14, String.valueOf(LongitudeDestination));
-        pS.setString(15,id);
+        pS.setInt(15,id);
     }
 
 

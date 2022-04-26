@@ -16,7 +16,7 @@ public class TripAlreadyExists extends RuntimeException{
 
     }
 
-    public TripAlreadyExists(String id) {
+    public TripAlreadyExists(Integer id) {
         super("Trip with id " + id + "already exists");
     }
 }

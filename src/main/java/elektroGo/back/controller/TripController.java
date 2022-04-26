@@ -9,6 +9,7 @@ package elektroGo.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import elektroGo.back.data.finders.FinderTrip;
 import elektroGo.back.data.gateways.GatewayTrip;
+import elektroGo.back.exceptions.InvalidKey;
 import elektroGo.back.exceptions.TripAlreadyExists;
 import elektroGo.back.exceptions.TripNotFound;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Objects;
+
+import static java.lang.Math.cos;
 
 /**
  * @brief La classe TripController és la classe que comunicarà front-end i back-end a l'hora de tractar amb dades dels Trips
@@ -54,7 +58,7 @@ public class TripController {
     @PostMapping("/car-pooling/create")
     public void createTrip(@RequestBody GatewayTrip gT) throws SQLException {
         FinderTrip fT = FinderTrip.getInstance();
-        if (fT.findById(gT.getId()) != null) throw new TripAlreadyExists(gT.getId());
+        //if (fT.findById(gT.getId()) != null) throw new TripAlreadyExists(gT.getId());
         gT.insert();
     }
     /**
@@ -75,10 +79,13 @@ public class TripController {
         }
     }
 
-    @GetMapping("/car-pooling")
+    @GetMapping("/car-pooling/byCoord")
     public ArrayList<GatewayTrip> getTripByCord(@RequestParam BigDecimal latitude, @RequestParam BigDecimal longitude, @RequestParam BigDecimal Radi,  @RequestParam String key) throws SQLException {
+        if(!Objects.equals(key, password))throw new InvalidKey();
         FinderTrip fT = FinderTrip.getInstance();
-        ArrayList<GatewayTrip> corT = fT.findByCoordinates(latitude.subtract(Radi),latitude.add(Radi),longitude.subtract(Radi), longitude.add(Radi));
+        BigDecimal radiLat = Radi.multiply(BigDecimal.valueOf(0.00904371));
+        BigDecimal radiLong = BigDecimal.valueOf(Radi.doubleValue()/(111.320*cos(latitude.doubleValue())));
+        ArrayList<GatewayTrip> corT = fT.findByCoordinates(latitude.subtract(radiLat),latitude.add(radiLat),longitude.subtract(radiLong), longitude.add(radiLong));
         if(corT == null)throw new TripNotFound();
         return corT;
     }

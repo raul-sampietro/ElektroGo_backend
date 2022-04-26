@@ -34,14 +34,14 @@ public class TripTest {
         Database d = Database.getInstance();
         gT.insert();
         FinderTrip fT = FinderTrip.getInstance();
-        GatewayTrip gTTest = fT.findById("2");
+        GatewayTrip gTTest = fT.findById("3");
         String res = gTTest.getId() + " " + gTTest.getNpVehicle();
         d.executeSQLUpdate("delete from TRIP where id = '2';");
         assertEquals("2 1234aas", res);
     }
 
     private GatewayTrip insertTestTrip() throws SQLException {
-        GatewayTrip gT = new GatewayTrip("2", LocalDate.of(2001, 2, 12), new Time(12,0,0),
+        GatewayTrip gT = new GatewayTrip(LocalDate.of(2001, 2, 12), new Time(12,0,0),
                 5,0, "null", "null",LocalDate.of(2001, 2,10),
                 "1234aas","bcn" ,"gir",new BigDecimal("41.3000"),new BigDecimal("41.0000"), new BigDecimal("41.3000"),new BigDecimal("41.0000"));
         gT.insert();
