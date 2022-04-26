@@ -12,10 +12,13 @@ import elektroGo.back.data.gateways.GatewayTrip;
 import elektroGo.back.exceptions.InvalidKey;
 import elektroGo.back.exceptions.TripAlreadyExists;
 import elektroGo.back.exceptions.TripNotFound;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -41,12 +44,58 @@ public class TripController {
     }
 
     /**
+     * @brief Funció amb metode 'GET' que retorna la informació del trip amb el id corresponen
+     * @return Es retorna un String amb la info del trip demanada
+     */
+    @GetMapping("/car-pooling/sel")
+    public ArrayList<GatewayTrip> getTripSelection(@RequestParam BigDecimal LatO, @RequestParam BigDecimal LongO,
+                                                   @RequestParam BigDecimal LatD, @RequestParam BigDecimal LongD,
+                                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate sDate, Time sTimeMin,
+                                                   Time sTimeMax) throws SQLException {
+        System.out.println("hey");
+        FinderTrip fT = FinderTrip.getInstance();
+        ArrayList<GatewayTrip> gT;
+        BigDecimal a = new BigDecimal("0.25");
+        if(sDate == null){
+            if(sTimeMax == null){
+                if(sTimeMin == null)gT = fT.findByNot(LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
+                        LatD.subtract(a),LatD.add(a),LongD.subtract(a),LongD.add(a));
+                else gT = fT.findByMin(LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
+                        LatD.subtract(a),LatD.add(a),LongD.subtract(a),LongD.add(a),sTimeMin);
+            }
+            else{
+                if(sTimeMin == null)gT = fT.findByMax(LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
+                        LatD.subtract(a),LatD.add(a),LongD.subtract(a),LongD.add(a),sTimeMax);
+                else gT = fT.findByMaxMin(LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
+                        LatD.subtract(a),LatD.add(a),LongD.subtract(a),LongD.add(a),sTimeMax,sTimeMin);
+            }
+        }
+        else{
+            if(sTimeMax == null){
+                if(sTimeMin == null)gT = fT.findByDat(LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
+                        LatD.subtract(a),LatD.add(a),LongD.subtract(a),LongD.add(a),sDate);
+                else gT = fT.findByDatMin(LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
+                        LatD.subtract(a),LatD.add(a),LongD.subtract(a),LongD.add(a),sDate,sTimeMin);
+            }
+            else{
+                if(sTimeMin == null)gT = fT.findByDatMax(LatO.subtract(a),LatO.add(a),LongO.subtract(a),
+                        LongO.add(a),LatD.subtract(a),LatD.add(a),LongD.subtract(a),LongD.add(a),sDate,sTimeMax);
+                else gT = fT.findByDatMaxMin(LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
+                        LatD.subtract(a),LatD.add(a),LongD.subtract(a),LongD.add(a),sDate,sTimeMax,sTimeMin);
+            }
+        }
+        if(gT == null)throw new TripNotFound();
+        return gT;
+    }
+
+    /**
      * @brief Funció amb metode 'GET' que retorna la informació de tots els Users a la BD
      * @return Es retorna un String amb la info dels usuaris
      */
     @GetMapping("/car-poolings")
     public ArrayList<GatewayTrip> getTrips() throws SQLException, JsonProcessingException {
         FinderTrip fT = FinderTrip.getInstance();
+        if(fT.findAll()==null)throw new TripNotFound();
         return fT.findAll();
     }
 
@@ -60,7 +109,7 @@ public class TripController {
         System.out.println(gT.json());
         System.out.println(gT.getUserName());
         FinderTrip fT = FinderTrip.getInstance();
-        //if (fT.findById(gT.getId()) != null) throw new TripAlreadyExists(gT.getId());
+        if (fT.findByUser(gT.getUserName(),gT.getStartDate(),gT.getStartTime()) != null) throw new TripAlreadyExists(gT.getUserName());
         gT.insert();
     }
     /**
@@ -90,7 +139,6 @@ public class TripController {
         BigDecimal radiLong = BigDecimal.valueOf(Radi.doubleValue()/(111.320*cos(latitude.doubleValue())));
         System.out.println(radiLong);
         BigDecimal a = new BigDecimal("0.5");
-        System.out.println(latitude.subtract(a));
         ArrayList<GatewayTrip> corT = fT.findByCoordinates(latitude.subtract(a),latitude.add(a),longitude.subtract(a), longitude.add(a));
         if(corT == null)throw new TripNotFound();
         return corT;

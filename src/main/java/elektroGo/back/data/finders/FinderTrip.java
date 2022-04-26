@@ -75,6 +75,18 @@ public class FinderTrip {
         if (r.next()) gT = createGateway(r);
         return gT;
     }
+    public GatewayTrip findByUser(String userName, LocalDate startDate, Time startTime) throws SQLException {
+        GatewayTrip gT = null;
+        Database d = Database.getInstance();
+        Connection conn = d.getConnection();
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP WHERE userName= ? AND startDate = ? AND startTime = ?;");
+        pS.setString(1, userName);
+        pS.setDate(2, Date.valueOf(startDate));
+        pS.setTime(3, startTime);
+        ResultSet r = pS.executeQuery();
+        if (r.next()) gT = createGateway(r);
+        return gT;
+    }
 
     /**
      * @brief Funció que agafa tots els trips de la BD i els posa a un Array
@@ -90,6 +102,185 @@ public class FinderTrip {
         pS.setBigDecimal(2,lat2);
         pS.setBigDecimal(3,long1);
         pS.setBigDecimal(4,long2);
+        ResultSet r = pS.executeQuery();
+        while (r.next()) {
+            corT.add(createGateway(r));
+        }
+        return corT;
+    }
+
+    public ArrayList<GatewayTrip> findByNot(BigDecimal latO1,BigDecimal latO2,BigDecimal longO1 ,BigDecimal longO2,BigDecimal lat1,BigDecimal lat2,BigDecimal long1 ,BigDecimal long2) throws SQLException {
+        GatewayTrip gT = null;
+        Database d = Database.getInstance();
+        Connection conn = d.getConnection();
+        ArrayList<GatewayTrip> corT = new ArrayList<>();
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ?;");
+        pS.setBigDecimal(1,latO1);
+        pS.setBigDecimal(2,latO2);
+        pS.setBigDecimal(3,longO1);
+        pS.setBigDecimal(4,longO2);
+        pS.setBigDecimal(5,lat1);
+        pS.setBigDecimal(6,lat2);
+        pS.setBigDecimal(7,long1);
+        pS.setBigDecimal(8,long2);
+        ResultSet r = pS.executeQuery();
+        while (r.next()) {
+            corT.add(createGateway(r));
+        }
+        return corT;
+    }
+
+    public ArrayList<GatewayTrip> findByMin(BigDecimal latO1,BigDecimal latO2,BigDecimal longO1 ,BigDecimal longO2,BigDecimal lat1,BigDecimal lat2,BigDecimal long1 ,BigDecimal long2, Time min) throws SQLException {
+        GatewayTrip gT = null;
+        Database d = Database.getInstance();
+        Connection conn = d.getConnection();
+        ArrayList<GatewayTrip> corT = new ArrayList<>();
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startTime >= ?;");
+        pS.setBigDecimal(1,latO1);
+        pS.setBigDecimal(2,latO2);
+        pS.setBigDecimal(3,longO1);
+        pS.setBigDecimal(4,longO2);
+        pS.setBigDecimal(5,lat1);
+        pS.setBigDecimal(6,lat2);
+        pS.setBigDecimal(7,long1);
+        pS.setBigDecimal(8,long2);
+        pS.setTime(9,min);
+        ResultSet r = pS.executeQuery();
+        while (r.next()) {
+            corT.add(createGateway(r));
+        }
+        return corT;
+    }
+
+    public ArrayList<GatewayTrip> findByMax(BigDecimal latO1,BigDecimal latO2,BigDecimal longO1 ,BigDecimal longO2,BigDecimal lat1,BigDecimal lat2,BigDecimal long1 ,BigDecimal long2, Time max) throws SQLException {
+        GatewayTrip gT = null;
+        Database d = Database.getInstance();
+        Connection conn = d.getConnection();
+        ArrayList<GatewayTrip> corT = new ArrayList<>();
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startTime <= ?;");
+        pS.setBigDecimal(1,latO1);
+        pS.setBigDecimal(2,latO2);
+        pS.setBigDecimal(3,longO1);
+        pS.setBigDecimal(4,longO2);
+        pS.setBigDecimal(5,lat1);
+        pS.setBigDecimal(6,lat2);
+        pS.setBigDecimal(7,long1);
+        pS.setBigDecimal(8,long2);
+        pS.setTime(9,max);
+        ResultSet r = pS.executeQuery();
+        while (r.next()) {
+            corT.add(createGateway(r));
+        }
+        return corT;
+    }
+
+    public ArrayList<GatewayTrip> findByMaxMin(BigDecimal latO1,BigDecimal latO2,BigDecimal longO1 ,BigDecimal longO2,BigDecimal lat1,BigDecimal lat2,BigDecimal long1 ,BigDecimal long2, Time max, Time min) throws SQLException {
+        GatewayTrip gT = null;
+        Database d = Database.getInstance();
+        Connection conn = d.getConnection();
+        ArrayList<GatewayTrip> corT = new ArrayList<>();
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startTime BETWEEN ? AND ?");
+        pS.setBigDecimal(1,latO1);
+        pS.setBigDecimal(2,latO2);
+        pS.setBigDecimal(3,longO1);
+        pS.setBigDecimal(4,longO2);
+        pS.setBigDecimal(5,lat1);
+        pS.setBigDecimal(6,lat2);
+        pS.setBigDecimal(7,long1);
+        pS.setBigDecimal(8,long2);
+        pS.setTime(10,max);
+        pS.setTime(9,min);
+        ResultSet r = pS.executeQuery();
+        while (r.next()) {
+            corT.add(createGateway(r));
+        }
+        return corT;
+    }
+    public ArrayList<GatewayTrip> findByDat(BigDecimal latO1,BigDecimal latO2,BigDecimal longO1 ,BigDecimal longO2,BigDecimal lat1,BigDecimal lat2,BigDecimal long1 ,BigDecimal long2, LocalDate dat) throws SQLException {
+        GatewayTrip gT = null;
+        Database d = Database.getInstance();
+        Connection conn = d.getConnection();
+        ArrayList<GatewayTrip> corT = new ArrayList<>();
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ?;");
+        pS.setBigDecimal(1,latO1);
+        pS.setBigDecimal(2,latO2);
+        pS.setBigDecimal(3,longO1);
+        pS.setBigDecimal(4,longO2);
+        pS.setBigDecimal(5,lat1);
+        pS.setBigDecimal(6,lat2);
+        pS.setBigDecimal(7,long1);
+        pS.setBigDecimal(8,long2);
+        pS.setDate(9, Date.valueOf(dat));
+        ResultSet r = pS.executeQuery();
+        while (r.next()) {
+            corT.add(createGateway(r));
+        }
+        return corT;
+    }
+
+    public ArrayList<GatewayTrip> findByDatMin(BigDecimal latO1,BigDecimal latO2,BigDecimal longO1 ,BigDecimal longO2,BigDecimal lat1,BigDecimal lat2,BigDecimal long1 ,BigDecimal long2, LocalDate dat,Time min) throws SQLException {
+        GatewayTrip gT = null;
+        Database d = Database.getInstance();
+        Connection conn = d.getConnection();
+        ArrayList<GatewayTrip> corT = new ArrayList<>();
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ? and startTime >= ?;");
+        pS.setBigDecimal(1,latO1);
+        pS.setBigDecimal(2,latO2);
+        pS.setBigDecimal(3,longO1);
+        pS.setBigDecimal(4,longO2);
+        pS.setBigDecimal(5,lat1);
+        pS.setBigDecimal(6,lat2);
+        pS.setBigDecimal(7,long1);
+        pS.setBigDecimal(8,long2);
+        pS.setDate(9, Date.valueOf(dat));
+        pS.setTime(10,min);
+        ResultSet r = pS.executeQuery();
+        while (r.next()) {
+            corT.add(createGateway(r));
+        }
+        return corT;
+    }
+
+    public ArrayList<GatewayTrip> findByDatMax(BigDecimal latO1,BigDecimal latO2,BigDecimal longO1 ,BigDecimal longO2,BigDecimal lat1,BigDecimal lat2,BigDecimal long1 ,BigDecimal long2, LocalDate dat,Time max) throws SQLException {
+        GatewayTrip gT = null;
+        Database d = Database.getInstance();
+        Connection conn = d.getConnection();
+        ArrayList<GatewayTrip> corT = new ArrayList<>();
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ? and startTime <= ?;");
+        pS.setBigDecimal(1,latO1);
+        pS.setBigDecimal(2,latO2);
+        pS.setBigDecimal(3,longO1);
+        pS.setBigDecimal(4,longO2);
+        pS.setBigDecimal(5,lat1);
+        pS.setBigDecimal(6,lat2);
+        pS.setBigDecimal(7,long1);
+        pS.setBigDecimal(8,long2);
+        pS.setDate(9, Date.valueOf(dat));
+        pS.setTime(10,max);
+        ResultSet r = pS.executeQuery();
+        while (r.next()) {
+            corT.add(createGateway(r));
+        }
+        return corT;
+    }
+
+    public ArrayList<GatewayTrip> findByDatMaxMin(BigDecimal latO1,BigDecimal latO2,BigDecimal longO1 ,BigDecimal longO2,BigDecimal lat1,BigDecimal lat2,BigDecimal long1 ,BigDecimal long2, LocalDate dat,Time max,Time min) throws SQLException {
+        GatewayTrip gT = null;
+        Database d = Database.getInstance();
+        Connection conn = d.getConnection();
+        ArrayList<GatewayTrip> corT = new ArrayList<>();
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ? and startTime <= ? and startTime >= ?;");
+        pS.setBigDecimal(1,latO1);
+        pS.setBigDecimal(2,latO2);
+        pS.setBigDecimal(3,longO1);
+        pS.setBigDecimal(4,longO2);
+        pS.setBigDecimal(5,lat1);
+        pS.setBigDecimal(6,lat2);
+        pS.setBigDecimal(7,long1);
+        pS.setBigDecimal(8,long2);
+        pS.setDate(9, Date.valueOf(dat));
+        pS.setTime(10,max);
+        pS.setTime(11,min);
         ResultSet r = pS.executeQuery();
         while (r.next()) {
             corT.add(createGateway(r));
