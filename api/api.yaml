@@ -6,32 +6,32 @@ info:
 servers:
   - url: 'https://10.4.41.58:8080/'
 paths:
-  /car-pooling:
+  /car-pooling/byCoord:
     get:
       tags:
       - Car pooling
       summary: Donades unes coordenades (lat i lon) rep la informació de tots els punts de car pooling vigents dins d'un radi determinat.
       operationId: getCarPooling
       parameters:
-      - name: lat
+      - name: latitude
         in: query
         description: Latitud de l'origen
         required: true
         schema:
           type: number
-      - name: lon
+      - name: longitude
         in: query
         description: Longitud de l'origen
         required: true
         schema:
           type: number
-      - name: R
+      - name: Radi
         in: query
         description: Radi de l'àrea a analitzar. En cas de no usar aquest paràmetre el radi per defecte és 25km.
         required: false
         schema:
           type: number
-      - name: k
+      - name: key
         in: query
         description: api_key per poder fer servir la API.
         required: true
@@ -54,14 +54,17 @@ components:
         id:
           type: integer
           example: 1
+        username:
+          type: string
+          example: "Pol B."
         startDate:
           type: string
           format: date
-          example: "13/07/2022"
+          example: "2022-01-10"
         startTime:
           type: string
           format: time 24h
-          example: "12:00"
+          example: "12:00:00"
         offeredSeats:
           type: integer
           example: 4
