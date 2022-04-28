@@ -69,7 +69,9 @@ public class FinderChargingStations {
         PreparedStatement pS = conn.prepareStatement("SELECT * FROM CHARGINGSTATIONS WHERE id = ?;");
         pS.setLong(1, idChargingStation);
         ResultSet r = pS.executeQuery();
-        if (r.next()) gCS = createGateway(r);
+        if (r.next()) {
+            gCS = createGateway(r);
+        }
 
         return gCS;
     }
@@ -112,14 +114,14 @@ public class FinderChargingStations {
         String acces = r.getString(3);
         String tipusVelocitat = r.getString(4);
         String tipusConnexio = r.getString(5);
-        BigDecimal longitude = r.getBigDecimal(5);
+        BigDecimal longitude = r.getBigDecimal(6);
         BigDecimal latitude = r.getBigDecimal(7);
         String descriptiva_designacio = r.getString(8);
         Double kw = r.getDouble(9);
-        String AcDc = r.getString(5);
-        String ident = r.getString(5);
-        String numberOfChargers = r.getString(6);
-        String tipusVehicle = r.getString(5);
+        String AcDc = r.getString(10);
+        String ident = r.getString(11);
+        String numberOfChargers = r.getString(12);
+        String tipusVehicle = r.getString(13);
         return new GatewayChargingStations(id, promotor, acces, tipusVelocitat, tipusConnexio, longitude, latitude, descriptiva_designacio,
                 kw, AcDc, ident, numberOfChargers, tipusVehicle);
     }

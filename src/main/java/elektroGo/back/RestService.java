@@ -34,11 +34,13 @@ public class RestService {
             else if (log.compareTo(BigDecimal.valueOf(-180)) == -1) valid = false;
             Double kw = a.getKw();
             if (valid){
-                //System.out.println("Hola");
+                GatewayChargingStations gc = fc.findByID(id);
+                if (gc == null) {
                     GatewayChargingStations gCS = new GatewayChargingStations(id, a.getPromotor_gestor(), a.getAcces(), a.getTipus_velocitat(),
                             a.getTipus_connexi(), lat, log, a.getDesignaci_descriptiva(), kw, a.getAc_dc(), a.getIde_pdr(), a.getNplaces_estaci(), a.getTipus_vehicle());
-                    System.out.println("M'he actualitzat: " + id);
+                    System.out.println("M'he actualitzat: " + id + " " + a.getPromotor_gestor());
                     gCS.insert();
+                }
                 id++;
             }
         }
