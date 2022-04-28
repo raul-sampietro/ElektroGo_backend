@@ -75,12 +75,12 @@ public class FinderTrip {
         if (r.next()) gT = createGateway(r);
         return gT;
     }
-    public GatewayTrip findByUser(String userName, LocalDate startDate, Time startTime) throws SQLException {
+    public GatewayTrip findByUser(String username, LocalDate startDate, Time startTime) throws SQLException {
         GatewayTrip gT = null;
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
-        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP WHERE userName= ? AND startDate = ? AND startTime = ?;");
-        pS.setString(1, userName);
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP WHERE username= ? AND startDate = ? AND startTime = ?;");
+        pS.setString(1, username);
         pS.setDate(2, Date.valueOf(startDate));
         pS.setTime(3, startTime);
         ResultSet r = pS.executeQuery();
@@ -297,21 +297,21 @@ public class FinderTrip {
         Integer id = r.getInt(1);
         LocalDate startDate = r.getDate(2).toLocalDate();
         Time startTime = r.getTime(3);
-        Integer oferredSeats = r.getInt(4);
-        Integer ocupiedSeats = r.getInt(5);
+        Integer offeredSeats = r.getInt(4);
+        Integer occupiedSeats = r.getInt(5);
         String restrictions = r.getString(6);
         String details = r.getString(7);
-        LocalDate cancelDate = r.getDate(8).toLocalDate();
-        String npVehicle = r.getString(9);
+        LocalDate CancelDate = r.getDate(8).toLocalDate();
+        String vehicleNumberPlate = r.getString(9);
         String origin = r.getString(10);
         String destination = r.getString(11);
         BigDecimal latitudeOrigin = r.getBigDecimal(12);
         BigDecimal longitudeOrigin = r.getBigDecimal(13);
         BigDecimal latitudeDestination = r.getBigDecimal(14);
         BigDecimal longitudeDestination = r.getBigDecimal(15);
-        String userName = r.getString(16);
-        return new GatewayTrip(id,startDate,startTime, oferredSeats ,ocupiedSeats,restrictions,details, cancelDate,
-                npVehicle, origin, destination,latitudeOrigin, longitudeOrigin, latitudeDestination, longitudeDestination, userName);
+        String username = r.getString(16);
+        return new GatewayTrip(id,startDate,startTime, offeredSeats ,occupiedSeats,restrictions,details, CancelDate,
+                vehicleNumberPlate, origin, destination,latitudeOrigin, longitudeOrigin, latitudeDestination, longitudeDestination, username);
     }
 
 }

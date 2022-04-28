@@ -107,9 +107,9 @@ public class TripController {
     @PostMapping("/car-pooling/create")
     public void createTrip(@RequestBody GatewayTrip gT) throws SQLException {
         System.out.println(gT.json());
-        System.out.println(gT.getUserName());
+        System.out.println(gT.getOfferedSeats());
         FinderTrip fT = FinderTrip.getInstance();
-        if (fT.findByUser(gT.getUserName(),gT.getStartDate(),gT.getStartTime()) != null) throw new TripAlreadyExists(gT.getUserName());
+        if (fT.findByUser(gT.getUsername(),gT.getStartDate(),gT.getStartTime()) != null) throw new TripAlreadyExists(gT.getUsername());
         gT.insert();
     }
     /**
@@ -136,10 +136,9 @@ public class TripController {
         FinderTrip fT = FinderTrip.getInstance();
         BigDecimal radiLat = Radi.multiply(BigDecimal.valueOf(0.00904371));
         System.out.println(radiLat);
-        BigDecimal radiLong = BigDecimal.valueOf(Radi.doubleValue()/(111.320*cos(latitude.doubleValue())));
+        BigDecimal radiLong = BigDecimal.valueOf(Radi.doubleValue()/(111.320*cos(latitude.doubleValue()))).abs();
         System.out.println(radiLong);
-        BigDecimal a = new BigDecimal("0.5");
-        ArrayList<GatewayTrip> corT = fT.findByCoordinates(latitude.subtract(a),latitude.add(a),longitude.subtract(a), longitude.add(a));
+        ArrayList<GatewayTrip> corT = fT.findByCoordinates(latitude.subtract(radiLat),latitude.add(radiLat),longitude.subtract(radiLong), longitude.add(radiLong));
         if(corT == null)throw new TripNotFound();
         return corT;
     }

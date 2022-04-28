@@ -35,7 +35,7 @@ public class TripTest {
         gT.insert();
         FinderTrip fT = FinderTrip.getInstance();
         GatewayTrip gTTest = fT.findById(3);
-        String res = gTTest.getId() + " " + gTTest.getNpVehicle();
+        String res = gTTest.getId() + " " + gTTest.getVehicleNumberPlate();
         d.executeSQLUpdate("delete from TRIP where id = '2';");
         assertEquals("2 1234aas", res);
     }
@@ -59,7 +59,7 @@ public class TripTest {
             gT.setRestrictions("NoMascotes");
             gT.update();
             gT = fT.findById(2);
-            String res = gT.getId() + " " + gT.getNpVehicle() + " " + gT.getRestrictions();
+            String res = gT.getId() + " " + gT.getVehicleNumberPlate() + " " + gT.getRestrictions();
             assertEquals("2 1234aas NoMascotes", res);
         }
         catch (SQLException s) {

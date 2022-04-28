@@ -28,50 +28,50 @@ public class GatewayTrip implements Gateway{
      * id varchar(100),
      * 	startDate Date,
      * 	startTime Time,
-     * 	oferredSeats integer,
-     * 	ocupiedSeats integer,
+     * 	offeredSeats integer,
+     * 	occupiedSeats integer,
      * 	restrictions text,
      * 	CancelDate Date,
-     * 	nPVehicle varchar(100),
+     * 	vehicleNumberPlate varchar(100),
      * 	Latitude varchar(100),
      * 	Longitude varchar(100),
      */
     private Integer id;
     private LocalDate startDate;
     private Time startTime;
-    private Integer oferredSeats;
-    private Integer ocupiedSeats;
+    private Integer offeredSeats;
+    private Integer occupiedSeats;
     private String restrictions;
     private String details;
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    private LocalDate cancelDate;
-    private String npVehicle;
+    private LocalDate CancelDate;
+    private String vehicleNumberPlate;
     private String origin;
     private String destination;
     private BigDecimal LatitudeOrigin;
     private BigDecimal LongitudeOrigin;
     private BigDecimal LatitudeDestination;
     private BigDecimal LongitudeDestination;
-    private String userName;
+    private String username;
 
     public GatewayTrip(){}
     /**
      * @brief Creadora de la Clase GatewayTrip amb tots els seus respectius parametres
      * @param id per identificar el viatge
-     * @param cancelDate data del ultim dia de cancelacio
+     * @param CancelDate data del ultim dia de cancelacio
      * @param latitudeO longitud inici
      * @param longitudeO longitud inici
-     * @param npVehicle matricula del vehicle que fara el viatge
-     * @param ocupiedSeats seients ocupats
-     * @param oferredSeats seients oferts
+     * @param vehicleNumberPlate matricula del vehicle que fara el viatge
+     * @param occupiedSeats seients ocupats
+     * @param offeredSeats seients oferts
      * @param restrictions restriccions del viatge posades pel conductor
      * @param startDate data del viatge
      * @param startTime temps sortida viatge
@@ -83,41 +83,41 @@ public class GatewayTrip implements Gateway{
      * @post Es crea un nou GWTrip amb els valors indicats
      */
 
-    public GatewayTrip(Integer id, LocalDate startDate, Time startTime, Integer oferredSeats, Integer ocupiedSeats, String restrictions, String details, LocalDate cancelDate, String npVehicle,String origin, String destination, BigDecimal latitudeO, BigDecimal longitudeO,BigDecimal latitudeD, BigDecimal longitudeD,String userName) {
+    public GatewayTrip(Integer id, LocalDate startDate, Time startTime, Integer offeredSeats, Integer occupiedSeats, String restrictions, String details, LocalDate CancelDate, String vehicleNumberPlate,String origin, String destination, BigDecimal latitudeO, BigDecimal longitudeO,BigDecimal latitudeD, BigDecimal longitudeD,String username) {
         this.id = id;
         this.startDate = startDate;
         this.startTime = startTime;
-        this.oferredSeats = oferredSeats;
-        this.ocupiedSeats = ocupiedSeats;
+        this.offeredSeats = offeredSeats;
+        this.occupiedSeats = occupiedSeats;
         this.restrictions = restrictions;
         this.details = details;
-        this.cancelDate = cancelDate;
-        this.npVehicle = npVehicle;
+        this.CancelDate = CancelDate;
+        this.vehicleNumberPlate= vehicleNumberPlate;
         this.origin = origin;
         this.destination = destination;
         this.LatitudeOrigin = latitudeO;
         this.LongitudeOrigin = longitudeO;
         this.LatitudeDestination = latitudeD;
         this.LongitudeDestination = longitudeD;
-        this.userName = userName;
+        this.username = username;
     }
 
-    public GatewayTrip(LocalDate startDate, Time startTime, Integer oferredSeats, Integer ocupiedSeats, String restrictions, String details, LocalDate cancelDate, String npVehicle,String origin, String destination, BigDecimal latitudeO, BigDecimal longitudeO,BigDecimal latitudeD, BigDecimal longitudeD, String userName) {
+    public GatewayTrip(LocalDate startDate, Time startTime, Integer offeredSeats, Integer occupiedSeats, String restrictions, String details, LocalDate CancelDate, String vehicleNumberPlate,String origin, String destination, BigDecimal latitudeO, BigDecimal longitudeO,BigDecimal latitudeD, BigDecimal longitudeD, String username) {
         this.startDate = startDate;
         this.startTime = startTime;
-        this.oferredSeats = oferredSeats;
-        this.ocupiedSeats = ocupiedSeats;
+        this.offeredSeats = offeredSeats;
+        this.occupiedSeats = occupiedSeats;
         this.restrictions = restrictions;
         this.details = details;
-        this.cancelDate = cancelDate;
-        this.npVehicle = npVehicle;
+        this.CancelDate = CancelDate;
+        this.vehicleNumberPlate = vehicleNumberPlate;
         this.origin = origin;
         this.destination = destination;
         this.LatitudeOrigin = latitudeO;
         this.LongitudeOrigin = longitudeO;
         this.LatitudeDestination = latitudeD;
         this.LongitudeDestination = longitudeD;
-        this.userName = userName;
+        this.username = username;
     }
 
 
@@ -129,18 +129,18 @@ public class GatewayTrip implements Gateway{
     public void setStartDate(LocalDate startDate) {this.startDate = startDate;}
     public Time getStartTime() {return startTime;}
     public void setStartTime(Time startTime) {this.startTime = startTime;}
-    public Integer getOferredSeats() {return oferredSeats;}
-    public void setOferredSeats(Integer oferredSeats) {this.oferredSeats = oferredSeats;}
-    public Integer getOcupiedSeats() {return ocupiedSeats;}
-    public void setOcupiedSeats(Integer ocupiedSeats) {this.ocupiedSeats = ocupiedSeats;}
+    public Integer getOfferedSeats() {return offeredSeats;}
+    public void setOfferedSeats(Integer offeredSeats) {this.offeredSeats = offeredSeats;}
+    public Integer getOccupiedSeats() {return occupiedSeats;}
+    public void setOccupiedSeats(Integer occupiedSeats) {this.occupiedSeats = occupiedSeats;}
     public String getRestrictions() {return restrictions;}
     public void setRestrictions(String restrictions) {this.restrictions = restrictions;}
     public String getDetails() {return details;}
     public void setDetails(String details) {this.details = details;}
-    public LocalDate getCancelDate() {return cancelDate;}
-    public void setCancelDate(LocalDate cancelDate) {this.cancelDate = cancelDate;}
-    public String getNpVehicle() {return npVehicle;}
-    public void setNpVehicle(String npVehicle) {this.npVehicle = npVehicle;}
+    public LocalDate getCancelDate() {return CancelDate;}
+    public void setCancelDate(LocalDate CancelDate) {this.CancelDate = CancelDate;}
+    public String getVehicleNumberPlate() {return vehicleNumberPlate;}
+    public void setVehicleNumberPlate(String vehicleNumberPlate) {this.vehicleNumberPlate = vehicleNumberPlate;}
     public String getOrigin() {return origin;}
     public void setOrigin(String origin) {this.origin = origin;}
     public String getDestination() {return destination;}
@@ -166,37 +166,37 @@ public class GatewayTrip implements Gateway{
     public void setFullPreparedStatement(PreparedStatement pS) throws SQLException {
         pS.setDate(1, Date.valueOf(startDate));
         pS.setTime(2,startTime);
-        pS.setInt(3,oferredSeats);
-        pS.setInt(4,ocupiedSeats);
+        pS.setInt(3,offeredSeats);
+        pS.setInt(4,occupiedSeats);
         pS.setString(5,restrictions);
         pS.setString(6,details);
-        pS.setDate(7, Date.valueOf(cancelDate));
-        pS.setString(8,npVehicle);
+        pS.setDate(7, Date.valueOf(CancelDate));
+        pS.setString(8,vehicleNumberPlate);
         pS.setString(9,origin);
         pS.setString(10,destination);
         pS.setString(11, String.valueOf(LatitudeOrigin));
         pS.setString(12, String.valueOf(LongitudeOrigin));
         pS.setString(13, String.valueOf(LatitudeOrigin));
         pS.setString(14, String.valueOf(LongitudeOrigin));
-        pS.setString(15,userName);
+        pS.setString(15,username);
     }
 
     public void setFullPreparedStatementUpdate(PreparedStatement pS) throws SQLException {
         pS.setDate(1, Date.valueOf(startDate));
         pS.setTime(2,startTime);
-        pS.setInt(3,oferredSeats);
-        pS.setInt(4,ocupiedSeats);
+        pS.setInt(3,offeredSeats);
+        pS.setInt(4,occupiedSeats);
         pS.setString(5,restrictions);
         pS.setString(6,details);
-        pS.setDate(7, Date.valueOf(cancelDate));
-        pS.setString(8,npVehicle);
+        pS.setDate(7, Date.valueOf(CancelDate));
+        pS.setString(8,vehicleNumberPlate);
         pS.setString(9,origin);
         pS.setString(10,destination);
         pS.setString(11, String.valueOf(LatitudeOrigin));
         pS.setString(12, String.valueOf(LongitudeOrigin));
         pS.setString(13, String.valueOf(LatitudeDestination));
         pS.setString(14, String.valueOf(LongitudeDestination));
-        pS.setString(16,userName);
+        pS.setString(16,username);
         pS.setInt(15,id);
     }
 
@@ -208,7 +208,7 @@ public class GatewayTrip implements Gateway{
     public void insert() throws SQLException {
         Database d = Database.getInstance();
         Connection c = d.getConnection();
-        PreparedStatement pS = c.prepareStatement("INSERT INTO TRIP(startDate,startTime,oferredSeats,ocupiedSeats,restrictions, details,CancelDate,nPVehicle,origin,destination,LatitudeOrigin,LongitudeOrigin,LatitudeDestination,LongitudeDestination,userName) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?); ");
+        PreparedStatement pS = c.prepareStatement("INSERT INTO TRIP(startDate,startTime,offeredSeats,occupiedSeats,restrictions, details,CancelDate,vehicleNumberPlate,origin,destination,LatitudeOrigin,LongitudeOrigin,LatitudeDestination,LongitudeDestination,username) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?); ");
         setFullPreparedStatement(pS);
         pS.executeUpdate();
     }
@@ -220,9 +220,9 @@ public class GatewayTrip implements Gateway{
     public void update() throws SQLException {
         Database d = Database.getInstance();
         Connection c = d.getConnection();
-        PreparedStatement pS = c.prepareStatement("UPDATE TRIP SET startDate = ?, startTime = ?, oferredSeats = ?," +
-                "ocupiedSeats = ?, restrictions = ?, details = ?, CancelDate = ?, nPVehicle = ?, origin = ?, destination = ?," +
-                " LatitudeOrigin = ?, LongitudeOrigin = ?, LatitudeDestination = ?, LongitudeDestination = ?, userName = ? WHERE id = ?");
+        PreparedStatement pS = c.prepareStatement("UPDATE TRIP SET startDate = ?, startTime = ?, offeredSeats = ?," +
+                "occupiedSeats = ?, restrictions = ?, details = ?, CancelDate = ?, vehicleNumberPlate = ?, origin = ?, destination = ?," +
+                " LatitudeOrigin = ?, LongitudeOrigin = ?, LatitudeDestination = ?, LongitudeDestination = ?, username = ? WHERE id = ?");
         setFullPreparedStatementUpdate(pS);
         pS.executeUpdate();
     }
