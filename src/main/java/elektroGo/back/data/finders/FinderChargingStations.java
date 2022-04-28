@@ -62,12 +62,12 @@ public class FinderChargingStations {
      * @param idChargingStation id del punt de carrega
      * @return Retorna el punt de carrega amb tota la seva informacio
      */
-    public GatewayChargingStations findByID(long idChargingStation) throws SQLException {
+    public GatewayChargingStations findByID(int idChargingStation) throws SQLException {
         GatewayChargingStations gCS = null;
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
         PreparedStatement pS = conn.prepareStatement("SELECT * FROM CHARGINGSTATIONS WHERE id = ?;");
-        pS.setLong(1,idChargingStation);
+        pS.setLong(1, idChargingStation);
         ResultSet r = pS.executeQuery();
         if (r.next()) gCS = createGateway(r);
 
@@ -108,9 +108,19 @@ public class FinderChargingStations {
      */
     private GatewayChargingStations createGateway(ResultSet r) throws SQLException {
         Integer id = r.getInt(1);
-        BigDecimal longitude = r.getBigDecimal(2);
-        BigDecimal latitude = r.getBigDecimal(3);
-        Integer numberOfChargers = r.getInt(4);
-        return new GatewayChargingStations(id, longitude, latitude, numberOfChargers);
+        String promotor = r.getString(2);
+        String acces = r.getString(3);
+        String tipusVelocitat = r.getString(4);
+        String tipusConnexio = r.getString(5);
+        BigDecimal longitude = r.getBigDecimal(5);
+        BigDecimal latitude = r.getBigDecimal(7);
+        String descriptiva_designacio = r.getString(8);
+        Double kw = r.getDouble(9);
+        String AcDc = r.getString(5);
+        String ident = r.getString(5);
+        String numberOfChargers = r.getString(6);
+        String tipusVehicle = r.getString(5);
+        return new GatewayChargingStations(id, promotor, acces, tipusVelocitat, tipusConnexio, longitude, latitude, descriptiva_designacio,
+                kw, AcDc, ident, numberOfChargers, tipusVehicle);
     }
 }
