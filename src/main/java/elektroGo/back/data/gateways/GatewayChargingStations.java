@@ -8,8 +8,10 @@ package elektroGo.back.data.gateways;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import elektroGo.back.RestService;
 import elektroGo.back.data.Database;
 import elektroGo.back.data.finders.FinderChargingStations;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -260,7 +262,7 @@ public class GatewayChargingStations implements Gateway{
         if (tipus_connexio != null) pS.setString(5,tipus_connexio);else pS.setString(5, null);
         pS.setBigDecimal(6, latitude);
         pS.setBigDecimal(7, longitude);
-        if (designacio_descriptiva != null) pS.setString(8,designacio_descriptiva);else pS.setString(5, null);
+        if (designacio_descriptiva != null) pS.setString(8,designacio_descriptiva);else pS.setString(8, null);
         if (kw != null) pS.setDouble(9,kw);else pS.setString(9, null);
         if (ac_dc != null) pS.setString(10,ac_dc);else pS.setString(10, null);
         if (ide_pdr != null) pS.setString(11,ide_pdr);else pS.setString(11, null);
@@ -274,10 +276,20 @@ public class GatewayChargingStations implements Gateway{
      * @pre S'ens passa un pS
      * @post el pS queda assignat amb la info requerida
      */
-    private void setPreparedStatementNoID(PreparedStatement pS) throws SQLException {
-        pS.setBigDecimal(1, latitude);
-        pS.setBigDecimal(2,longitude);
-        if (numberOfChargers != null) pS.setString(3,numberOfChargers); else pS.setString(3, null);
+    private void setPreparedStatementIdEnd(PreparedStatement pS) throws SQLException {
+        if (promotor_gestor != null) pS.setString(1,promotor_gestor);else pS.setString(1, null);
+        if (acces != null) pS.setString(2,acces);else pS.setString(2, null);
+        if (tipus_velocitat != null) pS.setString(3,tipus_velocitat);else pS.setString(3, null);
+        if (tipus_connexio != null) pS.setString(4,tipus_connexio);else pS.setString(4, null);
+        pS.setBigDecimal(5, latitude);
+        pS.setBigDecimal(6, longitude);
+        if (designacio_descriptiva != null) pS.setString(7,designacio_descriptiva);else pS.setString(7, null);
+        if (kw != null) pS.setDouble(8,kw);else pS.setString(8, null);
+        if (ac_dc != null) pS.setString(9,ac_dc);else pS.setString(9, null);
+        if (ide_pdr != null) pS.setString(10,ide_pdr);else pS.setString(10, null);
+        if (numberOfChargers != null) pS.setString(11,numberOfChargers);else pS.setString(11, null);
+        if (tipus_vehicle != null) pS.setString(12,tipus_vehicle);else pS.setString(12, null);
+        pS.setInt(13,id);
     }
 
     /**
@@ -299,10 +311,10 @@ public class GatewayChargingStations implements Gateway{
     public void update() throws SQLException {
         Database d = Database.getInstance();
         Connection c = d.getConnection();
-        PreparedStatement pS = c.prepareStatement("UPDATE CHARGINGSTATIONS SET latitude = ?, longitude = ?," +
-                " numeroPlaces = ? WHERE id = ?;");
-        setPreparedStatementNoID(pS);
-        pS.setLong(4, id);
+        PreparedStatement pS = c.prepareStatement("UPDATE CHARGINGSTATIONS SET promotorGestor = ?, acces = ?, " +
+                " tipusVelocitat = ?, tipusConnexio = ?, latitude = ?, longitude = ?, descriptiva_deseignacio = ?," +
+                " kw = ?, AcDc = ?, ident = ?, numeroPlaces = ?, tipus_vehicle = ? WHERE id = ?;");
+        setPreparedStatementIdEnd(pS);
         pS.executeUpdate();
     }
 
@@ -313,6 +325,12 @@ public class GatewayChargingStations implements Gateway{
     public void remove() throws SQLException {
         Database d = Database.getInstance();
         d.executeSQLUpdate("DELETE FROM CHARGINGSTATIONS WHERE id=" + id + ";");
+    }
+
+    @PostMapping("/UpdateDB")
+    public void updateBD() throws SQLException {
+        RestService re = null;
+        re.UpdateBD();
     }
 
     /**
