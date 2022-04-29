@@ -64,7 +64,7 @@ public class GatewayVehicle implements Gateway{
      * @param fabricationYear Any de fabricacio del vehicle.
      * @param seats Seients del vehicle.
      * @param imageId Identificador de la imatge del vehicle.
-     * @post Es crea un GatewayVehicle amb els parametres especificats
+     * @return Retorna la instancia del gateway que s'acaba de crear
      */
     public GatewayVehicle(String brand, String model, String numberPlate, Integer drivingRange, Integer fabricationYear, Integer seats, String imageId) {
         setUp(brand, model, numberPlate, drivingRange, fabricationYear, seats);
@@ -79,7 +79,7 @@ public class GatewayVehicle implements Gateway{
      * @param drivingRange Autonomia del vehicle.
      * @param fabricationYear Any de fabricacio del vehicle.
      * @param seats Seients del vehicle.
-     * @post Crea un GatewayVehicle amb els parametres especificats
+     * @return Retorna la instancia del gateway que s'acaba de crear
      */
     public GatewayVehicle(String brand, String model, String numberPlate, Integer drivingRange, Integer fabricationYear, Integer seats) {
         setUp(brand, model, numberPlate, drivingRange, fabricationYear, seats);

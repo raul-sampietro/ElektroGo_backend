@@ -12,7 +12,6 @@ import elektroGo.back.data.gateways.GatewayChargingStations;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Objects;
 
 class Rectangle {
     Point BL;
@@ -190,7 +189,7 @@ public class RouteCalculation {
      * @brief Funcio que calcula per quines estacions de carrega s'ha de passar per poder anar de l'origen al desti tenint
      * en compte l'autonomia del vehicle
      * @pre S'ha executat abans la funcio selectPossibleChargers()
-     * @post L'atribut definitive conte la llista, en ordre, de carregadors pels quals s'ha de passar per poder fer la ruta entre l'origen i el desti
+     * @post L'atribut \p definitive conte la llista, en ordre, de carregadors pels quals s'ha de passar per poder fer la ruta entre l'origen i el desti
      */
     public boolean execute() {
         matrix = distanceCalculator.calculateRoadDistanceMatrix(origin, destination, candidates);
@@ -219,14 +218,6 @@ public class RouteCalculation {
             result.add(p.getLongitude());
         }
         return result;
-    }
-
-    /**
-     * @brief Funcion que comproba si la API KEY per calcular les distancies es correcte
-     * @return Retorna fals si la API KEY no es correcte, cert en cas contrari
-     */
-    public boolean checkAPIKey() {
-        return !Objects.equals(distanceCalculator.getUrlKey(), "&key=");
     }
 
 }

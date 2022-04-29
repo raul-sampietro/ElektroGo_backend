@@ -26,16 +26,13 @@ public class RouteCalculationTest {
         String expected = "";
 
         RouteCalculation routeCalculation = new RouteCalculation(range, oriLat, oriLon, destLat, destLon);
-        if (routeCalculation.checkAPIKey()) {
-            routeCalculation.execute();
-            ArrayList<Double> actualList = routeCalculation.getResult();
-            String actual = "";
-            for (int i = 0; i < actualList.size() - 1; i+= 2) {
-                actual += actualList.get(i) + " " + actualList.get(i+1);
-            }
-            assertEquals(expected, actual);
+        routeCalculation.execute();
+        ArrayList<Double> actualList = routeCalculation.getResult();
+        String actual = "";
+        for (int i = 0; i < actualList.size() - 1; i+= 2) {
+            actual += actualList.get(i) + " " + actualList.get(i+1);
         }
-        else assertNull(null);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -56,16 +53,13 @@ public class RouteCalculationTest {
         }
 
         RouteCalculation routeCalculation = new RouteCalculation(range, oriLat, oriLon, destLat, destLon);
-        if (routeCalculation.checkAPIKey()) {
-            routeCalculation.execute();
-            ArrayList<Double> actualList = routeCalculation.getResult();
-            String actual = "";
-            for (int i = 0; i < actualList.size() - 1; i+= 2) {
-                actual += actualList.get(i) + " " + actualList.get(i+1);
-            }
-            assertEquals(expected, actual);
+        routeCalculation.execute();
+        ArrayList<Double> actualList = routeCalculation.getResult();
+        String actual = "";
+        for (int i = 0; i < actualList.size() - 1; i+= 2) {
+            actual += actualList.get(i) + " " + actualList.get(i+1);
         }
-        else assertNull(null);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -87,15 +81,12 @@ public class RouteCalculationTest {
         }
 
         RouteCalculation routeCalculation = new RouteCalculation(range, oriLat, oriLon, destLat, destLon);
-        if (routeCalculation.checkAPIKey()) {
-            routeCalculation.execute();
-            ArrayList<Double> actualList = routeCalculation.getResult();
-            String actual = "";
-            for (int i = 0; i < actualList.size() - 1; i+= 2) {
-                actual += actualList.get(i) + " " + actualList.get(i+1);
-            }
-            assertEquals(expected, actual);
+        routeCalculation.execute();
+        ArrayList<Double> actualList = routeCalculation.getResult();
+        String actual = "";
+        for (int i = 0; i < actualList.size() - 1; i+= 2) {
+            actual += actualList.get(i) + " " + actualList.get(i+1);
         }
-        else assertNull(null);
+        assertEquals(expected, actual);
     }
 }

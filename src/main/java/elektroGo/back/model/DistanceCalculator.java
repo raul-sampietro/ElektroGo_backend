@@ -40,10 +40,6 @@ public class DistanceCalculator {
      */
     private String urlDestinations = "&destinations=";
 
-    public String getUrlKey() {
-        return urlKey;
-    }
-
     /**
      * @brief Contingut de la url que especifica la API KEY
      */
