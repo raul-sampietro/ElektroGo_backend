@@ -57,6 +57,27 @@ public class FinderChats {
     }
 
     /**
+     * @brief Funcio que agafa un missatge en concret de la base de dades
+     * @param sender nom de l'usuari que envia el missatge
+     * @param receiver nom de l'usuari que rep el missatge
+     * @param message contingut del missatge
+     * @return Es retorna el GatewayChats amb la informacio del missatge indicat
+     */
+    public GatewayChats findByMessage(String sender, String receiver, String message) throws SQLException {
+        GatewayChats gC = null;
+        Database d = Database.getInstance();
+        Connection conn = d.getConnection();
+        PreparedStatement ps = conn.prepareStatement("SELECT * FROM CHATS WHERE sender = ? AND receiver = ? AND message = ?;");
+        ps.setString(1, sender);
+        ps.setString(2, receiver);
+        ps.setString(3, message);
+        ResultSet r = ps.executeQuery();
+        if (r.next()) gC = createGateway(r);
+        return gC;
+    }
+
+
+    /**
      * @brief Funció que agafa tots els missatges entre els dos usuaris indicats
      * @param userA nom de l'usuari A
      * @param userB nom de l'usuari B
