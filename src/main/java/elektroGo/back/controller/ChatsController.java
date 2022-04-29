@@ -63,7 +63,7 @@ public class ChatsController {
      * @param sender nom de l'usuari que envia el missatge
      * @param receiver nom de l'usuari que rep el missatge
      * @param message contingut del missatge en si
-     * @return Retrona cert si el missatge s'ha creat correctament i fals en cas contrari
+     * @post El missatge s'ha creat correctament
      */
     @PostMapping("/sendMessage")
     public void postSendMessage(@RequestParam String sender, @RequestParam String receiver, @RequestParam String message) throws SQLException {
