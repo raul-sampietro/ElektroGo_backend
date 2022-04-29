@@ -17,9 +17,8 @@ public class RatingTest {
 
     FinderRating fR = FinderRating.getInstance();
     @BeforeEach
-    public void Initialize() throws SQLException {
+    public void Initialize() {
         fR = FinderRating.getInstance();
-        createUsers();
     }
 
 
@@ -43,23 +42,6 @@ public class RatingTest {
         return gR;
     }
 
-
-
-    private void createUsers() throws SQLException {
-        FinderUser fU = FinderUser.getInstance();
-        if (fU.findByUserName("Test2")==null) {
-            GatewayUser gU = new GatewayUser("Test2","test2@test2.test2","1234");
-            gU.insert();
-        }
-        if (fU.findByUserName("Test3")==null) {
-            GatewayUser gU = new GatewayUser("Test3", "test3@test3.test3", "1234");
-            gU.insert();
-        }
-        if (fU.findByUserName("Test4")==null) {
-            GatewayUser gU = new GatewayUser("Test4","test4@test4.test4","1234");
-            gU.insert();
-        }
-    }
 
 
 
