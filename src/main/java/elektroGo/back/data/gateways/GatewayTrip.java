@@ -176,8 +176,8 @@ public class GatewayTrip implements Gateway{
         pS.setString(10,destination);
         pS.setString(11, String.valueOf(LatitudeOrigin));
         pS.setString(12, String.valueOf(LongitudeOrigin));
-        pS.setString(13, String.valueOf(LatitudeOrigin));
-        pS.setString(14, String.valueOf(LongitudeOrigin));
+        pS.setString(13, String.valueOf(LatitudeDestination));
+        pS.setString(14, String.valueOf(LongitudeDestination));
         pS.setString(15,username);
     }
 
