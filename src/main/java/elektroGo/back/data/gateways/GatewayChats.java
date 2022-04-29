@@ -14,12 +14,14 @@ import elektroGo.back.data.Database;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 /**
  * @brief La classe GatewayChats implementa el Gateway de Chats el qual te els atributs de Chats i fa insert/update/delete a la BD
  */
 public class GatewayChats implements Gateway{
+
+    private static final SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 
     /**
      * @brief Nom de l'usuari que envia el missatge
@@ -39,11 +41,11 @@ public class GatewayChats implements Gateway{
     /**
      * @brief Timestamp en el que s'ha enviat el missatge
      */
-    private Timestamp sentAt;
+    private String sentAt;
 
     /**
      * @brief Constructora buida
-     * @post Crea un GatewayChats buit
+     * @return Crea un GatewayChats buit
      */
     public GatewayChats(){}
 
@@ -55,7 +57,7 @@ public class GatewayChats implements Gateway{
      * @param sentAt moment en el qual s'ha enviat el missatge
      * @return Retorna la instancia del gateway que s'acaba de crear
      */
-    public GatewayChats(String sender, String receiver, String message, Timestamp sentAt) {
+    public GatewayChats(String sender, String receiver, String message, String sentAt) {
         setUp(sender, receiver, message, sentAt);
     }
 
@@ -67,7 +69,7 @@ public class GatewayChats implements Gateway{
      * @param sentAt moment en el qual s'ha enviat el missatge
      * @post Inicialitza l'objecte amb els parametres indicats previament
      */
-    private void setUp(String sender, String receiver, String message, Timestamp sentAt) {
+    private void setUp(String sender, String receiver, String message, String sentAt) {
         this.sender = sender;
         this.receiver = receiver;
         this.message = message;
@@ -100,11 +102,11 @@ public class GatewayChats implements Gateway{
         this.message = message;
     }
 
-    public Timestamp getSentAt() {
+    public String getSentAt() {
         return sentAt;
     }
 
-    public void setSentAt(Timestamp sentAt) {
+    public void setSentAt(String sentAt) {
         this.sentAt = sentAt;
     }
 
@@ -120,7 +122,7 @@ public class GatewayChats implements Gateway{
         pS.setString(1, sender);
         pS.setString(2, receiver);
         pS.setString(3, message);
-        pS.setTimestamp(4, sentAt);
+        pS.setString(4, sentAt);
     }
 
     /**
@@ -147,7 +149,7 @@ public class GatewayChats implements Gateway{
         PreparedStatement pS = c.prepareStatement("UPDATE CHATS SET message = ? WHERE sender = ? AND receiver = ? and sentAt = ?;");
         pS.setString(1, sender);
         pS.setString(2, receiver);
-        pS.setTimestamp(3, sentAt);
+        pS.setString(3, sentAt);
         pS.executeUpdate();
     }
 
@@ -162,7 +164,7 @@ public class GatewayChats implements Gateway{
         PreparedStatement pS = c.prepareStatement("DELETE FROM CHATS WHERE sender = ? AND receiver = ? and sentAt = ?;");
         pS.setString(1, sender);
         pS.setString(2, receiver);
-        pS.setTimestamp(3, sentAt);
+        pS.setString(3, sentAt);
         pS.executeUpdate();
     }
 

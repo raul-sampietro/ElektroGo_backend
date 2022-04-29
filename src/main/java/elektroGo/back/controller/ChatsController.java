@@ -10,12 +10,10 @@ package elektroGo.back.controller;
 import elektroGo.back.data.finders.FinderChats;
 import elektroGo.back.data.gateways.GatewayChats;
 import elektroGo.back.model.Chat;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 //todo exceptions
@@ -58,6 +56,22 @@ public class ChatsController {
     public ArrayList<String> getChatByConversation(@RequestParam String user) throws SQLException {
         FinderChats fC = FinderChats.getInstance();
         return fC.findByUser(user);
+    }
+
+    /**
+     * @brief Metode 'POST' que crea un missatge entre dos usuaris
+     * @param sender nom de l'usuari que envia el missatge
+     * @param receiver nom de l'usuari que rep el missatge
+     * @param message contingut del missatge en si
+     * @return Retrona cert si el missatge s'ha creat correctament i fals en cas contrari
+     */
+    @PostMapping("/sendMessage")
+    public boolean postSendMessage(@RequestParam String sender, @RequestParam String receiver, @RequestParam String message) throws SQLException {
+        String timestamp = String.valueOf(new Timestamp(System.currentTimeMillis()));
+        timestamp = timestamp.substring(0, timestamp.length() - 4);
+        GatewayChats gC = new GatewayChats(sender, receiver, message,timestamp);
+        gC.insert();
+        return true;
     }
 
 }

@@ -105,6 +105,7 @@ public class FinderChats {
         return chats;
     }
 
+
     /**
      * @brief Crear un gateway amb els parametres passats
      * @param r ResultSet que contindra tots el parametres per poder crear el Gateway (sender, receiver, message, createdAt)
@@ -114,7 +115,7 @@ public class FinderChats {
         String sender = r.getString(1);
         String receiver = r.getString(2);
         String message = r.getString(3);
-        Timestamp sentAt = r.getTimestamp(4);
+        String sentAt = r.getString(4);
         return new GatewayChats(sender, receiver, message, sentAt);
     }
 
