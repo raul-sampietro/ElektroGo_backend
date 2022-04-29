@@ -31,7 +31,7 @@ import static java.lang.Math.cos;
  */
 @RestController
 public class TripController {
-    String password = "test";
+    String password = "34ee7e6c4c51e43ed6a7767bc717a7f9127d3d0025a0efbf6af124d15821c6ec";
     /**
      * @brief Funció amb metode 'GET' que retorna la informació del trip amb el id corresponen
      * @param id Trip del que volem agafar la info
