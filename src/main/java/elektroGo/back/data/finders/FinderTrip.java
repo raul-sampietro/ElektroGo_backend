@@ -97,7 +97,7 @@ public class FinderTrip {
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
         ArrayList<GatewayTrip> corT = new ArrayList<>();
-        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ?;");
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and startDate >= CURDATE() and startTime >= CURTIME() ;");
         pS.setBigDecimal(1,lat1);
         pS.setBigDecimal(2,lat2);
         pS.setBigDecimal(3,long1);

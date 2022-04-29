@@ -237,9 +237,9 @@ public class GatewayTrip implements Gateway{
     }
 
     /**
-     * @brief Funció converteix en un String json un GatewayDriver
-     * @post El GWDriver esta en format String json
-     * @return es retorna el String Json amb la info del GWDriver
+     * @brief Funció converteix en un String json un Gateway
+     * @post El GW esta en format String json
+     * @return es retorna el String Json amb la info del GW
      */
     public String json() {
         ObjectMapper mapper = new ObjectMapper();
