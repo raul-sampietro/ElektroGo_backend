@@ -8,7 +8,9 @@
 package elektroGo.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import elektroGo.back.data.finders.FinderTrip;
+import elektroGo.back.data.finders.FinderUserTrip;
 import elektroGo.back.data.gateways.GatewayTrip;
+import elektroGo.back.data.gateways.GatewayUserTrip;
 import elektroGo.back.exceptions.InvalidKey;
 import elektroGo.back.exceptions.TripAlreadyExists;
 import elektroGo.back.exceptions.TripNotFound;
@@ -111,6 +113,9 @@ public class TripController {
         FinderTrip fT = FinderTrip.getInstance();
         if (fT.findByUser(gT.getUsername(),gT.getStartDate(),gT.getStartTime()) != null) throw new TripAlreadyExists(gT.getUsername());
         gT.insert();
+        GatewayTrip gNew = fT.findByUser(gT.getUsername(),gT.getStartDate(),gT.getStartTime());
+        GatewayUserTrip gU = new GatewayUserTrip(gNew.getId(),gNew.getUsername());
+        gU.insert();
     }
     /**
      * @brief Funció amb metode 'POST' que demana que s'esborri un Trip de la BD
