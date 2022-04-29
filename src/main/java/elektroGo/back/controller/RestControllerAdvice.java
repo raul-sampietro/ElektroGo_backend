@@ -155,6 +155,30 @@ public class RestControllerAdvice {
         return handleError(ex, response, 441);
     }
 
+    /**
+     * @brief Handler per capturar l'excepcio RatingNotFound
+     * @param ex Excepcio capturada
+     * @param response Response http per setejar els codis d'error
+     * @post Envia l'error http corresponent al client
+     * @return Retorna l'error de l'excepcio
+     */
+    @ExceptionHandler(RatingNotFound.class)
+    public String handleRatingNotFound(RatingNotFound ex, HttpServletResponse response) {
+        return handleError(ex, response, 442);
+    }
+
+    /**
+     * @brief Handler per capturar l'excepcio ReportNotFound
+     * @param ex Excepcio capturada
+     * @param response Response http per setejar els codis d'error
+     * @post Envia l'error http corresponent al client
+     * @return Retorna l'error de l'excepcio
+     */
+    @ExceptionHandler(ReportNotFound.class)
+    public String handleReportNotFound(ReportNotFound ex, HttpServletResponse response) {
+        return handleError(ex, response, 445);
+    }
+
 
 }
 

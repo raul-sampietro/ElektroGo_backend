@@ -1,6 +1,6 @@
 package elektroGo.back;
 
-import elektroGo.back.data.Database;
+
 import elektroGo.back.data.finders.FinderVehicle;
 import elektroGo.back.data.gateways.GatewayVehicle;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,6 @@ public class VehicleTest {
 
     @Test
     public void createVehicleTest() throws SQLException {
-        Database d = Database.getInstance();
         GatewayVehicle gV =  insertTestVehicleComplet();
         FinderVehicle fV = FinderVehicle.getInstance();
         GatewayVehicle gVTest = fV.findByNumberPlate(gV.getNumberPlate());
@@ -40,7 +39,6 @@ public class VehicleTest {
 
     @Test
     public void createVehicleTest2() throws SQLException {
-        Database d = Database.getInstance();
         GatewayVehicle gV =  insertTestVehicle();
         FinderVehicle fV = FinderVehicle.getInstance();
         GatewayVehicle gVTest = fV.findByNumberPlate(gV.getNumberPlate());
@@ -73,7 +71,6 @@ public class VehicleTest {
     @Test
     public void deleteVehicleTest() throws SQLException {
         GatewayVehicle gV =  insertTestVehicle();
-        Database d = Database.getInstance();
         gV.remove();
         FinderVehicle fV = FinderVehicle.getInstance();
         GatewayVehicle gVEmpty = fV.findByNumberPlate("7869");
