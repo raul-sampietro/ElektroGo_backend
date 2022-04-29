@@ -66,12 +66,11 @@ public class ChatsController {
      * @return Retrona cert si el missatge s'ha creat correctament i fals en cas contrari
      */
     @PostMapping("/sendMessage")
-    public boolean postSendMessage(@RequestParam String sender, @RequestParam String receiver, @RequestParam String message) throws SQLException {
+    public void postSendMessage(@RequestParam String sender, @RequestParam String receiver, @RequestParam String message) throws SQLException {
         String timestamp = String.valueOf(new Timestamp(System.currentTimeMillis()));
         timestamp = timestamp.substring(0, timestamp.length() - 4);
         GatewayChats gC = new GatewayChats(sender, receiver, message,timestamp);
         gC.insert();
-        return true;
     }
 
 }
