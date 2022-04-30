@@ -21,6 +21,7 @@ public class RestService {
     public RestService(RestTemplateBuilder restTemplateBuilder) throws SQLException {
 
         this.restTemplate = restTemplateBuilder.build();
+        UpdateBD();
     }
 
     private Post[] getPostsPlainJSON() {
