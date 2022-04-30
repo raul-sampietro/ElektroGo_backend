@@ -30,20 +30,20 @@ public class TripTest {
     public void createTripTest1() throws SQLException {
         GatewayTrip gT = new GatewayTrip(/*"2",*/ LocalDate.of(2001, 2, 12), new Time(12,0,0),
                 5,0, "null","null", LocalDate.of(2001, 2,10),
-                "1234aas","bcn", "gir",new BigDecimal("41.3000"),new BigDecimal("41.0000"),new BigDecimal("41.3000"),new BigDecimal("41.0000"), "Test");
+                "1234aas","bcn", "gir",new BigDecimal("41.3000"),new BigDecimal("41.0000"),new BigDecimal("41.3000"),new BigDecimal("41.0000"), "Test2");
         Database d = Database.getInstance();
         gT.insert();
         FinderTrip fT = FinderTrip.getInstance();
-        GatewayTrip gTTest = fT.findById(3);
-        String res = gTTest.getId() + " " + gTTest.getVehicleNumberPlate();
-        d.executeSQLUpdate("delete from TRIP where id = '2';");
-        assertEquals("2 1234aas", res);
+        GatewayTrip gTTest = fT.findByUser("Test2",LocalDate.of(2001, 2, 12),new Time(12,0,0));
+        String res = gTTest.getUsername()+ " " + gTTest.getVehicleNumberPlate();
+        d.executeSQLUpdate("delete from TRIP where username = 'Test2';");
+        assertEquals("Test2 1234aas", res);
     }
 
     private GatewayTrip insertTestTrip() throws SQLException {
         GatewayTrip gT = new GatewayTrip(LocalDate.of(2001, 2, 12), new Time(12,0,0),
                 5,0, "null", "null",LocalDate.of(2001, 2,10),
-                "1234aas","bcn" ,"gir",new BigDecimal("41.3000"),new BigDecimal("41.0000"), new BigDecimal("41.3000"),new BigDecimal("41.0000"), "Test");
+                "1234aas","bcn" ,"gir",new BigDecimal("41.3000"),new BigDecimal("41.0000"), new BigDecimal("41.3000"),new BigDecimal("41.0000"), "Test2");
         gT.insert();
         return gT;
     }
@@ -55,28 +55,26 @@ public class TripTest {
         Database d = Database.getInstance();
         try {
             FinderTrip fT = FinderTrip.getInstance();
-            GatewayTrip gT = fT.findById(2);
+            GatewayTrip gT = fT.findByUser("Test2",LocalDate.of(2001, 2, 12),new Time(12,0,0));;
             gT.setRestrictions("NoMascotes");
             gT.update();
-            gT = fT.findById(2);
-            String res = gT.getId() + " " + gT.getVehicleNumberPlate() + " " + gT.getRestrictions();
-            assertEquals("2 1234aas NoMascotes", res);
+            gT = fT.findByUser("Test2",LocalDate.of(2001, 2, 12),new Time(12,0,0));;
+            String res =gT.getVehicleNumberPlate() + " " + gT.getRestrictions();
+            assertEquals("1234aas NoMascotes", res);
         }
         catch (SQLException s) {
             s.printStackTrace();
         }
-        d.executeSQLUpdate("delete from TRIP where id = '2';");
+        d.executeSQLUpdate("delete from TRIP where username = 'Test2';");
     }
 
     @Test
     public void deleteTripTest() throws SQLException {
         GatewayTrip gT =  insertTestTrip();
-        Database d = Database.getInstance();
         gT.remove();
         FinderTrip fT = FinderTrip.getInstance();
-        GatewayTrip gTtemplate = fT.findById(2);
+        GatewayTrip gTtemplate = fT.findByUser("Test2",LocalDate.of(2001, 2, 12),new Time(12,0,0));
         assertNull(gTtemplate);
-        assertNull(null);
     }
 
 

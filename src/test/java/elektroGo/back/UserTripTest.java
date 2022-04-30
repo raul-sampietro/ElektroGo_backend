@@ -15,23 +15,23 @@ public class UserTripTest {
 
     @Test
     public void createUserTrip() throws SQLException {
-        GatewayUserTrip gU = new GatewayUserTrip(1, "gerard");
+        GatewayUserTrip gU = new GatewayUserTrip(40, "FirstUser");
         Database d = Database.getInstance();
         gU.insert();
         FinderUserTrip fT = FinderUserTrip.getInstance();
-        GatewayUserTrip gTTest = fT.findByTripUser(1,"gerard");
+        GatewayUserTrip gTTest = fT.findByTripUser(40,"FirstUser");
         String res = gTTest.getId() + " " + gTTest.getUsername();
-        d.executeSQLUpdate("delete from USERTRIP where id = 1;");
-        assertEquals("1 gerard", res);
+        d.executeSQLUpdate("delete from USERTRIP where id = 40;");
+        assertEquals("40 FirstUser", res);
     }
 
     private GatewayUserTrip insertTestTrip() throws SQLException {
-        GatewayUserTrip gT = new GatewayUserTrip(1, "gerard");
+        GatewayUserTrip gT = new GatewayUserTrip(40, "FirstUser");
         gT.insert();
         return gT;
     }
     private void insertTestTrip2() throws SQLException {
-        GatewayUserTrip gT = new GatewayUserTrip(1, "Test");
+        GatewayUserTrip gT = new GatewayUserTrip(40, "Test4");
         gT.insert();
     }
 
@@ -45,10 +45,10 @@ public class UserTripTest {
         insertTestTrip2();
         Database d = Database.getInstance();
         FinderUserTrip fT = FinderUserTrip.getInstance();
-        ArrayList<GatewayUserTrip> gUT = fT.findByDriver("Test");
+        ArrayList<GatewayUserTrip> gUT = fT.findByDriver("Test4");
         String res = gUT.get(0).getId() + " " +gUT.get(0).getUsername();
-        d.executeSQLUpdate("delete from USERTRIP where id = 1;");
-        assertEquals("1 Test",res);
+        d.executeSQLUpdate("delete from USERTRIP where id = 40;");
+        assertEquals("40 Test4",res);
 
     }
 
@@ -57,7 +57,7 @@ public class UserTripTest {
         GatewayUserTrip gT =  insertTestTrip();
         gT.remove();
         FinderUserTrip fT = FinderUserTrip.getInstance();
-        ArrayList<GatewayUserTrip> gUT = fT.findByTrip(1);
+        ArrayList<GatewayUserTrip> gUT = fT.findByTrip(40);
         assertEquals(gUT,new ArrayList<>());
     }
 

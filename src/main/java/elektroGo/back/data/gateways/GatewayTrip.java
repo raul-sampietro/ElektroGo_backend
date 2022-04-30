@@ -196,8 +196,8 @@ public class GatewayTrip implements Gateway{
         pS.setString(12, String.valueOf(LongitudeOrigin));
         pS.setString(13, String.valueOf(LatitudeDestination));
         pS.setString(14, String.valueOf(LongitudeDestination));
-        pS.setString(16,username);
-        pS.setInt(15,id);
+        pS.setString(15,username);
+        pS.setInt(16,id);
     }
 
 
@@ -233,7 +233,7 @@ public class GatewayTrip implements Gateway{
      */
     public void remove() throws SQLException {
         Database d = Database.getInstance();
-        d.executeSQLUpdate("DELETE FROM TRIP WHERE id='" + id + "';");
+        d.executeSQLUpdate("DELETE FROM TRIP WHERE username='" + username + "' and startDate='"+ startDate+"' and startTime='"+startTime+"';");
     }
 
     /**

@@ -29,18 +29,18 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DriverTest {
     @Test
     public void createDriverTest1() throws SQLException {
-        GatewayDriver gV = new GatewayDriver("Marc");
+        GatewayDriver gV = new GatewayDriver("FirstUser");
         Database d = Database.getInstance();
         gV.insert();
         FinderDriver fU = FinderDriver.getInstance();
-        GatewayDriver gUTest = fU.findByUserName("Marc");
+        GatewayDriver gUTest = fU.findByUserName("FirstUser");
         String res = gUTest.getUserName();
-        d.executeSQLUpdate("delete from DRIVER where userName = 'Marc';");
-        assertEquals("Marc", res);
+        d.executeSQLUpdate("delete from DRIVER where userName = 'FirstUser';");
+        assertEquals("FirstUser", res);
     }
 
     private GatewayDriver insertDriverUser() throws SQLException {
-        GatewayDriver gU = new GatewayDriver("Marc");
+        GatewayDriver gU = new GatewayDriver("FirstUser");
         gU.insert();
         return gU;
     }
@@ -52,7 +52,7 @@ public class DriverTest {
         Database d = Database.getInstance();
         gU.remove();
         FinderDriver fU = FinderDriver.getInstance();
-        GatewayDriver gUtemplate = fU.findByUserName("Marc");
+        GatewayDriver gUtemplate = fU.findByUserName("FirstUser");
         assertNull(gUtemplate);
         assertNull(null);
     }
@@ -61,11 +61,11 @@ public class DriverTest {
     @Test
     public void readDriverTest() throws SQLException {
         Database d = Database.getInstance();
-        d.executeSQLUpdate("insert into DRIVER values('gerard');");
+        d.executeSQLUpdate("insert into DRIVER values('FirstUser');");
         FinderDriver fU = FinderDriver.getInstance();
-        GatewayDriver gUTest = fU.findByUserName("gerard");
+        GatewayDriver gUTest = fU.findByUserName("FirstUser");
         String res = gUTest.getUserName();
-        d.executeSQLUpdate("delete from DRIVER where userName = 'gerard';");
-        assertEquals("gerard", res);
+        d.executeSQLUpdate("delete from DRIVER where userName = 'FirstUser';");
+        assertEquals("FirstUser", res);
     }
 }
