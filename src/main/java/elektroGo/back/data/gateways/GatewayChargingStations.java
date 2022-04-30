@@ -29,7 +29,7 @@ public class GatewayChargingStations implements Gateway{
     /**
      * @brief Nom del promotor
      */
-    private String promotor_gestor;
+    private String promotorGestor;
 
     /**
      * @brief Tipus d'accés
@@ -108,22 +108,22 @@ public class GatewayChargingStations implements Gateway{
      * @param longitude Longitud del punt on esta situada l'estacio de carrega
      * @param numberOfChargers Numero de carregadors que hi ha a l'estacio de carrega
      */
-    public GatewayChargingStations(Integer id, String promotor_gestor, String acces, String tipus_velocitat, String tipus_connexio,
-                                   BigDecimal latitude, BigDecimal longitude, String designacio_descriptiva, Double kw, String ac_dc,
-                                   String ident, String numberOfChargers, String tipus_vehicle) {
+    public GatewayChargingStations(Integer id, String promotorGestor, String acces, String tipusVelocitat, String tipusConnexio,
+                                   BigDecimal latitude, BigDecimal longitude, String designacioDescriptiva, Double kw, String acDc,
+                                   String ident, String numberOfChargers, String tipusVehicle) {
         this.id = id;
-        this.promotor_gestor = promotor_gestor;
+        this.promotorGestor = promotorGestor;
         this.acces = acces;
-        this.tipusVelocitat = tipus_velocitat;
-        this.tipusConnexio = tipus_connexio;
+        this.tipusVelocitat = tipusVelocitat;
+        this.tipusConnexio = tipusConnexio;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.designacioDescriptiva = designacio_descriptiva;
+        this.designacioDescriptiva = designacioDescriptiva;
         this.kw = kw;
-        this.acDc = ac_dc;
+        this.acDc = acDc;
         this.idePdr = ident;
         this.numberOfChargers = numberOfChargers;
-        this.tipusVehicle = tipus_vehicle;
+        this.tipusVehicle = tipusVehicle;
     }
 
 
@@ -137,12 +137,12 @@ public class GatewayChargingStations implements Gateway{
         this.id = id;
     }
 
-    public String getPromotor_gestor() {
-        return promotor_gestor;
+    public String getPromotorGestor() {
+        return promotorGestor;
     }
 
-    public void setPromotor_gestor(String promotor_gestor) {
-        this.promotor_gestor = promotor_gestor;
+    public void setPromotor_gestor(String promotorGestor) {
+        this.promotorGestor = promotorGestor;
     }
 
     public String getAcces() {
@@ -252,7 +252,7 @@ public class GatewayChargingStations implements Gateway{
      */
     private void setFullPreparedStatement(PreparedStatement pS) throws SQLException {
         pS.setInt(1,id);
-        if (promotor_gestor != null) pS.setString(2,promotor_gestor);else pS.setString(2, null);
+        if (promotorGestor != null) pS.setString(2,promotorGestor);else pS.setString(2, null);
         if (acces != null) pS.setString(3,acces);else pS.setString(3, null);
         if (tipusVelocitat != null) pS.setString(4,tipusVelocitat);else pS.setString(4, null);
         if (tipusConnexio != null) pS.setString(5,tipusConnexio);else pS.setString(5, null);
@@ -273,7 +273,7 @@ public class GatewayChargingStations implements Gateway{
      * @post el pS queda assignat amb la info requerida
      */
     private void setPreparedStatementIdEnd(PreparedStatement pS) throws SQLException {
-        if (promotor_gestor != null) pS.setString(1,promotor_gestor);else pS.setString(1, null);
+        if (promotorGestor != null) pS.setString(1,promotorGestor);else pS.setString(1, null);
         if (acces != null) pS.setString(2,acces);else pS.setString(2, null);
         if (tipusVelocitat != null) pS.setString(3,tipusVelocitat);else pS.setString(3, null);
         if (tipusConnexio != null) pS.setString(4,tipusConnexio);else pS.setString(4, null);

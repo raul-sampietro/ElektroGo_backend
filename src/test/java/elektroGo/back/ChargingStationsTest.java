@@ -26,7 +26,7 @@ public class ChargingStationsTest {
         gCS.insert();
         FinderChargingStations fCS = FinderChargingStations.getInstance();
         GatewayChargingStations gCSTest = fCS.findByID(999);
-        String res = gCSTest.getId() + " " + gCSTest.getPromotor_gestor() + " " + gCSTest.getAcces() + " " + gCSTest.getTipusVelocitat() + " "
+        String res = gCSTest.getId() + " " + gCSTest.getPromotorGestor() + " " + gCSTest.getAcces() + " " + gCSTest.getTipusVelocitat() + " "
                 + gCSTest.getTipusConnexio() + " " + gCSTest.getLatitude() + " " + gCSTest.getLongitude() + " " + gCSTest.getDesignacioDescriptiva() + " "
                 + gCSTest.getKw() + " " + gCSTest.getAcDc() + " " + gCSTest.getIdePdr() + " " + gCSTest.getNumberOfChargers() + " " + gCSTest.getTipusVehicle();
         d.executeSQLUpdate("delete from CHARGINGSTATIONS where id = 999;");
@@ -54,7 +54,7 @@ public class ChargingStationsTest {
             gCS.setAcces("Privat");
             gCS.update();
             gCS = fCS.findByID(999);
-            String res = gCS.getId() + " " + gCS.getPromotor_gestor() + " " + gCS.getAcces() + " " + gCS.getTipusVelocitat() + " "
+            String res = gCS.getId() + " " + gCS.getPromotorGestor() + " " + gCS.getAcces() + " " + gCS.getTipusVelocitat() + " "
                     + gCS.getTipusConnexio() + " " + gCS.getLatitude() + " " + gCS.getLongitude() + " " + gCS.getDesignacioDescriptiva() + " "
                     + gCS.getKw() + " " + gCS.getAcDc() + " " + gCS.getIdePdr() + " " + gCS.getNumberOfChargers() + " " + gCS.getTipusVehicle();
             assertEquals("999 FIB Privat ràpid Tesla 41.38925600 2.11344200 parking UPC 15.0 AC ID 4 Cotxe", res);
@@ -82,7 +82,7 @@ public class ChargingStationsTest {
         insertTestChargingStation();
         FinderChargingStations fV = FinderChargingStations.getInstance();
         GatewayChargingStations gCS = fV.findByID(999);
-        String res =  gCS.getId() + " " + gCS.getPromotor_gestor() + " " + gCS.getAcces() + " " + gCS.getTipusVelocitat() + " "
+        String res =  gCS.getId() + " " + gCS.getPromotorGestor() + " " + gCS.getAcces() + " " + gCS.getTipusVelocitat() + " "
                 + gCS.getTipusConnexio() + " " + gCS.getLatitude() + " " + gCS.getLongitude() + " " + gCS.getDesignacioDescriptiva() + " "
                 + gCS.getKw() + " " + gCS.getAcDc() + " " + gCS.getIdePdr() + " " + gCS.getNumberOfChargers() + " " + gCS.getTipusVehicle();
         d.executeSQLUpdate("delete from CHARGINGSTATIONS where id = 999;");
@@ -105,7 +105,7 @@ public class ChargingStationsTest {
         ArrayList<GatewayChargingStations> gCSTest = fCS.findByCoordinates(latitude1, longitude1, latitude2, longitude2);
         String res = null;
         for (GatewayChargingStations test: gCSTest) {
-            res = test.getId() + " " + test.getPromotor_gestor() + " " + test.getAcces() + " " + test.getTipusVelocitat() + " "
+            res = test.getId() + " " + test.getPromotorGestor() + " " + test.getAcces() + " " + test.getTipusVelocitat() + " "
                     + test.getTipusConnexio() + " " + test.getLatitude() + " " + test.getLongitude() + " " + test.getDesignacioDescriptiva() + " "
                     + test.getKw() + " " + test.getAcDc() + " " + test.getIdePdr() + " " + test.getNumberOfChargers() + " " + test.getTipusVehicle();
         }
