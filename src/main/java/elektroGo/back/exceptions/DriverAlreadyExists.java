@@ -16,6 +16,6 @@ public class DriverAlreadyExists extends RuntimeException{
     }
 
     public DriverAlreadyExists(String numberName) {
-        super("Driver with userName " + numberName + "already exists");
+        super("Driver with userName " + numberName + " already exists");
     }
 }
