@@ -129,12 +129,6 @@ public class GatewayUser implements Gateway{
         pS.setString(7, imageUrl);
     }
 
-    public void setFullPreparedStatementUpdate(PreparedStatement pS) throws SQLException {
-        pS.setString(3,userName);
-        pS.setString(1, mail);
-        pS.setString(2,password);
-    }
-
     /**
      * @brief Funció inserta a la BD un User
      * @post A la BD queda agefit el User

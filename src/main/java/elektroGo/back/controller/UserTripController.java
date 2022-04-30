@@ -36,7 +36,7 @@ public class UserTripController {
     @GetMapping("/userTrip")
     public String getUserTrip(@RequestParam Integer id, @RequestParam String username) throws SQLException {
         FinderUser fU = FinderUser.getInstance();
-        GatewayUser gU = fU.findByUserName(username);
+        GatewayUser gU = fU.findByUsername(username);
         if(gU == null)throw new UserNotFound(username);
         FinderTrip fT = FinderTrip.getInstance();
         GatewayTrip gT = fT.findById(id);
@@ -67,7 +67,7 @@ public class UserTripController {
     @PostMapping("/userTrip/create")
     public void createUserTrip(@RequestBody GatewayUserTrip gD) throws SQLException {
         FinderUser fU = FinderUser.getInstance();
-        GatewayUser gU = fU.findByUserName(gD.getUsername());
+        GatewayUser gU = fU.findByUsername(gD.getUsername());
         if(gU == null)throw new UserNotFound(gD.getUsername());
         FinderTrip fT = FinderTrip.getInstance();
         GatewayTrip gT = fT.findById(gD.getId());

@@ -180,7 +180,7 @@ public class RestControllerAdvice {
         return handleError(ex, response, 444);
     }
 
-     * @brief Handler per capturar l'excepcio RatingNotFound
+    /** @brief Handler per capturar l'excepcio RatingNotFound
      * @param ex Excepcio capturada
      * @param response Response http per setejar els codis d'error
      * @post Envia l'error http corresponent al client
