@@ -23,9 +23,11 @@ public class ReportTest {
     GatewayReport gR;
     GatewayReport gR2;
     GatewayUser gU;
+    boolean gUInserted;
 
     @BeforeEach
     public void initialize() throws SQLException {
+        gUInserted = false;
         fR = FinderReport.getInstance();
         FinderUser fU = FinderUser.getInstance();
         if (fU.findByUsername("Test") == null) insertTest();
@@ -37,12 +39,13 @@ public class ReportTest {
     public void removeGateways() throws SQLException {
         gR.remove();
         gR2.remove();
-        gU.remove();
+        if (gUInserted) gU.remove();
     }
 
     private void insertTest() throws SQLException {
         gU = new GatewayUser("9999999991","prov2","Test","test@gmail.com","Test","Test", "fnTest", "/test");
         gU.insert();
+        gUInserted = true;
     }
     private GatewayReport insertTestReportComplet() throws SQLException {
         GatewayReport gRAct = new GatewayReport("Test","Test2","Em cau malament");
