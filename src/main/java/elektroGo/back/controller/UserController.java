@@ -20,8 +20,6 @@ import elektroGo.back.exceptions.ReportNotFound;
 import elektroGo.back.exceptions.UserAlreadyExists;
 import elektroGo.back.exceptions.UserNotFound;
 import org.springframework.web.bind.annotation.*;
-
-import java.sql.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,14 +32,14 @@ public class UserController {
 
     /**
      * @brief Funció amb metode 'GET' que retorna la informació del user amb el username corresponen
-     * @param userName Usuari del que volem agafar la info
+     * @param username Usuari del que volem agafar la info
      * @return Es retorna un String amb la info del usuari demanada
      */
     @GetMapping("/user")
-    public String getUser(@RequestParam String userName) throws SQLException {
+    public String getUser(@RequestParam String username) throws SQLException {
         FinderUser fU = FinderUser.getInstance();
-        GatewayUser gU = fU.findByUserName(userName);
-        if(gU == null)throw new UserNotFound(userName);
+        GatewayUser gU = fU.findByUsername(username);
+        if(gU == null)throw new UserNotFound(username);
         return gU.json();
     }
 
@@ -65,7 +63,7 @@ public class UserController {
     @PostMapping("/users/create")
     public void createUser(@RequestBody GatewayUser gU) throws SQLException {
         FinderUser fU = FinderUser.getInstance();
-        if (fU.findByUserName(gU.getUserName()) != null) throw new UserAlreadyExists(gU.getUserName());
+        if (fU.findByUsername(gU.getUsername()) != null) throw new UserAlreadyExists(gU.getUsername());
         gU.insert();
     }
 
@@ -78,7 +76,7 @@ public class UserController {
     public void deleteUser(@RequestParam String userName) {
         FinderUser fU = FinderUser.getInstance();
         try {
-            GatewayUser gU = fU.findByUserName(userName);
+            GatewayUser gU = fU.findByUsername(userName);
             if (gU != null) gU.remove();
             else throw new UserNotFound(userName);
         } catch (SQLException e) {
@@ -95,7 +93,7 @@ public class UserController {
     public List<GatewayRating> getRatingsUser(@RequestParam String userName) throws SQLException {
         System.out.println("\nStarting getRatingsUser method with userName '" + userName + "'...");
         FinderUser fU = FinderUser.getInstance();
-        if (fU.findByUserName(userName) == null) throw new UserNotFound(userName);
+        if (fU.findByUsername(userName) == null) throw new UserNotFound(userName);
         FinderRating fR = FinderRating.getInstance();
         List<GatewayRating> l = fR.findByUserWhoRates(userName);
         System.out.println("Returning this ratings:");
@@ -112,7 +110,7 @@ public class UserController {
     public List<GatewayRating> getRated(@RequestParam String userName) throws SQLException {
         System.out.println("\nStarting getRated method with userName '" + userName + "'...");
         FinderUser fU = FinderUser.getInstance();
-        if (fU.findByUserName(userName) == null) throw new UserNotFound(userName);
+        if (fU.findByUsername(userName) == null) throw new UserNotFound(userName);
         FinderRating fR = FinderRating.getInstance();
         List<GatewayRating> l = fR.findByRatedUser(userName);
         System.out.println("Returning this ratings:");
@@ -130,8 +128,8 @@ public class UserController {
         System.out.println("\nStarting rateUser method with this rating:");
         System.out.println(gR.json());
         FinderUser fU = FinderUser.getInstance();
-        if (fU.findByUserName(gR.getUserWhoRates()) == null) throw new UserNotFound(gR.getUserWhoRates());
-        if (fU.findByUserName(gR.getRatedUser()) == null) throw new UserNotFound(gR.getRatedUser());
+        if (fU.findByUsername(gR.getUserWhoRates()) == null) throw new UserNotFound(gR.getUserWhoRates());
+        if (fU.findByUsername(gR.getRatedUser()) == null) throw new UserNotFound(gR.getRatedUser());
         FinderRating fR = FinderRating.getInstance();
         if (fR.findByPrimaryKey(gR.getUserWhoRates(), gR.getRatedUser()) != null) {
             //Rating already exists, we have to modify it
@@ -168,7 +166,7 @@ public class UserController {
         System.out.println("\nStarting reportsUser method with userWhoReports : '" + userWhoReports + "'");
         FinderReport fR = FinderReport.getInstance();
         FinderUser fU = FinderUser.getInstance();
-        if ( fU.findByUserName(userWhoReports) == null) throw new UserNotFound(userWhoReports);
+        if ( fU.findByUsername(userWhoReports) == null) throw new UserNotFound(userWhoReports);
         List<GatewayReport> l = fR.findByUserWhoReports(userWhoReports);
         System.out.println("Returning reports with userWhoReports: '" + userWhoReports + "' that are:" );
         for (GatewayReport g : l) System.out.println(g.json());
@@ -180,7 +178,7 @@ public class UserController {
         System.out.println("\nStarting reportsUser method with reportedUser : '" + reportedUser + "'");
         FinderReport fR = FinderReport.getInstance();
         FinderUser fU = FinderUser.getInstance();
-        if ( fU.findByUserName(reportedUser) == null) throw new UserNotFound(reportedUser);
+        if ( fU.findByUsername(reportedUser) == null) throw new UserNotFound(reportedUser);
         List<GatewayReport> l = fR.findByReportedUser(reportedUser);
         System.out.println("Returning reports with reportedUser: '" + reportedUser + "' that are:" );
         for (GatewayReport g : l) System.out.println(g.json());
@@ -192,8 +190,8 @@ public class UserController {
         System.out.println("\nStarting reportUser method with report:");
         System.out.println(gR.json());
         FinderUser fU = FinderUser.getInstance();
-        if ( fU.findByUserName(gR.getUserWhoReports()) == null) throw new UserNotFound(gR.getUserWhoReports());
-        if ( fU.findByUserName(gR.getReportedUser()) == null) throw new UserNotFound(gR.getReportedUser());
+        if ( fU.findByUsername(gR.getUserWhoReports()) == null) throw new UserNotFound(gR.getUserWhoReports());
+        if ( fU.findByUsername(gR.getReportedUser()) == null) throw new UserNotFound(gR.getReportedUser());
         FinderReport fR = FinderReport.getInstance();
         //Report doesn't already exist
         if (fR.findByPrimaryKey(gR.getUserWhoReports(), gR.getReportedUser()) == null) {
