@@ -4,25 +4,25 @@ import java.io.Serializable;
 
 public class Post implements Serializable {
 
-    private String promotor_gestor;
+    private String promotorGestor;
     private String acces;
-    private String tipus_velocitat;
-    private String tipus_connexi;
+    private String tipusVelocitat;
+    private String tipusConnexi;
     private double latitud;
     private double longitud;
-    private String designaci_descriptiva;
+    private String designaciDescriptiva;
     private double kw;
-    private String ac_dc;
-    private String ide_pdr;
-    private String nplaces_estaci;
-    private String tipus_vehicle;
+    private String acdc;
+    private String idePdr;
+    private String nplacesestaci;
+    private String tipusVehicle;
 
-    public String getPromotor_gestor() {
-        return promotor_gestor;
+    public String getPromotorGestor() {
+        return promotorGestor;
     }
 
-    public void setPromotor_gestor(String promotor_gestor) {
-        this.promotor_gestor = promotor_gestor;
+    public void setPromotorGestor(String promotorGestor) {
+        this.promotorGestor = promotorGestor;
     }
 
     public String getAcces() {
@@ -33,20 +33,20 @@ public class Post implements Serializable {
         this.acces = acces;
     }
 
-    public String getTipus_velocitat() {
-        return tipus_velocitat;
+    public String getTipusVelocitat() {
+        return tipusVelocitat;
     }
 
-    public void setTipus_velocitat(String tipus_velocitat) {
-        this.tipus_velocitat = tipus_velocitat;
+    public void setTipusVelocitat(String tipusVelocitat) {
+        this.tipusVelocitat = tipusVelocitat;
     }
 
-    public String getTipus_connexi() {
-        return tipus_connexi;
+    public String getTipusConnexi() {
+        return tipusConnexi;
     }
 
-    public void setTipus_connexi(String tipus_connexi) {
-        this.tipus_connexi = tipus_connexi;
+    public void setTipusConnexi(String tipusConnexi) {
+        this.tipusConnexi = tipusConnexi;
     }
 
     public double getLatitud() {
@@ -65,12 +65,12 @@ public class Post implements Serializable {
         this.longitud = longitud;
     }
 
-    public String getDesignaci_descriptiva() {
-        return designaci_descriptiva;
+    public String getDesignaciDescriptiva() {
+        return designaciDescriptiva;
     }
 
-    public void setDesignaci_descriptiva(String designaci_descriptiva) {
-        this.designaci_descriptiva = designaci_descriptiva;
+    public void setDesignaciDescriptiva(String designaciDescriptiva) {
+        this.designaciDescriptiva = designaciDescriptiva;
     }
 
     public double getKw() {
@@ -81,53 +81,53 @@ public class Post implements Serializable {
         this.kw = kw;
     }
 
-    public String getAc_dc() {
-        return ac_dc;
+    public String getAcdc() {
+        return acdc;
     }
 
-    public void setAc_dc(String ac_dc) {
-        this.ac_dc = ac_dc;
+    public void setAcdc(String acdc) {
+        this.acdc = acdc;
     }
 
-    public String getIde_pdr() {
-        return ide_pdr;
+    public String getIdePdr() {
+        return idePdr;
     }
 
-    public void setIde_pdr(String ide_pdr) {
-        this.ide_pdr = ide_pdr;
+    public void setIdePdr(String idePdr) {
+        this.idePdr = idePdr;
     }
 
-    public String getNplaces_estaci() {
-        return nplaces_estaci;
+    public String getNplacesestaci() {
+        return nplacesestaci;
     }
 
-    public void setNplaces_estaci(String nplaces_estaci) {
-        this.nplaces_estaci = nplaces_estaci;
+    public void setNplacesestaci(String nplacesestaci) {
+        this.nplacesestaci = nplacesestaci;
     }
 
-    public String getTipus_vehicle() {
-        return tipus_vehicle;
+    public String getTipusVehicle() {
+        return tipusVehicle;
     }
 
-    public void setTipus_vehicle(String tipus_vehicle) {
-        this.tipus_vehicle = tipus_vehicle;
+    public void setTipusVehicle(String tipusVehicle) {
+        this.tipusVehicle = tipusVehicle;
     }
 
     @Override
     public String toString() {
         return "Post{" +
-                "promotor_gestor='" + promotor_gestor + '\'' +
+                "promotorGestor='" + promotorGestor + '\'' +
                 ", acces='" + acces + '\'' +
-                ", tipus_velocitat='" + tipus_velocitat + '\'' +
-                ", tipus_connexi='" + tipus_connexi + '\'' +
+                ", tipusVelocitat='" + tipusVelocitat + '\'' +
+                ", tipusConnexi='" + tipusConnexi + '\'' +
                 ", latitud=" + latitud +
                 ", longitud=" + longitud +
-                ", designaci_descriptiva='" + designaci_descriptiva + '\'' +
+                ", designaciDescriptiva='" + designaciDescriptiva + '\'' +
                 ", kw=" + kw +
-                ", ac_dc='" + ac_dc + '\'' +
-                ", ide_pdr='" + ide_pdr + '\'' +
-                ", nplaces_estaci='" + nplaces_estaci + '\'' +
-                ", tipus_vehicle='" + tipus_vehicle + '\'' +
+                ", acdc='" + acdc + '\'' +
+                ", idePdr='" + idePdr + '\'' +
+                ", nplacesestaci='" + nplacesestaci + '\'' +
+                ", tipusVehicle='" + tipusVehicle + '\'' +
                 '}';
     }
 }

@@ -26,9 +26,9 @@ public class ChargingStationsTest {
         gCS.insert();
         FinderChargingStations fCS = FinderChargingStations.getInstance();
         GatewayChargingStations gCSTest = fCS.findByID(999);
-        String res = gCSTest.getId() + " " + gCSTest.getPromotor_gestor() + " " + gCSTest.getAcces() + " " + gCSTest.getTipus_velocitat() + " "
-                + gCSTest.getTipus_connexio() + " " + gCSTest.getLatitude() + " " + gCSTest.getLongitude() + " " + gCSTest.getDesignacio_descriptiva() + " "
-                + gCSTest.getKw() + " " + gCSTest.getAc_dc() + " " + gCSTest.getIde_pdr() + " " + gCSTest.getNumberOfChargers() + " " + gCSTest.getTipus_vehicle();
+        String res = gCSTest.getId() + " " + gCSTest.getPromotor_gestor() + " " + gCSTest.getAcces() + " " + gCSTest.getTipusVelocitat() + " "
+                + gCSTest.getTipusConnexio() + " " + gCSTest.getLatitude() + " " + gCSTest.getLongitude() + " " + gCSTest.getDesignacioDescriptiva() + " "
+                + gCSTest.getKw() + " " + gCSTest.getAcDc() + " " + gCSTest.getIdePdr() + " " + gCSTest.getNumberOfChargers() + " " + gCSTest.getTipusVehicle();
         d.executeSQLUpdate("delete from CHARGINGSTATIONS where id = 999;");
         assertEquals("999 UPC públic ràpid Tesla 41.38925600 2.11344200 parking UPC 15.0 AC ID 5 Cotxe", res);
     }
@@ -54,9 +54,9 @@ public class ChargingStationsTest {
             gCS.setAcces("Privat");
             gCS.update();
             gCS = fCS.findByID(999);
-            String res = gCS.getId() + " " + gCS.getPromotor_gestor() + " " + gCS.getAcces() + " " + gCS.getTipus_velocitat() + " "
-                    + gCS.getTipus_connexio() + " " + gCS.getLatitude() + " " + gCS.getLongitude() + " " + gCS.getDesignacio_descriptiva() + " "
-                    + gCS.getKw() + " " + gCS.getAc_dc() + " " + gCS.getIde_pdr() + " " + gCS.getNumberOfChargers() + " " + gCS.getTipus_vehicle();
+            String res = gCS.getId() + " " + gCS.getPromotor_gestor() + " " + gCS.getAcces() + " " + gCS.getTipusVelocitat() + " "
+                    + gCS.getTipusConnexio() + " " + gCS.getLatitude() + " " + gCS.getLongitude() + " " + gCS.getDesignacioDescriptiva() + " "
+                    + gCS.getKw() + " " + gCS.getAcDc() + " " + gCS.getIdePdr() + " " + gCS.getNumberOfChargers() + " " + gCS.getTipusVehicle();
             assertEquals("999 FIB Privat ràpid Tesla 41.38925600 2.11344200 parking UPC 15.0 AC ID 4 Cotxe", res);
         }
         catch (SQLException s) {
@@ -82,9 +82,9 @@ public class ChargingStationsTest {
         insertTestChargingStation();
         FinderChargingStations fV = FinderChargingStations.getInstance();
         GatewayChargingStations gCS = fV.findByID(999);
-        String res =  gCS.getId() + " " + gCS.getPromotor_gestor() + " " + gCS.getAcces() + " " + gCS.getTipus_velocitat() + " "
-                + gCS.getTipus_connexio() + " " + gCS.getLatitude() + " " + gCS.getLongitude() + " " + gCS.getDesignacio_descriptiva() + " "
-                + gCS.getKw() + " " + gCS.getAc_dc() + " " + gCS.getIde_pdr() + " " + gCS.getNumberOfChargers() + " " + gCS.getTipus_vehicle();
+        String res =  gCS.getId() + " " + gCS.getPromotor_gestor() + " " + gCS.getAcces() + " " + gCS.getTipusVelocitat() + " "
+                + gCS.getTipusConnexio() + " " + gCS.getLatitude() + " " + gCS.getLongitude() + " " + gCS.getDesignacioDescriptiva() + " "
+                + gCS.getKw() + " " + gCS.getAcDc() + " " + gCS.getIdePdr() + " " + gCS.getNumberOfChargers() + " " + gCS.getTipusVehicle();
         d.executeSQLUpdate("delete from CHARGINGSTATIONS where id = 999;");
         assertEquals("999 UPC públic ràpid Tesla 41.38925600 2.11344200 parking UPC 15.0 AC ID 5 Cotxe", res);
     }
@@ -105,9 +105,9 @@ public class ChargingStationsTest {
         ArrayList<GatewayChargingStations> gCSTest = fCS.findByCoordinates(latitude1, longitude1, latitude2, longitude2);
         String res = null;
         for (GatewayChargingStations test: gCSTest) {
-            res = test.getId() + " " + test.getPromotor_gestor() + " " + test.getAcces() + " " + test.getTipus_velocitat() + " "
-                    + test.getTipus_connexio() + " " + test.getLatitude() + " " + test.getLongitude() + " " + test.getDesignacio_descriptiva() + " "
-                    + test.getKw() + " " + test.getAc_dc() + " " + test.getIde_pdr() + " " + test.getNumberOfChargers() + " " + test.getTipus_vehicle();
+            res = test.getId() + " " + test.getPromotor_gestor() + " " + test.getAcces() + " " + test.getTipusVelocitat() + " "
+                    + test.getTipusConnexio() + " " + test.getLatitude() + " " + test.getLongitude() + " " + test.getDesignacioDescriptiva() + " "
+                    + test.getKw() + " " + test.getAcDc() + " " + test.getIdePdr() + " " + test.getNumberOfChargers() + " " + test.getTipusVehicle();
         }
         d.executeSQLUpdate("delete from CHARGINGSTATIONS where id = 999;");
         assertEquals("999 UPC públic ràpid Tesla 41.38925600 2.11344200 parking UPC 15.0 AC ID 5 Cotxe", res);

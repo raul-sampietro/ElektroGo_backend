@@ -37,26 +37,26 @@ public class RestService {
         Post[] dades = getPostsPlainJSON();
         FinderChargingStations fc = FinderChargingStations.getInstance();
         Database d = Database.getInstance();
-        Integer id = 1;
+        int id = 1;
         for (Post a: dades) {
             boolean valid = true;
             BigDecimal lat = BigDecimal.valueOf(a.getLatitud());
-            if (lat.compareTo(BigDecimal.valueOf(90)) == 1) valid = false;
-            else if (lat.compareTo(BigDecimal.valueOf(-90)) == -1) valid = false;
+            if (lat.compareTo(BigDecimal.valueOf(90)) > 0) valid = false;
+            else if (lat.compareTo(BigDecimal.valueOf(-90)) < 0) valid = false;
             BigDecimal log = BigDecimal.valueOf(a.getLongitud());
-            if (log.compareTo(BigDecimal.valueOf(180)) == 1) valid = false;
-            else if (log.compareTo(BigDecimal.valueOf(-180)) == -1) valid = false;
+            if (log.compareTo(BigDecimal.valueOf(180)) > 0) valid = false;
+            else if (log.compareTo(BigDecimal.valueOf(-180)) < 0) valid = false;
             Double kw = a.getKw();
             if (valid){
                 GatewayChargingStations gc = fc.findByID(id);
-                GatewayChargingStations gCS = new GatewayChargingStations(id, a.getPromotor_gestor(), a.getAcces(), a.getTipus_velocitat(),
-                        a.getTipus_connexi(), lat, log, a.getDesignaci_descriptiva(), kw, a.getAc_dc(), a.getIde_pdr(), a.getNplaces_estaci(), a.getTipus_vehicle());
+                GatewayChargingStations gCS = new GatewayChargingStations(id, a.getPromotorGestor(), a.getAcces(), a.getTipusVelocitat(),
+                        a.getTipusConnexi(), lat, log, a.getDesignaciDescriptiva(), kw, a.getAcdc(), a.getIdePdr(), a.getNplacesestaci(), a.getTipusVehicle());
                 if (gc == null) {
-                    System.out.println("M'he inserit: " + id + " " + a.getPromotor_gestor());
+                    System.out.println("M'he inserit: " + id + " " + a.getPromotorGestor());
                     gCS.insert();
                 }
                 else {
-                    System.out.println("M'he actualitzat: " + id + " " + a.getPromotor_gestor());
+                    System.out.println("M'he actualitzat: " + id + " " + a.getPromotorGestor());
                     gCS.update();
                 }
                 id++;
