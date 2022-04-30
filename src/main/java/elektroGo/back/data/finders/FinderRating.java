@@ -124,6 +124,21 @@ public class FinderRating {
         return gV;
     }
 
+    /**
+     * @brief Funcio que retorna la valoracio mitjana donat un usuari
+     * @param userName Usuari del qual es vol saber la valoracio mitjana
+     * @return Valoracio mijtana de l'usuari donat
+     */
+    public double findUserRateAvg(String userName) throws SQLException{
+        Database d = Database.getInstance();
+        Connection conn = d.getConnection();
+        double avgRate = 0;
+        PreparedStatement pS = conn.prepareStatement("select AVG(points) from RATING r WHERE  ratedUser = ?;");
+        pS.setString(1,userName);
+        ResultSet r = pS.executeQuery();
+        if (r.next()) avgRate = r.getDouble(1);
+        return avgRate;
+    }
 
 }
 

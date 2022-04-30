@@ -161,6 +161,16 @@ public class UserController {
         System.out.println("Rating removed successfully, end of method");
     }
 
+
+    @GetMapping("/user/avgRate")
+    public Double avgRate(@RequestParam String userName) throws SQLException {
+        System.out.println("\nStarting avgRate method with userName : '" + userName +"'...");
+        FinderUser fU = FinderUser.getInstance();
+        if (fU.findByUserName(userName) == null) throw new UserNotFound(userName);
+        FinderRating fR = FinderRating.getInstance();
+        return fR.findUserRateAvg(userName);
+    }
+
     @GetMapping("/user/reports")
     public List<GatewayReport> reportsUser(@RequestParam String userWhoReports) throws SQLException {
         System.out.println("\nStarting reportsUser method with userWhoReports : '" + userWhoReports + "'");
