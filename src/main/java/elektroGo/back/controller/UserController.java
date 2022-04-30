@@ -166,7 +166,7 @@ public class UserController {
     public Double avgRate(@RequestParam String userName) throws SQLException {
         System.out.println("\nStarting avgRate method with userName : '" + userName +"'...");
         FinderUser fU = FinderUser.getInstance();
-        if (fU.findByUserName(userName) == null) throw new UserNotFound(userName);
+        if (fU.findByUsername(userName) == null) throw new UserNotFound(userName);
         FinderRating fR = FinderRating.getInstance();
         return fR.findUserRateAvg(userName);
     }
