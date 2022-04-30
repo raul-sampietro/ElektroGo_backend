@@ -1,0 +1,356 @@
+{
+	"info": {
+		"_postman_id": "d17b1391-b697-4b17-b43b-74bd9f93f4a6",
+		"name": "Rating",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create",
+			"item": [
+				{
+					"name": "localhost:8080/users/rate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userWhoRates\": \"Test\",\r\n    \"ratedUser\": \"Test2\",\r\n    \"points\": \"7\",\r\n    \"comment\": \"Comentari d'exemple\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/users/rate",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"rate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:8080/users/rate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userWhoRates\": \"Test\",\r\n    \"ratedUser\": \"Test3\",\r\n    \"points\": \"5\",\r\n    \"comment\": \"Comentari d'exemple\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/users/rate",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"rate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:8080/users/rate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userWhoRates\": \"Test2\",\r\n    \"ratedUser\": \"Test\",\r\n    \"points\": \"3\",\r\n    \"comment\": \"Comentari d'exemple\"\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/users/rate",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"rate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:8080/users/rate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userWhoRates\": \"Test4\",\r\n    \"ratedUser\": \"Test\",\r\n    \"points\": \"8\",\r\n    \"comment\": \"Comentari d'exemple\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/users/rate",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"rate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:8080/users/rate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userWhoRates\": \"Test\",\r\n    \"ratedUser\": \"Test2\",\r\n    \"points\": \"9\",\r\n    \"comment\": \"Canvi de puntuacio\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/users/rate",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"rate"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ratings",
+			"item": [
+				{
+					"name": "localhost:8080/users/ratings?userName=Test",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/users/ratings?userName=Test",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"ratings"
+							],
+							"query": [
+								{
+									"key": "userName",
+									"value": "Test"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Rated",
+			"item": [
+				{
+					"name": "localhost:8080/users/rated?userName=Test",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/users/rated?userName=Test",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"rated"
+							],
+							"query": [
+								{
+									"key": "userName",
+									"value": "Test"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Average",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Remove",
+			"item": [
+				{
+					"name": "localhost:8080/users/unrate?userWhoRates=Test&ratedUser=Test2",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/users/unrate?userWhoRates=Test&ratedUser=Test2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"unrate"
+							],
+							"query": [
+								{
+									"key": "userWhoRates",
+									"value": "Test"
+								},
+								{
+									"key": "ratedUser",
+									"value": "Test2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:8080/users/unrate?userWhoRates=Test&ratedUser=Test3",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/users/unrate?userWhoRates=Test&ratedUser=Test3",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"unrate"
+							],
+							"query": [
+								{
+									"key": "userWhoRates",
+									"value": "Test"
+								},
+								{
+									"key": "ratedUser",
+									"value": "Test3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:8080/users/unrate?userWhoRates=Test2&ratedUser=Test",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/users/unrate?userWhoRates=Test2&ratedUser=Test",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"unrate"
+							],
+							"query": [
+								{
+									"key": "userWhoRates",
+									"value": "Test2"
+								},
+								{
+									"key": "ratedUser",
+									"value": "Test"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:8080/users/unrate?userWhoRates=Test4&ratedUser=Test",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/users/unrate?userWhoRates=Test4&ratedUser=Test",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"unrate"
+							],
+							"query": [
+								{
+									"key": "userWhoRates",
+									"value": "Test4"
+								},
+								{
+									"key": "ratedUser",
+									"value": "Test"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
