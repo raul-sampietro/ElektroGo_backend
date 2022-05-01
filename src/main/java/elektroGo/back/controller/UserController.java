@@ -226,4 +226,11 @@ public class UserController {
         if (fR.findByPrimaryKey(userWhoReports, reportedUser) == null) System.out.println("Report removed successfully, end of method");
         else System.out.println("ERROR, couldn't delete the report");
     }
+
+    @GetMapping("/users/Allreports")
+    public List<GatewayReport> allReports() throws SQLException {
+        System.out.println("\nStarting allReports method...");
+        FinderReport fR = FinderReport.getInstance();
+        return fR.findAll();
+    }
 }
