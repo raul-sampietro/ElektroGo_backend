@@ -68,16 +68,16 @@ public class UserController {
 
     /**
      * @brief Funció amb metode 'POST' que demana que s'esborri un User de la BD
-     * @param userName Usuari que volem eliminar
+     * @param username Usuari que volem eliminar
      * @post El usuari s'elimina de la BD
      */
     @PostMapping("/users/delete")
-    public void deleteUser(@RequestParam String userName) {
+    public void deleteUser(@RequestParam String username) {
         FinderUser fU = FinderUser.getInstance();
         try {
-            GatewayUser gU = fU.findByUsername(userName);
+            GatewayUser gU = fU.findByUsername(username);
             if (gU != null) gU.remove();
-            else throw new UserNotFound(userName);
+            else throw new UserNotFound(username);
         } catch (SQLException e) {
             e.printStackTrace();
         }
