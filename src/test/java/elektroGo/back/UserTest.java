@@ -23,22 +23,21 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UserTest {
     @Test
     public void createUserTest1() throws SQLException {
-        GatewayUser gV = new GatewayUser("id1","prov1","Test", "test@mail.com", "name1","gN1","fN1","url1");
+        GatewayUser gV = new GatewayUser("id1","prov1","TestingUsername", "test@mail.com", "name1","gN1","fN1","url1");
         Database d = Database.getInstance();
         gV.insert();
         FinderUser fU = FinderUser.getInstance();
-        GatewayUser gUTest = fU.findByUsername("Test");
+        GatewayUser gUTest = fU.findByUsername("TestingUsername");
         String res = gUTest.getUsername() + " " + gUTest.getEmail() + " " + gUTest.getName();
         d.executeSQLUpdate("delete from USERS where userName = 'Test';");
-        assertEquals("Test test@mail.com name1", res);
+        assertEquals("TestingUsername test@mail.com name1", res);
     }
 
     private GatewayUser insertTestUser() throws SQLException {
-        GatewayUser gU = new GatewayUser("id1","prov1","Test", "test@mail.com", "name1","gN1","fN1","url1");
+        GatewayUser gU = new GatewayUser("id1","prov1","TestingUsername", "test@mail.com", "name1","gN1","fN1","url1");
         gU.insert();
         return gU;
     }
-
 
     @Test
     public void updateUser() throws SQLException {
@@ -46,17 +45,17 @@ public class UserTest {
         Database d = Database.getInstance();
         try {
             FinderUser fU = FinderUser.getInstance();
-            GatewayUser gU = fU.findByUsername("Test");
+            GatewayUser gU = fU.findByUsername("TestingUsername");
             gU.setName("name32");
             gU.update();
-            gU = fU.findByUsername("Test");
+            gU = fU.findByUsername("TestingUsername");
             String res = gU.getName();
             assertEquals("name32", res);
         }
         catch (SQLException s) {
             s.printStackTrace();
         }
-        d.executeSQLUpdate("delete from USERS where userName = 'Test';");
+        d.executeSQLUpdate("delete from USERS where userName = 'TestingUsername';");
     }
 
     @Test
@@ -64,8 +63,17 @@ public class UserTest {
         GatewayUser gU =  insertTestUser();
         gU.remove();
         FinderUser fU = FinderUser.getInstance();
-        GatewayUser gUtemplate = fU.findByUsername("Test");
+        GatewayUser gUtemplate = fU.findByUsername("TestingUsername");
         assertNull(gUtemplate);
+        Database.getInstance().executeSQLUpdate("delete from USERS where userName = 'TestingUsername';");
     }
 
+    @Test
+    public void getUserByIdTest() throws SQLException {
+        GatewayUser gU = insertTestUser();
+        FinderUser fU = FinderUser.getInstance();
+        GatewayUser testG = fU.findById(gU.getId(), gU.getProvider());
+        assertEquals(gU.getUsername(), testG.getUsername(), "Incorrect username get");
+        Database.getInstance().executeSQLUpdate("delete from USERS where userName = 'TestingUsername';");
+    }
 }

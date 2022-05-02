@@ -33,13 +33,23 @@ public class UserController {
     /**
      * @brief Funció amb metode 'GET' que retorna la informació del user amb el username corresponen
      * @param username Usuari del que volem agafar la info
+     * @param id ID de l'Usuari
+     * @param provider Proveidor de sessio de l'Usuari
      * @return Es retorna un String amb la info del usuari demanada
      */
     @GetMapping("/user")
-    public String getUser(@RequestParam String username) throws SQLException {
+    public String getUser(@RequestParam(required = false) String username,
+                          @RequestParam(required = false) String id,
+                          @RequestParam(required = false) String provider) throws SQLException {
         FinderUser fU = FinderUser.getInstance();
-        GatewayUser gU = fU.findByUsername(username);
-        if(gU == null)throw new UserNotFound(username);
+        GatewayUser gU = null;
+        if (username != null && id == null && provider == null) {
+            gU = fU.findByUsername(username);
+        }
+        else if (username == null && id != null && provider != null) {
+            gU = fU.findById(id, provider);
+        }
+        if(gU == null) throw new UserNotFound(username);
         return gU.json();
     }
 
@@ -62,6 +72,8 @@ public class UserController {
      */
     @PostMapping("/users/create")
     public void createUser(@RequestBody GatewayUser gU) throws SQLException {
+        System.out.println("User creation request");
+        System.out.println("Requested user: " + gU.getUsername());
         FinderUser fU = FinderUser.getInstance();
         if (fU.findByUsername(gU.getUsername()) != null) throw new UserAlreadyExists(gU.getUsername());
         gU.insert();
