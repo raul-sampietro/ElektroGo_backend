@@ -71,11 +71,11 @@ public class UserController {
      */
     @PostMapping("/users/create")
     public void createUser(@RequestBody GatewayUser gU) throws SQLException {
-        System.out.println("User creation request");
-        System.out.println("Requested user: " + gU.getUsername());
+        System.out.println("\nStarting createUser method with username " + gU.getUsername() + " ...");
         FinderUser fU = FinderUser.getInstance();
         if (fU.findByUsername(gU.getUsername()) != null) throw new UserAlreadyExists(gU.getUsername());
         gU.insert();
+        System.out.println("User inserted (End of method)");
     }
 
     /**
