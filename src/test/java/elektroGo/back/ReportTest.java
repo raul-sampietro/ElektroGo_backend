@@ -1,7 +1,9 @@
 package elektroGo.back;
 
 import elektroGo.back.data.finders.FinderReport;
+import elektroGo.back.data.finders.FinderUser;
 import elektroGo.back.data.gateways.GatewayReport;
+import elektroGo.back.data.gateways.GatewayUser;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
@@ -20,10 +22,15 @@ public class ReportTest {
     FinderReport fR;
     GatewayReport gR;
     GatewayReport gR2;
+    GatewayUser gU;
+    boolean gUInserted;
 
     @BeforeEach
     public void initialize() throws SQLException {
+        gUInserted = false;
         fR = FinderReport.getInstance();
+        FinderUser fU = FinderUser.getInstance();
+        if (fU.findByUsername("Test") == null) insertTest();
         gR = insertTestReportComplet();
         gR2 = insertTestReportComplet2();
     }
@@ -32,8 +39,14 @@ public class ReportTest {
     public void removeGateways() throws SQLException {
         gR.remove();
         gR2.remove();
+        if (gUInserted) gU.remove();
     }
 
+    private void insertTest() throws SQLException {
+        gU = new GatewayUser("9999999991","prov2","Test","test@gmail.com","Test","Test", "fnTest", "/test");
+        gU.insert();
+        gUInserted = true;
+    }
     private GatewayReport insertTestReportComplet() throws SQLException {
         GatewayReport gRAct = new GatewayReport("Test","Test2","Em cau malament");
         gRAct.insert();

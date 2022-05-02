@@ -6,7 +6,6 @@
  */
 
 package elektroGo.back.controller;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import elektroGo.back.data.finders.FinderRating;
@@ -81,16 +80,16 @@ public class UserController {
 
     /**
      * @brief Funció amb metode 'POST' que demana que s'esborri un User de la BD
-     * @param userName Usuari que volem eliminar
+     * @param username Usuari que volem eliminar
      * @post El usuari s'elimina de la BD
      */
     @PostMapping("/users/delete")
-    public void deleteUser(@RequestParam String userName) {
+    public void deleteUser(@RequestParam String username) {
         FinderUser fU = FinderUser.getInstance();
         try {
-            GatewayUser gU = fU.findByUsername(userName);
+            GatewayUser gU = fU.findByUsername(username);
             if (gU != null) gU.remove();
-            else throw new UserNotFound(userName);
+            else throw new UserNotFound(username);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -173,6 +172,16 @@ public class UserController {
         System.out.println("Rating removed successfully, end of method");
     }
 
+
+    @GetMapping("/user/avgRate")
+    public Double avgRate(@RequestParam String userName) throws SQLException {
+        System.out.println("\nStarting avgRate method with userName : '" + userName +"'...");
+        FinderUser fU = FinderUser.getInstance();
+        if (fU.findByUsername(userName) == null) throw new UserNotFound(userName);
+        FinderRating fR = FinderRating.getInstance();
+        return fR.findUserRateAvg(userName);
+    }
+
     @GetMapping("/user/reports")
     public List<GatewayReport> reportsUser(@RequestParam String userWhoReports) throws SQLException {
         System.out.println("\nStarting reportsUser method with userWhoReports : '" + userWhoReports + "'");
@@ -228,5 +237,12 @@ public class UserController {
         gR.remove();
         if (fR.findByPrimaryKey(userWhoReports, reportedUser) == null) System.out.println("Report removed successfully, end of method");
         else System.out.println("ERROR, couldn't delete the report");
+    }
+
+    @GetMapping("/users/Allreports")
+    public List<GatewayReport> allReports() throws SQLException {
+        System.out.println("\nStarting allReports method...");
+        FinderReport fR = FinderReport.getInstance();
+        return fR.findAll();
     }
 }
