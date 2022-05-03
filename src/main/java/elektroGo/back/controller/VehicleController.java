@@ -187,7 +187,7 @@ public class VehicleController {
                     System.out.println("Found that that relation was the last with the vehicle with number plate '" + nPVehicle);
                     System.out.println("Deleting that vehicle...");
                     GatewayVehicle gV = fV.findByNumberPlate(nPVehicle);
-                    File fileToDelete = new File("Images/vehicle-images/" + gV.getImageId());
+                    File fileToDelete = new File("../Images/vehicle-images/" + gV.getImageId());
                     boolean success = fileToDelete.delete();
                     if (success) System.out.println("File was removed succesfully");
                     else System.out.println("WARNING: File couldn't be removed");
@@ -237,7 +237,7 @@ public class VehicleController {
                 ArrayList<GatewayDriverVehicle> aL = fDV.findByNumberPlateV(numberPlate);
                 for (GatewayDriverVehicle gDV : aL) gDV.remove();
                 System.out.println("Deleting image of the vehicle...");
-                File fileToDelete = new File("Images/vehicle-images/" + gV.getImageId());
+                File fileToDelete = new File("../Images/vehicle-images/" + gV.getImageId());
                 boolean success = fileToDelete.delete();
                 if (success) System.out.println("File was removed succesfully");
                 else System.out.println("WARNING: File couldn't be removed");
