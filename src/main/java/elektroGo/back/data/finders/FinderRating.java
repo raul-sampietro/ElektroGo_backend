@@ -9,6 +9,7 @@ package elektroGo.back.data.finders;
 
 import elektroGo.back.data.Database;
 import elektroGo.back.data.gateways.GatewayRating;
+import elektroGo.back.model.avgRate;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -129,15 +130,17 @@ public class FinderRating {
      * @param userName Usuari del qual es vol saber la valoracio mitjana
      * @return Valoracio mijtana de l'usuari donat
      */
-    public double findUserRateAvg(String userName) throws SQLException{
+    public avgRate findUserRateAvg(String userName) throws SQLException{
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
         double avgRate = 0;
-        PreparedStatement pS = conn.prepareStatement("select AVG(points) from RATING r WHERE  ratedUser = ?;");
+        PreparedStatement pS = conn.prepareStatement("select AVG(points), count(*) from RATING r WHERE  ratedUser = ?;");
         pS.setString(1,userName);
         ResultSet r = pS.executeQuery();
-        if (r.next()) avgRate = r.getDouble(1);
-        return avgRate;
+        Double ratingValue = null;
+        if (r.next()) ratingValue = r.getDouble(1);
+        Integer numberOfRatings = r.getInt(2);
+        return new avgRate(ratingValue, numberOfRatings);
     }
 
 }

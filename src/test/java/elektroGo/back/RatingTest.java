@@ -4,6 +4,7 @@ import elektroGo.back.data.finders.FinderRating;
 import elektroGo.back.data.finders.FinderUser;
 import elektroGo.back.data.gateways.GatewayRating;
 import elektroGo.back.data.gateways.GatewayUser;
+import elektroGo.back.model.avgRate;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -151,7 +152,8 @@ public class RatingTest {
 
     @Test
     public void findAvgRateUserTest() throws SQLException {
-        double d = fR.findUserRateAvg(gR2.getRatedUser());
-        assertEquals( (double)(gR2.getPoints()+gR3.getPoints())/2, d );
+        avgRate a = fR.findUserRateAvg(gR2.getRatedUser());
+        assertEquals( (double)(gR2.getPoints()+gR3.getPoints())/2, a.getRatingValue() );
+        assertEquals(2, a.getNumberOfRatings());
     }
 }

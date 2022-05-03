@@ -18,6 +18,7 @@ import elektroGo.back.exceptions.RatingNotFound;
 import elektroGo.back.exceptions.ReportNotFound;
 import elektroGo.back.exceptions.UserAlreadyExists;
 import elektroGo.back.exceptions.UserNotFound;
+import elektroGo.back.model.avgRate;
 import org.springframework.web.bind.annotation.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -174,7 +175,7 @@ public class UserController {
 
 
     @GetMapping("/user/avgRate")
-    public Double avgRate(@RequestParam String userName) throws SQLException {
+    public avgRate avgRate(@RequestParam String userName) throws SQLException {
         System.out.println("\nStarting avgRate method with userName : '" + userName +"'...");
         FinderUser fU = FinderUser.getInstance();
         if (fU.findByUsername(userName) == null) throw new UserNotFound(userName);
