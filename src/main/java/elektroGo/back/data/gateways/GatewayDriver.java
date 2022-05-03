@@ -26,39 +26,31 @@ public class GatewayDriver implements Gateway{
     /**
      * @brief Username del Driver
      */
-    private String userName; //CHANGE TYPE OF THIS ATTRIBUTE TO DRIVER WHEN IMPLEMENTED
+    private String username; //CHANGE TYPE OF THIS ATTRIBUTE TO DRIVER WHEN IMPLEMENTED
 
     /**
      * @brief SingleTon amb el FinderDriver
      */
     private FinderDriver fD;
 
+    public GatewayDriver() {}
     /**
-     * @brief Creadora de la Clase Gateway Driver amb el userName
-     * @param userName Usuari del qual volem crear el GW
+     * @brief Creadora de la Clase Gateway Driver amb el username
+     * @param username Usuari del qual volem crear el GW
      * @post Es crea un nou GWDriver amb els valors indicats
      * @return Retorna la instancia del gateway que s'acaba de crear
      */
-    public GatewayDriver(String userName) {
-        setUp(userName);
-    }
-
-    /**
-     * @brief Funció encarregada d'assignar els valors username al Driver crear
-     * @param userName que assignarem al propi Driver
-     * @post El userName del Driver s'actualitza
-     */
-    private void setUp(String userName) {
-        this.userName = userName;
+    public GatewayDriver(String username) {
+        this.username = username;
     }
 
     //Getters and Setters
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     //SQL operations
@@ -69,7 +61,7 @@ public class GatewayDriver implements Gateway{
      * @post el pS queda assignat amb la info requerida
      */
     public void setFullPreparedStatement(PreparedStatement pS) throws SQLException {
-        pS.setString(1,userName);
+        pS.setString(1, username);
     }
     /**
      * @brief Funció inserta a la BD un Driver
@@ -102,7 +94,7 @@ public class GatewayDriver implements Gateway{
      */
     public void remove() throws SQLException {
         Database d = Database.getInstance();
-        d.executeSQLUpdate("DELETE FROM DRIVER WHERE userName='" + userName + "';");
+        d.executeSQLUpdate("DELETE FROM DRIVER WHERE userName='" + username + "';");
     }
 
     /**
