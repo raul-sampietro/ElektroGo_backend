@@ -34,7 +34,7 @@ public class DriverTest {
         gV.insert();
         FinderDriver fU = FinderDriver.getInstance();
         GatewayDriver gUTest = fU.findByUserName("FirstUser");
-        String res = gUTest.getUserName();
+        String res = gUTest.getUsername();
         d.executeSQLUpdate("delete from DRIVER where userName = 'FirstUser';");
         assertEquals("FirstUser", res);
     }
@@ -64,7 +64,7 @@ public class DriverTest {
         d.executeSQLUpdate("insert into DRIVER values('FirstUser');");
         FinderDriver fU = FinderDriver.getInstance();
         GatewayDriver gUTest = fU.findByUserName("FirstUser");
-        String res = gUTest.getUserName();
+        String res = gUTest.getUsername();
         d.executeSQLUpdate("delete from DRIVER where userName = 'FirstUser';");
         assertEquals("FirstUser", res);
     }
