@@ -91,7 +91,7 @@ public class VehicleController {
         gV.setImageId(fileName);
         gV.update();
         System.out.println("Filename settled in Database");
-        Path uploadPath = Paths.get("Images/vehicle-images/");
+        Path uploadPath = Paths.get("../Images/vehicle-images/");
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
@@ -134,7 +134,7 @@ public class VehicleController {
         FinderVehicle fV = FinderVehicle.getInstance();
         GatewayVehicle gV = fV.findByNumberPlate(numberPlate);
         if (gV == null) throw new VehicleNotFound(numberPlate);
-        InputStream in = new BufferedInputStream(new FileInputStream("Images/vehicle-images/" + gV.getImageId()));
+        InputStream in = new BufferedInputStream(new FileInputStream("../Images/vehicle-images/" + gV.getImageId()));
         response.setContentType(MediaType.IMAGE_PNG_VALUE);
         IOUtils.copy(in, response.getOutputStream());
         System.out.println("getImage method ended.");
