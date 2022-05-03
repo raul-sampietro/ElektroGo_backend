@@ -10,8 +10,10 @@ package elektroGo.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import elektroGo.back.data.finders.FinderDriver;
+import elektroGo.back.data.finders.FinderUser;
 import elektroGo.back.data.gateways.GatewayDriver;
 import elektroGo.back.exceptions.DriverNotFound;
+import elektroGo.back.exceptions.UserAlreadyExists;
 import elektroGo.back.exceptions.UserNotFound;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,8 +59,10 @@ public class DriverController {
     @PostMapping("/drivers/create")
     public void createDriver(@RequestBody GatewayDriver gD) throws SQLException {
         System.out.println("\nStarting createDriver method with username " + gD.getUsername() + " ...");
-        FinderDriver fU = FinderDriver.getInstance();
-        if (fU.findByUserName(gD.getUsername()) == null) throw new UserNotFound(gD.getUsername());
+        FinderUser fU = FinderUser.getInstance();
+        if (fU.findByUsername(gD.getUsername()) == null) throw new UserNotFound(gD.getUsername());
+        FinderDriver fD = FinderDriver.getInstance();
+        if (fD.findByUserName(gD.getUsername()) != null) throw new UserAlreadyExists(gD.getUsername());
         gD.insert();
         System.out.println("Driver inserted (End of method)");
     }
