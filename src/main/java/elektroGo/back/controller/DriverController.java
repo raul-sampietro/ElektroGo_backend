@@ -57,7 +57,7 @@ public class DriverController {
      */
     @PostMapping("/drivers/create")
     public void createDriver(@RequestBody GatewayDriver gD) throws SQLException {
-        System.out.println("\nStarting createDriver method with username " + gD.getUsername() + " ...");
+        System.out.println("\nStarting createDriver method with username " + gD.getUserName() + " ...");
         FinderDriver fU = FinderDriver.getInstance();
         if (fU.findByUserName(gD.getUserName()) == null) throw new UserNotFound(gD.getUserName());
         gD.insert();
