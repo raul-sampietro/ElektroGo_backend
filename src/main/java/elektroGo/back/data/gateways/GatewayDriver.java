@@ -33,23 +33,15 @@ public class GatewayDriver implements Gateway{
      */
     private FinderDriver fD;
 
+    public GatewayDriver() {}
     /**
-     * @brief Creadora de la Clase Gateway Driver amb el userName
+     * @brief Creadora de la Clase Gateway Driver amb el username
      * @param username Usuari del qual volem crear el GW
      * @post Es crea un nou GWDriver amb els valors indicats
      * @return Retorna la instancia del gateway que s'acaba de crear
      */
     public GatewayDriver(String username) {
-        setUp(username);
-    }
-
-    /**
-     * @brief Funció encarregada d'assignar els valors username al Driver crear
-     * @param userName que assignarem al propi Driver
-     * @post El userName del Driver s'actualitza
-     */
-    private void setUp(String userName) {
-        this.username = userName;
+        this.username = username;
     }
 
     //Getters and Setters
