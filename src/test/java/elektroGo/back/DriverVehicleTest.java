@@ -3,6 +3,7 @@ package elektroGo.back;
 import elektroGo.back.data.finders.FinderDriverVehicle;
 import elektroGo.back.data.finders.FinderVehicle;
 import elektroGo.back.data.gateways.GatewayDriverVehicle;
+import elektroGo.back.data.gateways.GatewayUser;
 import elektroGo.back.data.gateways.GatewayVehicle;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,11 +18,15 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class DriverVehicleTest {
 
-    boolean insertVehicle;
-    boolean insertVehicle2;
+    GatewayVehicle gV1;
+    GatewayVehicle gV2;
+    GatewayUser gU1;
+    GatewayUser gU2;
 
     @BeforeEach
-    private void initialize() {
+    private void initialize() throws SQLException {
+        gV1 = insertVehicle();
+
         insertVehicle = false;
         insertVehicle2 = false;
     }
@@ -30,14 +35,14 @@ public class DriverVehicleTest {
         GatewayVehicle gV = new GatewayVehicle("testBrand", "testModel", "VTestDriverVehicleTest",
                 666, 2010, 3);
         gV.insert();
-        insertVehicle = true;
+        return gV;
     }
 
     private void insertVehicle2() throws SQLException {
         GatewayVehicle gV = new GatewayVehicle("testBrand", "testModel", "VTestDriverVehicleTest2",
                 666, 2010, 3);
         gV.insert();
-        insertVehicle2 = true;
+        return gV;
     }
 
     @AfterEach
