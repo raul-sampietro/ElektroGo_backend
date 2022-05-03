@@ -16,7 +16,7 @@ import java.util.ArrayList;
 @SpringBootTest
 public class RatingTest {
 
-    FinderRating fR = FinderRating.getInstance();
+    FinderRating fR;
     GatewayRating gR1;
     GatewayRating gR2;
     GatewayRating gR3;
@@ -42,6 +42,7 @@ public class RatingTest {
         if (gU1 != null) gU1.remove();
         if (gU2 != null) gU2.remove();
         if (gU3 != null) gU3.remove();
+        if (gU4 != null) gU4.remove();
     }
 
     private GatewayUser createUser(String username) {
