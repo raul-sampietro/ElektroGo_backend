@@ -87,14 +87,13 @@ public class TripController {
         }
         if(gT == null)throw new TripNotFound();
 
-        ArrayList<AbstractMap.SimpleEntry<Double, GatewayTrip>> list= new ArrayList<>();
+        ArrayList<AbstractMap.SimpleEntry<Double, GatewayTrip>> list1= new ArrayList<>();
         FinderRating fR =  FinderRating.getInstance();
 
         for(int i = 0; i < gT.size(); i++){
-            list.add(new AbstractMap.SimpleEntry<>(fR.findUserRateAvg(gT.get(i).getUsername()).getRatingValue(), gT.get(i)));
-            System.out.println(gT.get(i).getUsername() + " " + fR.findUserRateAvg(gT.get(i).getUsername()).getRatingValue());
+            list1.add(new AbstractMap.SimpleEntry<>(fR.findUserRateAvg(gT.get(i).getUsername()).getRatingValue(), gT.get(i)));
         }
-        list.sort((o1, o2) -> {
+        list1.sort((o1, o2) -> {
             if (o1.getKey() > o2.getKey()) {
                 return -1;
             } else if (o1.getKey().equals(o2.getKey())) {
@@ -103,12 +102,11 @@ public class TripController {
                 return 1;
             }
         });
-        System.out.println(list);
-        ArrayList<GatewayTrip> end= new ArrayList<>();
-        for(int i = 0; i < list.size(); i++){
-            end.add(list.get(i).getValue());
+        ArrayList<GatewayTrip> end1= new ArrayList<>();
+        for(int i = 0; i < list1.size(); i++){
+            end1.add(list1.get(i).getValue());
         }
-        return end;
+        return end1;
     }
 
     /**
