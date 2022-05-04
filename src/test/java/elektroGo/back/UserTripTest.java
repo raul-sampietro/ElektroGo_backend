@@ -45,7 +45,7 @@ public class UserTripTest {
         fT = FinderTrip.getInstance();
         gT = insertTestTrip();
         fUT = FinderUserTrip.getInstance();
-        gT = fT.findByUser("UserTestClass",LocalDate.of(2001, 2, 12),new Time(12,0,0));
+        gT = fT.findByUser("UserTestClass",LocalDate.of(2001, 2, 12),new Time(12*60*60*1000));
         gUT = insertTestUserTrip(gT.getId());
         gUT2 = insertTestUserTrip2(gT.getId());
     }
@@ -69,7 +69,7 @@ public class UserTripTest {
         return gU2;
     }
     private GatewayTrip insertTestTrip() throws SQLException {
-        GatewayTrip gT = new GatewayTrip(LocalDate.of(2001, 2, 12), new Time(12,0,0),
+        GatewayTrip gT = new GatewayTrip(LocalDate.of(2001, 2, 12), new Time(12*60*60*1000),
                 5,0, "null", "null",LocalDate.of(2001, 2,10),
                 "1221","bcn" ,"gir",new BigDecimal("41.3000"),new BigDecimal("41.0000"), new BigDecimal("41.3000"),new BigDecimal("41.0000"), "UserTestClass");
         gT.insert();
