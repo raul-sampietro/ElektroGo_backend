@@ -7,8 +7,8 @@
 
 package elektroGo.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import elektroGo.back.data.finders.FinderRating;
 import elektroGo.back.data.finders.FinderTrip;
-import elektroGo.back.data.finders.FinderUserTrip;
 import elektroGo.back.data.gateways.GatewayTrip;
 import elektroGo.back.data.gateways.GatewayUserTrip;
 import elektroGo.back.exceptions.InvalidKey;
@@ -21,8 +21,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Objects;
+import java.util.*;
 
 import static java.lang.Math.cos;
 
@@ -100,6 +99,41 @@ public class TripController {
         if(fT.findAll()==null)throw new TripNotFound();
         return fT.findAll();
     }
+
+    /**
+     * @brief Funció amb metode 'GET' que retorna la informació de tots els Users a la BD
+     * @return Es retorna un String amb la info dels usuaris
+     */
+    @GetMapping("/car-poolings/order")
+    public ArrayList<GatewayTrip> getTripsOrdered() throws SQLException {
+        FinderTrip fT = FinderTrip.getInstance();
+        ArrayList<GatewayTrip> all = fT.findAll();
+        if(all ==null)throw new TripNotFound();
+
+        ArrayList<AbstractMap.SimpleEntry<Double, GatewayTrip>> list= new ArrayList<>();
+        FinderRating fR =  FinderRating.getInstance();
+
+        for(int i = 0; i < all.size(); i++){
+            list.add(new AbstractMap.SimpleEntry<>(fR.findUserRateAvg(all.get(i).getUsername()).getRatingValue(), all.get(i)));
+            System.out.println(all.get(i).getUsername() + " " + fR.findUserRateAvg(all.get(i).getUsername()).getRatingValue());
+        }
+        list.sort((o1, o2) -> {
+            if (o1.getKey() > o2.getKey()) {
+                return -1;
+            } else if (o1.getKey().equals(o2.getKey())) {
+                return 0;
+            } else {
+                return 1;
+            }
+        });
+        System.out.println(list);
+        ArrayList<GatewayTrip> end= new ArrayList<>();
+        for(int i = 0; i < list.size(); i++){
+            end.add(list.get(i).getValue());
+        }
+        return end;
+    }
+
 
     /**
      * @brief Funció amb metode 'POST' que crearà un Trip amb la info requerida
