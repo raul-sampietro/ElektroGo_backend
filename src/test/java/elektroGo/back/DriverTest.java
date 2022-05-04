@@ -11,8 +11,12 @@ package elektroGo.back;
 import elektroGo.back.data.Database;
 import elektroGo.back.data.finders.FinderDriver;
 
+import elektroGo.back.data.finders.FinderUser;
 import elektroGo.back.data.gateways.GatewayDriver;
 
+import elektroGo.back.data.gateways.GatewayUser;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -27,45 +31,48 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @SpringBootTest
 public class DriverTest {
-    @Test
-    public void createDriverTest1() throws SQLException {
-        GatewayDriver gV = new GatewayDriver("FirstUser");
-        Database d = Database.getInstance();
+
+
+    FinderUser fU;
+    FinderDriver fD;
+    GatewayUser gU;
+    GatewayDriver gV;
+
+    //BEFORE AND AFTER
+    @BeforeEach
+    public void initialize() throws SQLException {
+        fU = FinderUser.getInstance();
+        fD = FinderDriver.getInstance();
+        gU = insertTest();
+        gV = new GatewayDriver("UserTestClass");
         gV.insert();
-        FinderDriver fU = FinderDriver.getInstance();
-        GatewayDriver gUTest = fU.findByUserName("FirstUser");
-        String res = gUTest.getUsername();
-        d.executeSQLUpdate("delete from DRIVER where userName = 'FirstUser';");
-        assertEquals("FirstUser", res);
     }
 
-    private GatewayDriver insertDriverUser() throws SQLException {
-        GatewayDriver gU = new GatewayDriver("FirstUser");
+    @AfterEach
+    public void removeGateways() throws SQLException {
+        if(fU.findByUsername(gU.getUsername()) != null)gU.remove();
+    }
+
+    //FUNCTIONS
+    private GatewayUser insertTest() throws SQLException {
+        gU = new GatewayUser("0","p","UserTestClass","t@gmail.com","T","T", "f", "/t");
         gU.insert();
         return gU;
+    }
+
+    //TEST
+    @Test
+    public void createDriverTest1() throws SQLException {
+        GatewayDriver gUTest = fD.findByUserName("UserTestClass");
+        String res = gUTest.getUsername();
+        assertEquals("UserTestClass", res);
     }
 
 
     @Test
     public void deleteDriverTest() throws SQLException {
-        GatewayDriver gU = insertDriverUser();
-        Database d = Database.getInstance();
-        gU.remove();
-        FinderDriver fU = FinderDriver.getInstance();
-        GatewayDriver gUtemplate = fU.findByUserName("FirstUser");
+        gV.remove();
+        GatewayDriver gUtemplate = fD.findByUserName("UserTestClass");
         assertNull(gUtemplate);
-        assertNull(null);
-    }
-
-
-    @Test
-    public void readDriverTest() throws SQLException {
-        Database d = Database.getInstance();
-        d.executeSQLUpdate("insert into DRIVER values('FirstUser');");
-        FinderDriver fU = FinderDriver.getInstance();
-        GatewayDriver gUTest = fU.findByUserName("FirstUser");
-        String res = gUTest.getUsername();
-        d.executeSQLUpdate("delete from DRIVER where userName = 'FirstUser';");
-        assertEquals("FirstUser", res);
     }
 }

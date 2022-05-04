@@ -6,10 +6,16 @@
  */
 package elektroGo.back;
 import elektroGo.back.data.Database;
+import elektroGo.back.data.finders.FinderDriver;
 import elektroGo.back.data.finders.FinderTrip;
 import elektroGo.back.data.finders.FinderUser;
+import elektroGo.back.data.finders.FinderVehicle;
+import elektroGo.back.data.gateways.GatewayDriver;
 import elektroGo.back.data.gateways.GatewayTrip;
 import elektroGo.back.data.gateways.GatewayUser;
+import elektroGo.back.data.gateways.GatewayVehicle;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -26,54 +32,81 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @SpringBootTest
 public class TripTest {
-    @Test
-    public void createTripTest1() throws SQLException {
-        GatewayTrip gT = new GatewayTrip(/*"2",*/ LocalDate.of(2001, 2, 12), new Time(12,0,0),
-                5,0, "null","null", LocalDate.of(2001, 2,10),
-                "1234aas","bcn", "gir",new BigDecimal("41.3000"),new BigDecimal("41.0000"),new BigDecimal("41.3000"),new BigDecimal("41.0000"), "Test2");
-        Database d = Database.getInstance();
-        gT.insert();
-        FinderTrip fT = FinderTrip.getInstance();
-        GatewayTrip gTTest = fT.findByUser("Test2",LocalDate.of(2001, 2, 12),new Time(12,0,0));
-        String res = gTTest.getUsername()+ " " + gTTest.getVehicleNumberPlate();
-        d.executeSQLUpdate("delete from TRIP where username = 'Test2';");
-        assertEquals("Test2 1234aas", res);
+
+    FinderUser fU;
+    FinderDriver fD;
+    GatewayUser gU;
+    GatewayDriver gD;
+    FinderVehicle fV;
+    GatewayVehicle gV;
+    FinderTrip fT;
+    GatewayTrip gT;
+
+    //BEF & AFTER
+    @BeforeEach
+    public void initialize() throws SQLException {
+        fU = FinderUser.getInstance();
+        fD = FinderDriver.getInstance();
+        gU = insertTest();
+        gD = new GatewayDriver("UserTestClass");
+        gD.insert();
+        fV = FinderVehicle.getInstance();
+        gV = insertTestVehicleComplet();
+        fT = FinderTrip.getInstance();
+        gT = insertTestTrip();
     }
 
+    @AfterEach
+    public void removeGateways() throws SQLException {
+        if(fU.findByUsername(gU.getUsername()) != null)gU.remove();
+        if (gV != null) gV.remove();
+    }
+
+    //FUNCTIONS
+    private GatewayUser insertTest() throws SQLException {
+        gU = new GatewayUser("0","p","UserTestClass","t@gmail.com","T","T", "f", "/t");
+        gU.insert();
+        return gU;
+    }
     private GatewayTrip insertTestTrip() throws SQLException {
         GatewayTrip gT = new GatewayTrip(LocalDate.of(2001, 2, 12), new Time(12,0,0),
                 5,0, "null", "null",LocalDate.of(2001, 2,10),
-                "1234aas","bcn" ,"gir",new BigDecimal("41.3000"),new BigDecimal("41.0000"), new BigDecimal("41.3000"),new BigDecimal("41.0000"), "Test2");
+                "1221","bcn" ,"gir",new BigDecimal("41.3000"),new BigDecimal("41.0000"), new BigDecimal("41.3000"),new BigDecimal("41.0000"), "UserTestClass");
         gT.insert();
         return gT;
+    }
+    private GatewayVehicle insertTestVehicleComplet() throws SQLException {
+        GatewayVehicle gV = new GatewayVehicle("test", "test", "1221",
+                600, 2010, 6, "id");
+        gV.insert();
+        return gV;
+    }
+
+    //TEST
+    @Test
+    public void createTripTest1() throws SQLException {
+        GatewayTrip gTTest = fT.findByUser("UserTestClass",LocalDate.of(2001, 2, 12),new Time(12,0,0));
+        String res = gTTest.getUsername()+ " " + gTTest.getVehicleNumberPlate();
+        assertEquals("UserTestClass 1221", res);
     }
 
 
     @Test
     public void updateTrip() throws SQLException {
-        insertTestTrip();
-        Database d = Database.getInstance();
-        try {
-            FinderTrip fT = FinderTrip.getInstance();
-            GatewayTrip gT = fT.findByUser("Test2",LocalDate.of(2001, 2, 12),new Time(12,0,0));;
-            gT.setRestrictions("NoMascotes");
-            gT.update();
-            gT = fT.findByUser("Test2",LocalDate.of(2001, 2, 12),new Time(12,0,0));;
-            String res =gT.getVehicleNumberPlate() + " " + gT.getRestrictions();
-            assertEquals("1234aas NoMascotes", res);
-        }
-        catch (SQLException s) {
-            s.printStackTrace();
-        }
-        d.executeSQLUpdate("delete from TRIP where username = 'Test2';");
+            GatewayTrip gTest = fT.findByUser("UserTestClass",LocalDate.of(2001, 2, 12),new Time(12,0,0));
+            gTest.setRestrictions("NoMascotes");
+            gTest.update();
+            System.out.println(gTest.json());
+            gTest = fT.findByUser("UserTestClass",LocalDate.of(2001, 2, 12),new Time(12,0,0));
+            System.out.println(gTest.json());
+            String res =gTest.getVehicleNumberPlate() + " " + gTest.getRestrictions();
+            assertEquals("1221 NoMascotes", res);
     }
 
     @Test
     public void deleteTripTest() throws SQLException {
-        GatewayTrip gT =  insertTestTrip();
         gT.remove();
-        FinderTrip fT = FinderTrip.getInstance();
-        GatewayTrip gTtemplate = fT.findByUser("Test2",LocalDate.of(2001, 2, 12),new Time(12,0,0));
+        GatewayTrip gTtemplate = fT.findByUser("UserTestClass",LocalDate.of(2001, 2, 12),new Time(12,0,0));
         assertNull(gTtemplate);
     }
 
