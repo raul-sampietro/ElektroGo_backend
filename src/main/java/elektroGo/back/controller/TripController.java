@@ -86,7 +86,29 @@ public class TripController {
             }
         }
         if(gT == null)throw new TripNotFound();
-        return gT;
+
+        ArrayList<AbstractMap.SimpleEntry<Double, GatewayTrip>> list= new ArrayList<>();
+        FinderRating fR =  FinderRating.getInstance();
+
+        for(int i = 0; i < gT.size(); i++){
+            list.add(new AbstractMap.SimpleEntry<>(fR.findUserRateAvg(gT.get(i).getUsername()).getRatingValue(), gT.get(i)));
+            System.out.println(gT.get(i).getUsername() + " " + fR.findUserRateAvg(gT.get(i).getUsername()).getRatingValue());
+        }
+        list.sort((o1, o2) -> {
+            if (o1.getKey() > o2.getKey()) {
+                return -1;
+            } else if (o1.getKey().equals(o2.getKey())) {
+                return 0;
+            } else {
+                return 1;
+            }
+        });
+        System.out.println(list);
+        ArrayList<GatewayTrip> end= new ArrayList<>();
+        for(int i = 0; i < list.size(); i++){
+            end.add(list.get(i).getValue());
+        }
+        return end;
     }
 
     /**
