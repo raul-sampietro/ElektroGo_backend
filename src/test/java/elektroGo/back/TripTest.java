@@ -62,22 +62,22 @@ public class TripTest {
 
     //FUNCTIONS
     private GatewayUser insertTest() throws SQLException {
-        gU = new GatewayUser("0","p","TripTestClass","t@gmail.com","T","T", "f", "/t");
-        gU.insert();
-        return gU;
+        GatewayUser gU1 = new GatewayUser("0","p","TripTestClass","t@gmail.com","T","T", "f", "/t");
+        gU1.insert();
+        return gU1;
     }
     private GatewayTrip insertTestTrip() throws SQLException {
-        GatewayTrip gT = new GatewayTrip(LocalDate.of(2001, 2, 12), new Time(12*60*60*1000),
+        GatewayTrip gT1 = new GatewayTrip(LocalDate.of(2001, 2, 12), new Time(12*60*60*1000),
                 5,0, "null", "null",LocalDate.of(2001, 2,10),
                 "1221","bcn" ,"gir",new BigDecimal("41.3000"),new BigDecimal("41.0000"), new BigDecimal("41.3000"),new BigDecimal("41.0000"), "TripTestClass");
-        gT.insert();
-        return gT;
+        gT1.insert();
+        return gT1;
     }
     private GatewayVehicle insertTestVehicleComplet() throws SQLException {
-        GatewayVehicle gV = new GatewayVehicle("test", "test", "1221",
+        GatewayVehicle gV1 = new GatewayVehicle("test", "test", "1221",
                 600, 2010, 6, "id");
-        gV.insert();
-        return gV;
+        gV1.insert();
+        return gV1;
     }
 
     //TEST
