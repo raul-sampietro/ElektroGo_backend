@@ -68,7 +68,6 @@ public class DriverTest {
         assertEquals("UserTestClass", res);
     }
 
-
     @Test
     public void deleteDriverTest() throws SQLException {
         gV.remove();
