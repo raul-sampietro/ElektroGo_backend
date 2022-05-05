@@ -43,7 +43,6 @@ public class TripController {
         if(gT == null)throw new TripNotFound(id);
         return gT;
     }
-
     /**
      * @brief Funció amb metode 'GET' que retorna la informació del trip amb el id corresponen
      * @return Es retorna un String amb la info del trip demanada
