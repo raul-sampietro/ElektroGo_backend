@@ -43,7 +43,6 @@ public class TripController {
         if(gT == null)throw new TripNotFound(id);
         return gT;
     }
-
     /**
      * @brief Funció amb metode 'GET' que retorna la informació del trip amb el id corresponen
      * @return Es retorna un String amb la info del trip demanada
@@ -56,7 +55,7 @@ public class TripController {
         System.out.println("hey");
         FinderTrip fT = FinderTrip.getInstance();
         ArrayList<GatewayTrip> gT;
-        BigDecimal a = new BigDecimal("0.25");
+        BigDecimal a = new BigDecimal("0.15");
         if(sDate == null){
             if(sTimeMax == null){
                 if(sTimeMin == null)gT = fT.findByNot(LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
@@ -86,27 +85,7 @@ public class TripController {
             }
         }
         if(gT == null)throw new TripNotFound();
-
-        ArrayList<AbstractMap.SimpleEntry<Double, GatewayTrip>> list1= new ArrayList<>();
-        FinderRating fR =  FinderRating.getInstance();
-
-        for(int i = 0; i < gT.size(); i++){
-            list1.add(new AbstractMap.SimpleEntry<>(fR.findUserRateAvg(gT.get(i).getUsername()).getRatingValue(), gT.get(i)));
-        }
-        list1.sort((o1, o2) -> {
-            if (o1.getKey() > o2.getKey()) {
-                return -1;
-            } else if (o1.getKey().equals(o2.getKey())) {
-                return 0;
-            } else {
-                return 1;
-            }
-        });
-        ArrayList<GatewayTrip> end1= new ArrayList<>();
-        for(int i = 0; i < list1.size(); i++){
-            end1.add(list1.get(i).getValue());
-        }
-        return end1;
+        return gT;
     }
 
     /**
@@ -127,31 +106,9 @@ public class TripController {
     @GetMapping("/car-poolings/order")
     public ArrayList<GatewayTrip> getTripsOrdered() throws SQLException {
         FinderTrip fT = FinderTrip.getInstance();
-        ArrayList<GatewayTrip> all = fT.findAll();
+        ArrayList<GatewayTrip> all = fT.findOrdered();
         if(all ==null)throw new TripNotFound();
-
-        ArrayList<AbstractMap.SimpleEntry<Double, GatewayTrip>> list= new ArrayList<>();
-        FinderRating fR =  FinderRating.getInstance();
-
-        for(int i = 0; i < all.size(); i++){
-            list.add(new AbstractMap.SimpleEntry<>(fR.findUserRateAvg(all.get(i).getUsername()).getRatingValue(), all.get(i)));
-            System.out.println(all.get(i).getUsername() + " " + fR.findUserRateAvg(all.get(i).getUsername()).getRatingValue());
-        }
-        list.sort((o1, o2) -> {
-            if (o1.getKey() > o2.getKey()) {
-                return -1;
-            } else if (o1.getKey().equals(o2.getKey())) {
-                return 0;
-            } else {
-                return 1;
-            }
-        });
-        System.out.println(list);
-        ArrayList<GatewayTrip> end= new ArrayList<>();
-        for(int i = 0; i < list.size(); i++){
-            end.add(list.get(i).getValue());
-        }
-        return end;
+        return all;
     }
 
 
