@@ -20,7 +20,7 @@ import java.net.URI;
 import java.util.ArrayList;
 
 /**
- * @brief La classe DistanceCalculator representa s'utilitza per calcular la matriu de distancies entre l'origen,
+ * @brief La classe DistanceCalculator s'utilitza per calcular la matriu de distancies entre l'origen,
  * el desti i les estacions de carrega
  */
 public class DistanceCalculator {
