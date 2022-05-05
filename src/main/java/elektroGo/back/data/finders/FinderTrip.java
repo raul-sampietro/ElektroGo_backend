@@ -59,6 +59,30 @@ public class FinderTrip {
         }
         return gtrip;
     }
+    /**
+     * @brief Funció que agafa tots els trips de la BD i els posa a un Array
+     * @return Es retorna un array de GatewayTrips amb tota la info dels Trips
+     */
+    public ArrayList<GatewayTrip> findOrdered() throws SQLException {
+        Database d = Database.getInstance();
+        Connection conn = d.getConnection();
+        ArrayList<GatewayTrip> gtrip = new ArrayList<>();
+        PreparedStatement pS = conn.prepareStatement("select t.id, t.startDate, t.startTime, " +
+                "t.offeredSeats,t.occupiedSeats,t.restrictions, t.details,t.CancelDate," +
+                "t.vehicleNumberPlate,t.origin,t.destination,t.LatitudeOrigin," +
+                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username," +
+                "AVG(r.points) as avgpoints " +
+                "from TRIP t " +
+                "LEFT OUTER JOIN RATING  r " +
+                "ON t.username = r.ratedUser " +
+                "group by t.id " +
+                "order by avgpoints desc;");
+        ResultSet r = pS.executeQuery();
+        while (r.next()) {
+            gtrip.add(createGateway(r));
+        }
+        return gtrip;
+    }
 
     /**
      * @brief Funció que agafa un trip de la BD i el retorna
@@ -114,7 +138,17 @@ public class FinderTrip {
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
         ArrayList<GatewayTrip> corT = new ArrayList<>();
-        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ?;");
+        PreparedStatement pS = conn.prepareStatement(("select t.id, t.startDate, t.startTime, " +
+                        "t.offeredSeats,t.occupiedSeats,t.restrictions, t.details,t.CancelDate," +
+                        "t.vehicleNumberPlate,t.origin,t.destination,t.LatitudeOrigin," +
+                        "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username," +
+                        "AVG(r.points) as avgpoints " +
+                        "from TRIP t " +
+                        "LEFT OUTER JOIN RATING  r " +
+                        "ON t.username = r.ratedUser " +
+                        "WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ?"
+                        +"group by t.id " +
+                        "order by avgpoints desc;"));
         pS.setBigDecimal(1,latO1);
         pS.setBigDecimal(2,latO2);
         pS.setBigDecimal(3,longO1);
@@ -135,7 +169,17 @@ public class FinderTrip {
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
         ArrayList<GatewayTrip> corT = new ArrayList<>();
-        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startTime >= ?;");
+        PreparedStatement pS = conn.prepareStatement(("select t.id, t.startDate, t.startTime, " +
+                "t.offeredSeats,t.occupiedSeats,t.restrictions, t.details,t.CancelDate," +
+                "t.vehicleNumberPlate,t.origin,t.destination,t.LatitudeOrigin," +
+                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username," +
+                "AVG(r.points) as avgpoints " +
+                "from TRIP t " +
+                "LEFT OUTER JOIN RATING  r " +
+                "ON t.username = r.ratedUser " +
+                "WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startTime >= ?"
+                +"group by t.id " +
+                "order by avgpoints desc;"));
         pS.setBigDecimal(1,latO1);
         pS.setBigDecimal(2,latO2);
         pS.setBigDecimal(3,longO1);
@@ -157,7 +201,17 @@ public class FinderTrip {
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
         ArrayList<GatewayTrip> corT = new ArrayList<>();
-        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startTime <= ?;");
+        PreparedStatement pS = conn.prepareStatement(("select t.id, t.startDate, t.startTime, " +
+                "t.offeredSeats,t.occupiedSeats,t.restrictions, t.details,t.CancelDate," +
+                "t.vehicleNumberPlate,t.origin,t.destination,t.LatitudeOrigin," +
+                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username," +
+                "AVG(r.points) as avgpoints " +
+                "from TRIP t " +
+                "LEFT OUTER JOIN RATING  r " +
+                "ON t.username = r.ratedUser " +
+                "WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startTime <= ?"
+                +"group by t.id " +
+                "order by avgpoints desc;"));
         pS.setBigDecimal(1,latO1);
         pS.setBigDecimal(2,latO2);
         pS.setBigDecimal(3,longO1);
@@ -179,7 +233,17 @@ public class FinderTrip {
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
         ArrayList<GatewayTrip> corT = new ArrayList<>();
-        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startTime BETWEEN ? AND ?");
+        PreparedStatement pS = conn.prepareStatement(("select t.id, t.startDate, t.startTime, " +
+                "t.offeredSeats,t.occupiedSeats,t.restrictions, t.details,t.CancelDate," +
+                "t.vehicleNumberPlate,t.origin,t.destination,t.LatitudeOrigin," +
+                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username," +
+                "AVG(r.points) as avgpoints " +
+                "from TRIP t " +
+                "LEFT OUTER JOIN RATING  r " +
+                "ON t.username = r.ratedUser " +
+                "WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startTime BETWEEN ? AND ?"
+                +"group by t.id " +
+                "order by avgpoints desc;"));
         pS.setBigDecimal(1,latO1);
         pS.setBigDecimal(2,latO2);
         pS.setBigDecimal(3,longO1);
@@ -201,7 +265,17 @@ public class FinderTrip {
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
         ArrayList<GatewayTrip> corT = new ArrayList<>();
-        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ?;");
+        PreparedStatement pS = conn.prepareStatement(("select t.id, t.startDate, t.startTime, " +
+                "t.offeredSeats,t.occupiedSeats,t.restrictions, t.details,t.CancelDate," +
+                "t.vehicleNumberPlate,t.origin,t.destination,t.LatitudeOrigin," +
+                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username," +
+                "AVG(r.points) as avgpoints " +
+                "from TRIP t " +
+                "LEFT OUTER JOIN RATING  r " +
+                "ON t.username = r.ratedUser " +
+                "WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ?"
+                +"group by t.id " +
+                "order by avgpoints desc;"));
         pS.setBigDecimal(1,latO1);
         pS.setBigDecimal(2,latO2);
         pS.setBigDecimal(3,longO1);
@@ -223,7 +297,17 @@ public class FinderTrip {
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
         ArrayList<GatewayTrip> corT = new ArrayList<>();
-        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ? and startTime >= ?;");
+        PreparedStatement pS = conn.prepareStatement(("select t.id, t.startDate, t.startTime, " +
+                "t.offeredSeats,t.occupiedSeats,t.restrictions, t.details,t.CancelDate," +
+                "t.vehicleNumberPlate,t.origin,t.destination,t.LatitudeOrigin," +
+                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username," +
+                "AVG(r.points) as avgpoints " +
+                "from TRIP t " +
+                "LEFT OUTER JOIN RATING  r " +
+                "ON t.username = r.ratedUser " +
+                "WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ? and startTime >= ?"
+                +"group by t.id " +
+                "order by avgpoints desc;"));
         pS.setBigDecimal(1,latO1);
         pS.setBigDecimal(2,latO2);
         pS.setBigDecimal(3,longO1);
@@ -246,7 +330,17 @@ public class FinderTrip {
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
         ArrayList<GatewayTrip> corT = new ArrayList<>();
-        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ? and startTime <= ?;");
+        PreparedStatement pS = conn.prepareStatement(("select t.id, t.startDate, t.startTime, " +
+                "t.offeredSeats,t.occupiedSeats,t.restrictions, t.details,t.CancelDate," +
+                "t.vehicleNumberPlate,t.origin,t.destination,t.LatitudeOrigin," +
+                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username," +
+                "AVG(r.points) as avgpoints " +
+                "from TRIP t " +
+                "LEFT OUTER JOIN RATING  r " +
+                "ON t.username = r.ratedUser " +
+                "WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ? and startTime <= ?"
+                +"group by t.id " +
+                "order by avgpoints desc;"));
         pS.setBigDecimal(1,latO1);
         pS.setBigDecimal(2,latO2);
         pS.setBigDecimal(3,longO1);
@@ -269,7 +363,17 @@ public class FinderTrip {
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
         ArrayList<GatewayTrip> corT = new ArrayList<>();
-        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ? and startTime <= ? and startTime >= ?;");
+        PreparedStatement pS = conn.prepareStatement(("select t.id, t.startDate, t.startTime, " +
+                "t.offeredSeats,t.occupiedSeats,t.restrictions, t.details,t.CancelDate," +
+                "t.vehicleNumberPlate,t.origin,t.destination,t.LatitudeOrigin," +
+                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username," +
+                "AVG(r.points) as avgpoints " +
+                "from TRIP t " +
+                "LEFT OUTER JOIN RATING  r " +
+                "ON t.username = r.ratedUser " +
+                "WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ? and startTime <= ? and startTime >= ?"
+                +"group by t.id " +
+                "order by avgpoints desc;"));
         pS.setBigDecimal(1,latO1);
         pS.setBigDecimal(2,latO2);
         pS.setBigDecimal(3,longO1);
