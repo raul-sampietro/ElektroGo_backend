@@ -9,7 +9,6 @@ package elektroGo.back.controller;
 
 import elektroGo.back.data.finders.FinderChats;
 import elektroGo.back.data.gateways.GatewayChats;
-import elektroGo.back.model.Chat;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
