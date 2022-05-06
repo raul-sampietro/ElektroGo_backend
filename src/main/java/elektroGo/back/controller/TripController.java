@@ -155,7 +155,7 @@ public class TripController {
         BigDecimal radiLong = BigDecimal.valueOf(Radi.doubleValue()/(111.320*cos(latitude.doubleValue()))).abs();
         System.out.println(radiLong);
         ArrayList<GatewayTrip> corT = fT.findByCoordinates(latitude.subtract(radiLat),latitude.add(radiLat),longitude.subtract(radiLong), longitude.add(radiLong));
-        if(corT == null)throw new TripNotFound();
+        if(corT == null || corT.size() == 0)throw new TripNotFound();
         return corT;
     }
 
