@@ -213,7 +213,7 @@ public class RestControllerAdvice {
      */
     @ExceptionHandler(InvalidKey.class)
     public String handleInvalidKey(InvalidKey ex, HttpServletResponse response) {
-        return handleError(ex, response, 446);
+        return handleError(ex, response, 401);
 
     }
 
@@ -226,7 +226,7 @@ public class RestControllerAdvice {
      */
     @ExceptionHandler(UserTripNotFound.class)
     public String handleUserTripNotFound(UserTripNotFound ex, HttpServletResponse response) {
-        return handleError(ex, response, 447);
+        return handleError(ex, response, 404);
     }
 
 
