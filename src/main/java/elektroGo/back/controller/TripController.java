@@ -55,7 +55,7 @@ public class TripController {
         System.out.println("hey");
         FinderTrip fT = FinderTrip.getInstance();
         ArrayList<GatewayTrip> gT;
-        BigDecimal a = new BigDecimal("0.15");
+        BigDecimal a = new BigDecimal("0.05");
         if(sDate == null){
             if(sTimeMax == null){
                 if(sTimeMin == null)gT = fT.findByNot(LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
