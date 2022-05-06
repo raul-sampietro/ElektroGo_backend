@@ -156,7 +156,6 @@ public class TripController {
         System.out.println(radiLong);
         ArrayList<GatewayTrip> corT = fT.findByCoordinates(latitude.subtract(radiLat),latitude.add(radiLat),longitude.subtract(radiLong), longitude.add(radiLong));
         for (GatewayTrip gT : corT) System.out.println(gT.json());
-        if(corT.size() == 0)throw new TripNotFound();
         return corT;
     }
 
