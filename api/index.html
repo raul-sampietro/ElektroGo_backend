@@ -766,11 +766,11 @@
   "properties" : {
     "status" : {
       "type" : "integer",
-      "enum" : [ 400, 446 ]
+      "enum" : [ 400, 401, 404 ]
     },
     "error" : {
       "type" : "string",
-      "enum" : [ "Bad Request", "Invalid api key" ]
+      "enum" : [ "Bad Request", "Unauthorized", "Not found" ]
     },
     "message" : {
       "type" : "string"
@@ -852,7 +852,7 @@
                           <div class="tab-pane active" id="examples-CarPooling-getCarPooling-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://10.4.41.58:8080//car-pooling/byCoord?latitude=&longitude=&Radi=&key="</code></pre>
+"http://10.4.41.58:8080//car-pooling/byCoord?latitude=&longitude=&Radi=&key="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-CarPooling-getCarPooling-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -1205,6 +1205,183 @@ except ApiException as e:
                                     </script>
                                   </div>
                                   <input id='responses-getCarPooling-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                            <h3> Status: 400 - Error: Bad request </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-getCarPooling-400-schema">Schema</a>
+                                </li>
+
+                                  <li class="">
+                                    <a data-toggle="tab" href="#responses-getCarPooling-400-example-0">Response Example</a>
+                                  </li>
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-getCarPooling-400-schema">
+                                  <div id='responses-getCarPooling-400-schema-400' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Error: Bad request",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/ErrorResult"
+      },
+      "examples" : {
+        "errorExample" : {
+          "$ref" : "#/components/examples/error400"
+        }
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-getCarPooling-400-schema-data').val(stringify(schema));
+                                        var result = $('#responses-getCarPooling-400-schema-400');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-getCarPooling-400-schema-data' type='hidden' value=''></input>
+                                </div>
+                                  <div class="tab-pane" id="responses-getCarPooling-400-example-0">
+                                      <pre class="prettyprint"><code class="json"></code></pre>
+                                </div>
+                            </div>
+
+                            <h3> Status: 401 - Error: Unauthorized </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-getCarPooling-401-schema">Schema</a>
+                                </li>
+
+                                  <li class="">
+                                    <a data-toggle="tab" href="#responses-getCarPooling-401-example-0">Response Example</a>
+                                  </li>
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-getCarPooling-401-schema">
+                                  <div id='responses-getCarPooling-401-schema-401' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Error: Unauthorized",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/ErrorResult"
+      },
+      "examples" : {
+        "errorExample" : {
+          "$ref" : "#/components/examples/error401"
+        }
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-getCarPooling-401-schema-data').val(stringify(schema));
+                                        var result = $('#responses-getCarPooling-401-schema-401');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-getCarPooling-401-schema-data' type='hidden' value=''></input>
+                                </div>
+                                  <div class="tab-pane" id="responses-getCarPooling-401-example-0">
+                                      <pre class="prettyprint"><code class="json"></code></pre>
+                                </div>
+                            </div>
+
+                            <h3> Status: 404 - Error: Not Found </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-getCarPooling-404-schema">Schema</a>
+                                </li>
+
+                                  <li class="">
+                                    <a data-toggle="tab" href="#responses-getCarPooling-404-example-0">Response Example</a>
+                                  </li>
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-getCarPooling-404-schema">
+                                  <div id='responses-getCarPooling-404-schema-404' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Error: Not Found",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/ErrorResult"
+      },
+      "examples" : {
+        "errorExample" : {
+          "$ref" : "#/components/examples/error404"
+        }
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-getCarPooling-404-schema-data').val(stringify(schema));
+                                        var result = $('#responses-getCarPooling-404-schema-404');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-getCarPooling-404-schema-data' type='hidden' value=''></input>
+                                </div>
+                                  <div class="tab-pane" id="responses-getCarPooling-404-example-0">
+                                      <pre class="prettyprint"><code class="json"></code></pre>
                                 </div>
                             </div>
 
