@@ -148,6 +148,7 @@ public class TripController {
 
     @GetMapping("/car-pooling/byCoord")
     public ArrayList<GatewayTrip> getTripByCord(@RequestParam BigDecimal latitude, @RequestParam BigDecimal longitude, @RequestParam BigDecimal Radi,  @RequestParam String key) throws SQLException {
+        System.out.println("\nStarting getTripByCord method..." );
         if(!Objects.equals(key, password))throw new InvalidKey();
         FinderTrip fT = FinderTrip.getInstance();
         BigDecimal radiLat = Radi.multiply(BigDecimal.valueOf(0.00904371));
@@ -155,6 +156,7 @@ public class TripController {
         BigDecimal radiLong = BigDecimal.valueOf(Radi.doubleValue()/(111.320*cos(latitude.doubleValue()))).abs();
         System.out.println(radiLong);
         ArrayList<GatewayTrip> corT = fT.findByCoordinates(latitude.subtract(radiLat),latitude.add(radiLat),longitude.subtract(radiLong), longitude.add(radiLong));
+        System.out.println("Returning this coords:");
         for (GatewayTrip gT : corT) System.out.println(gT.json());
         if (corT.size() == 0) throw new TripNotFound();
         return corT;

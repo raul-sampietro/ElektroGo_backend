@@ -75,6 +75,7 @@ public class FinderTrip {
                 "from TRIP t " +
                 "LEFT OUTER JOIN RATING  r " +
                 "ON t.username = r.ratedUser " +
+                "WHERE t.startDate > CURDATE() or ( t.startDate = CURDATE()  and  t.startTime >= CURTIME() )"+
                 "group by t.id " +
                 "order by avgpoints desc;");
         ResultSet r = pS.executeQuery();
