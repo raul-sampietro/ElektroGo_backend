@@ -7,8 +7,8 @@
 
 package elektroGo.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import elektroGo.back.data.finders.FinderRating;
 import elektroGo.back.data.finders.FinderTrip;
-import elektroGo.back.data.finders.FinderUserTrip;
 import elektroGo.back.data.gateways.GatewayTrip;
 import elektroGo.back.data.gateways.GatewayUserTrip;
 import elektroGo.back.exceptions.InvalidKey;
@@ -21,8 +21,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Objects;
+import java.util.*;
 
 import static java.lang.Math.cos;
 
@@ -44,7 +43,6 @@ public class TripController {
         if(gT == null)throw new TripNotFound(id);
         return gT;
     }
-
     /**
      * @brief Funció amb metode 'GET' que retorna la informació del trip amb el id corresponen
      * @return Es retorna un String amb la info del trip demanada
@@ -57,7 +55,7 @@ public class TripController {
         System.out.println("hey");
         FinderTrip fT = FinderTrip.getInstance();
         ArrayList<GatewayTrip> gT;
-        BigDecimal a = new BigDecimal("0.25");
+        BigDecimal a = new BigDecimal("0.05");
         if(sDate == null){
             if(sTimeMax == null){
                 if(sTimeMin == null)gT = fT.findByNot(LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
@@ -102,6 +100,19 @@ public class TripController {
     }
 
     /**
+     * @brief Funció amb metode 'GET' que retorna la informació de tots els Users a la BD
+     * @return Es retorna un String amb la info dels usuaris
+     */
+    @GetMapping("/car-poolings/order")
+    public ArrayList<GatewayTrip> getTripsOrdered() throws SQLException {
+        FinderTrip fT = FinderTrip.getInstance();
+        ArrayList<GatewayTrip> all = fT.findOrdered();
+        if(all ==null)throw new TripNotFound();
+        return all;
+    }
+
+
+    /**
      * @brief Funció amb metode 'POST' que crearà un Trip amb la info requerida
      * @param gT GatewayTrip amb tota la informació necessaria
      * @post S'afegeix el trip a la BD
@@ -144,7 +155,7 @@ public class TripController {
         BigDecimal radiLong = BigDecimal.valueOf(Radi.doubleValue()/(111.320*cos(latitude.doubleValue()))).abs();
         System.out.println(radiLong);
         ArrayList<GatewayTrip> corT = fT.findByCoordinates(latitude.subtract(radiLat),latitude.add(radiLat),longitude.subtract(radiLong), longitude.add(radiLong));
-        if(corT == null)throw new TripNotFound();
+        if(corT == null || corT.size() == 0)throw new TripNotFound();
         return corT;
     }
 

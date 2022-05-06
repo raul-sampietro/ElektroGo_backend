@@ -47,6 +47,34 @@ public class UserTripController {
         return gU.json();
     }
 
+    @GetMapping("/userTrip/byUser")
+    public ArrayList<GatewayUserTrip> getUserTripUSer(@RequestParam String username) throws SQLException {
+        FinderUser fU = FinderUser.getInstance();
+        GatewayUser gU = fU.findByUsername(username);
+        if(gU == null)throw new UserNotFound(username);
+        FinderUserTrip fUT = FinderUserTrip.getInstance();
+        ArrayList<GatewayUserTrip> gUT = fUT.findTripByUser(username);
+        if(gUT == null) throw new UserTripNotFound();
+        return gUT;
+    }
+
+    @GetMapping("/userTrip/TripByUser")
+    public ArrayList<GatewayTrip> getUserTripUSerinfo(@RequestParam String username) throws SQLException {
+        FinderUser fU = FinderUser.getInstance();
+        GatewayUser gU = fU.findByUsername(username);
+        if(gU == null)throw new UserNotFound(username);
+
+        FinderUserTrip fUT = FinderUserTrip.getInstance();
+        ArrayList<GatewayUserTrip> gUT = fUT.findTripByUser(username);
+        if(gUT == null) throw new UserTripNotFound();
+        ArrayList<GatewayTrip> end = new ArrayList<>();
+        FinderTrip fT = FinderTrip.getInstance();
+        for (GatewayUserTrip gatewayUserTrip : gUT) {
+            end.add(fT.findById(gatewayUserTrip.getId()));
+        }
+        return end;
+    }
+
     /**
      * @brief Funció amb metode 'GET' que retorna la informació de tots els trips a la BD
      * @return Es retorna un String amb la info dels trips

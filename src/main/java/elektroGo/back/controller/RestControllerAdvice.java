@@ -165,7 +165,7 @@ public class RestControllerAdvice {
      */
     @ExceptionHandler(TripNotFound.class)
     public String handleTripNotFound(TripNotFound ex, HttpServletResponse response) {
-        return handleError(ex, response, 443);
+        return handleError(ex, response, 404);
     }
 
     /**
@@ -213,7 +213,7 @@ public class RestControllerAdvice {
      */
     @ExceptionHandler(InvalidKey.class)
     public String handleInvalidKey(InvalidKey ex, HttpServletResponse response) {
-        return handleError(ex, response, 446);
+        return handleError(ex, response, 401);
 
     }
 
