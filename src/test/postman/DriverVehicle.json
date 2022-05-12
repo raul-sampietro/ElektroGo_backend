@@ -1,0 +1,106 @@
+{
+	"info": {
+		"_postman_id": "0c06283a-0eb6-4ff1-83cb-4e3ff4778e78",
+		"name": "DriverVehicle",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create",
+			"item": [
+				{
+					"name": "createDriverVehicle1",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/vehicle/addDriverVehicle?nPVehicle=testNP&userDriver=Test2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicle",
+								"addDriverVehicle"
+							],
+							"query": [
+								{
+									"key": "nPVehicle",
+									"value": "testNP"
+								},
+								{
+									"key": "userDriver",
+									"value": "Test2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createDriverVehicle2",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/vehicle/addDriverVehicle?nPVehicle=testNP2&userDriver=Test",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicle",
+								"addDriverVehicle"
+							],
+							"query": [
+								{
+									"key": "nPVehicle",
+									"value": "testNP2"
+								},
+								{
+									"key": "userDriver",
+									"value": "Test"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get",
+			"item": [
+				{
+					"name": "getVehicles",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Remove",
+			"item": [
+				{
+					"name": "remove1",
+					"request": {
+						"method": "POST",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "remove2",
+					"request": {
+						"method": "POST",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

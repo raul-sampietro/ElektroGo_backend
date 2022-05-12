@@ -6,310 +6,344 @@
 	},
 	"item": [
 		{
-			"name": "CreateReport",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n        \"userWhoReports\": \"Test\",\r\n        \"reportedUser\": \"Test2\",\r\n        \"reason\": \"Test-Test2\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:8080/user/report",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"user",
-						"report"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "CreateReport2",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n        \"userWhoReports\": \"Test\",\r\n        \"reportedUser\": \"Test3\",\r\n        \"reason\": \"Test-Test3\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:8080/user/report",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"user",
-						"report"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "CreateReport3",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n        \"userWhoReports\": \"Test2\",\r\n        \"reportedUser\": \"Test\",\r\n        \"reason\": \"Test2-Test\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:8080/user/report",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"user",
-						"report"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "CreateReport4",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n        \"userWhoReports\": \"Test4\",\r\n        \"reportedUser\": \"Test\",\r\n        \"reason\": \"Test4-Test\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:8080/user/report",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"user",
-						"report"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "UpdateReport4",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n        \"userWhoReports\": \"Test4\",\r\n        \"reportedUser\": \"Test\",\r\n        \"reason\": \"Test4-Test;Update\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:8080/user/report",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"user",
-						"report"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "GetReports",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost:8080/user/reports?userWhoReports=Test",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"user",
-						"reports"
-					],
-					"query": [
-						{
-							"key": "userWhoReports",
-							"value": "Test"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "GetReported",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost:8080/user/reported?reportedUser=Test",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"user",
-						"reported"
-					],
-					"query": [
-						{
-							"key": "reportedUser",
-							"value": "Test"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "RemoveReport",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "localhost:8080/user/unreport?userWhoReports=Test&reportedUser=Test2",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"user",
-						"unreport"
-					],
-					"query": [
-						{
-							"key": "userWhoReports",
-							"value": "Test"
+			"name": "Create",
+			"item": [
+				{
+					"name": "CreateReport",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"userWhoReports\": \"Test\",\r\n        \"reportedUser\": \"Test2\",\r\n        \"reason\": \"Test-Test2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
-						{
-							"key": "reportedUser",
-							"value": "Test2"
+						"url": {
+							"raw": "localhost:8080/user/report",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"report"
+							]
 						}
-					]
+					},
+					"response": []
+				},
+				{
+					"name": "CreateReport2",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"userWhoReports\": \"Test\",\r\n        \"reportedUser\": \"Test3\",\r\n        \"reason\": \"Test-Test3\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/user/report",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"report"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateReport3",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"userWhoReports\": \"Test2\",\r\n        \"reportedUser\": \"Test\",\r\n        \"reason\": \"Test2-Test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/user/report",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"report"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateReport4",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"userWhoReports\": \"Test4\",\r\n        \"reportedUser\": \"Test\",\r\n        \"reason\": \"Test4-Test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/user/report",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"report"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateReport4",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"userWhoReports\": \"Test4\",\r\n        \"reportedUser\": \"Test\",\r\n        \"reason\": \"Test4-Test;Update\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/user/report",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"report"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "RemoveReport 2",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "localhost:8080/user/unreport?userWhoReports=Test&reportedUser=Test3",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"user",
-						"unreport"
-					],
-					"query": [
-						{
-							"key": "userWhoReports",
-							"value": "Test"
-						},
-						{
-							"key": "reportedUser",
-							"value": "Test3"
+			"name": "Get",
+			"item": [
+				{
+					"name": "GetReports",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/user/reports?userWhoReports=Test",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"reports"
+							],
+							"query": [
+								{
+									"key": "userWhoReports",
+									"value": "Test"
+								}
+							]
 						}
-					]
+					},
+					"response": []
+				},
+				{
+					"name": "GetReported",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/user/reported?reportedUser=Test",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"reported"
+							],
+							"query": [
+								{
+									"key": "reportedUser",
+									"value": "Test"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllReports",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/users/Allreports",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"Allreports"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "RemoveReport 3",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "localhost:8080/user/unreport?userWhoReports=Test2&reportedUser=Test",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"user",
-						"unreport"
-					],
-					"query": [
-						{
-							"key": "userWhoReports",
-							"value": "Test2"
-						},
-						{
-							"key": "reportedUser",
-							"value": "Test"
+			"name": "Remove",
+			"item": [
+				{
+					"name": "RemoveReport",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/user/unreport?userWhoReports=Test&reportedUser=Test2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"unreport"
+							],
+							"query": [
+								{
+									"key": "userWhoReports",
+									"value": "Test"
+								},
+								{
+									"key": "reportedUser",
+									"value": "Test2"
+								}
+							]
 						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "RemoveReport 4",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "localhost:8080/user/unreport?userWhoReports=Test4&reportedUser=Test",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"user",
-						"unreport"
-					],
-					"query": [
-						{
-							"key": "userWhoReports",
-							"value": "Test4"
-						},
-						{
-							"key": "reportedUser",
-							"value": "Test"
+					},
+					"response": []
+				},
+				{
+					"name": "RemoveReport 2",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/user/unreport?userWhoReports=Test&reportedUser=Test3",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"unreport"
+							],
+							"query": [
+								{
+									"key": "userWhoReports",
+									"value": "Test"
+								},
+								{
+									"key": "reportedUser",
+									"value": "Test3"
+								}
+							]
 						}
-					]
+					},
+					"response": []
+				},
+				{
+					"name": "RemoveReport 3",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/user/unreport?userWhoReports=Test2&reportedUser=Test",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"unreport"
+							],
+							"query": [
+								{
+									"key": "userWhoReports",
+									"value": "Test2"
+								},
+								{
+									"key": "reportedUser",
+									"value": "Test"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RemoveReport 4",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/user/unreport?userWhoReports=Test4&reportedUser=Test",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"unreport"
+							],
+							"query": [
+								{
+									"key": "userWhoReports",
+									"value": "Test4"
+								},
+								{
+									"key": "reportedUser",
+									"value": "Test"
+								}
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	]
 }

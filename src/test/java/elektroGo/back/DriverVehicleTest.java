@@ -1,8 +1,11 @@
 package elektroGo.back;
 
 import elektroGo.back.data.finders.FinderDriverVehicle;
+import elektroGo.back.data.finders.FinderUser;
 import elektroGo.back.data.finders.FinderVehicle;
+import elektroGo.back.data.gateways.GatewayDriver;
 import elektroGo.back.data.gateways.GatewayDriverVehicle;
+import elektroGo.back.data.gateways.GatewayUser;
 import elektroGo.back.data.gateways.GatewayVehicle;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,84 +20,97 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class DriverVehicleTest {
 
-    boolean insertVehicle;
-    boolean insertVehicle2;
+    FinderVehicle fV;
+    FinderDriverVehicle fDV;
+    GatewayVehicle gV1;
+    GatewayVehicle gV2;
+
+    GatewayDriverVehicle gDV1;
+    ArrayList<GatewayDriverVehicle> AGDV2;
+    GatewayUser gU1;
+    GatewayDriver gD;
+
 
     @BeforeEach
-    private void initialize() {
-        insertVehicle = false;
-        insertVehicle2 = false;
+    private void initialize() throws SQLException {
+        fV = FinderVehicle.getInstance();
+        fDV = FinderDriverVehicle.getInstance();
+        createUsers();
+        gV1 = insertVehicle();
+        gV2 = insertVehicle2();
+        gDV1 = insertDriverVehicle();
+        AGDV2 = insertDriverVehicle2();
+
     }
 
-    private void insertVehicle() throws SQLException {
+    private void createUsers() throws SQLException {
+        FinderUser fU = FinderUser.getInstance();
+        gU1 = fU.findByUsername("VTestDriverVehicleTest");
+        if (gU1 == null) {
+            gU1 = createUser("TestDriverVehicle");
+            gD = new GatewayDriver(gU1.getUsername());
+            gU1.insert();
+            gD.insert();
+        }
+    }
+
+    private GatewayUser createUser(String username) {
+        return new GatewayUser(username, "Test", username, "test@test.test",username, username, username+"family", "/test");
+    }
+
+    private GatewayVehicle insertVehicle() throws SQLException {
         GatewayVehicle gV = new GatewayVehicle("testBrand", "testModel", "VTestDriverVehicleTest",
                 666, 2010, 3);
         gV.insert();
-        insertVehicle = true;
+        return gV;
     }
 
-    private void insertVehicle2() throws SQLException {
+    private GatewayVehicle insertVehicle2() throws SQLException {
         GatewayVehicle gV = new GatewayVehicle("testBrand", "testModel", "VTestDriverVehicleTest2",
                 666, 2010, 3);
         gV.insert();
-        insertVehicle2 = true;
+        return gV;
     }
 
     @AfterEach
     private void removeVehicles() throws SQLException {
-        FinderVehicle fV = FinderVehicle.getInstance();
-        if (insertVehicle) {
-            GatewayVehicle gV = fV.findByNumberPlate("VTestDriverVehicleTest");
-            gV.remove();
-        }
-        if (insertVehicle2) {
-            GatewayVehicle gV = fV.findByNumberPlate("VTestDriverVehicleTest2");
-            gV.remove();
-        }
+        if (gDV1 != null ) gDV1.remove();
+        if (AGDV2 != null) for(GatewayDriverVehicle gd : AGDV2) gd.remove();
+        if (gU1 != null) gU1.remove();
+        if (gV1 != null) gV1.remove();
+        if (gV2 != null) gV2.remove();
+        if (gD != null) gD.remove();
     }
 
     private GatewayDriverVehicle insertDriverVehicle() throws SQLException {
-        FinderVehicle fV = FinderVehicle.getInstance();
-        if (fV.findByNumberPlate("TestV") == null) insertVehicle();
         GatewayDriverVehicle gDV = new GatewayDriverVehicle("VTestDriverVehicleTest","TestDriverVehicle");
         gDV.insert();
         return gDV;
     }
 
     private ArrayList<GatewayDriverVehicle> insertDriverVehicle2() throws SQLException {
-        FinderVehicle fV = FinderVehicle.getInstance();
-        if (fV.findByNumberPlate("VTestDriverVehicleTest") == null) insertVehicle();
-        if (fV.findByNumberPlate("VTestDriverVehicleTest2") == null) insertVehicle2();
-        GatewayDriverVehicle gDV = new GatewayDriverVehicle("VTestDriverVehicleTest","TestDriverVehicle");
         GatewayDriverVehicle gDV2 = new GatewayDriverVehicle("VTestDriverVehicleTest2","TestDriverVehicle");
         gDV2.insert();
-        gDV.insert();
         ArrayList<GatewayDriverVehicle> aL= new ArrayList<>();
-        aL.add(gDV);
+        aL.add(gDV1);
         aL.add(gDV2);
         return aL;
     }
 
     @Test
     public void createAndRemoveDriverVehicle() throws SQLException {
-        GatewayDriverVehicle gDV =  insertDriverVehicle();
-        FinderDriverVehicle fDV = FinderDriverVehicle.getInstance();
-        GatewayDriverVehicle gDVTest = fDV.findByNumberPlateDriver(gDV.getUserDriver(), gDV.getnPVehicle());
+        GatewayDriverVehicle gDVTest = fDV.findByNumberPlateDriver(gDV1.getUserDriver(), gDV1.getnPVehicle());
         assertNotNull(gDVTest);
-        assertEquals(gDV.json(), gDVTest.json());
-        assertEquals(gDV.json(), gDVTest.json());
-        gDV.remove();
+        assertEquals(gDV1.json(), gDVTest.json());
+        assertEquals(gDV1.json(), gDVTest.json());
     }
 
     @Test
     public void createAndRemove2DriverVehicle() throws SQLException {
-        ArrayList<GatewayDriverVehicle> aL =  insertDriverVehicle2();
         FinderDriverVehicle fDV = FinderDriverVehicle.getInstance();
         assertEquals(1, fDV.findByNumberPlateV("VTestDriverVehicleTest").size());
         assertEquals(1, fDV.findByNumberPlateV("VTestDriverVehicleTest2").size());
         assertEquals(2, fDV.findByUserDriver("TestDriverVehicle").size());
-        for (GatewayDriverVehicle gDV : aL) gDV.remove();
-
     }
 
 }

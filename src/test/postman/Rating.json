@@ -9,7 +9,7 @@
 			"name": "Create",
 			"item": [
 				{
-					"name": "localhost:8080/users/rate",
+					"name": "Test-Test2",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -37,7 +37,7 @@
 					"response": []
 				},
 				{
-					"name": "localhost:8080/users/rate",
+					"name": "Test-Test3",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -65,7 +65,7 @@
 					"response": []
 				},
 				{
-					"name": "localhost:8080/users/rate",
+					"name": "Test2-Test",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -93,7 +93,7 @@
 					"response": []
 				},
 				{
-					"name": "localhost:8080/users/rate",
+					"name": "Test4-Test",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -121,7 +121,7 @@
 					"response": []
 				},
 				{
-					"name": "localhost:8080/users/rate",
+					"name": "Test-Test2",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -154,7 +154,7 @@
 			"name": "Ratings",
 			"item": [
 				{
-					"name": "localhost:8080/users/ratings?userName=Test",
+					"name": "RatingsTest",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -184,7 +184,7 @@
 			"name": "Rated",
 			"item": [
 				{
-					"name": "localhost:8080/users/rated?userName=Test",
+					"name": "RatedTest",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -197,6 +197,44 @@
 							"path": [
 								"users",
 								"rated"
+							],
+							"query": [
+								{
+									"key": "userName",
+									"value": "Test"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Average",
+			"item": [
+				{
+					"name": "AvgTest4",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "AvgTest",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/user/avgRate?userName=Test",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"avgRate"
 							],
 							"query": [
 								{

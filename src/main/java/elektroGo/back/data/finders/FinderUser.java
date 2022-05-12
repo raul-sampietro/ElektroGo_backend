@@ -60,15 +60,27 @@ public class FinderUser {
 
     /**
      * @brief Funció que agafa un user de la BD i el retorna
-     * @param userName Usuari del qual volem agafar la info
+     * @param username Usuari del qual volem agafar la info
      * @return Es retorna un GatewayUser amb tota la info del User
      */
-    public GatewayUser findByUserName(String userName) throws SQLException {
+    public GatewayUser findByUsername(String username) throws SQLException {
         GatewayUser gU = null;
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
-        PreparedStatement pS = conn.prepareStatement("SELECT * FROM USERS WHERE userName = ?;");
-        pS.setString(1, userName);
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM USERS WHERE username = ?;");
+        pS.setString(1, username);
+        ResultSet r = pS.executeQuery();
+        if (r.next()) gU = createGateway(r);
+        return gU;
+    }
+
+    public GatewayUser findById(String id, String provider) throws SQLException {
+        GatewayUser gU = null;
+        Database d = Database.getInstance();
+        Connection conn = d.getConnection();
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM USERS WHERE id = ? AND provider = ?;");
+        pS.setString(1, id);
+        pS.setString(2, provider);
         ResultSet r = pS.executeQuery();
         if (r.next()) gU = createGateway(r);
         return gU;
@@ -80,10 +92,15 @@ public class FinderUser {
      * @return Es retorna un GatewayUser amb tota la info del User creat.
      */
     private GatewayUser createGateway(ResultSet r) throws SQLException {
-        String userName = r.getString(1);
-        String mail = r.getString(2);
-        String password = r.getString(3);
-        return new GatewayUser(userName, mail, password);
-    }
+        String id = r.getString(1);
+        String provider = r.getString(2);
+        String username = r.getString(3);
+        String email = r.getString(4);
+        String name = r.getString(5);
+        String givenName = r.getString(6);
+        String familyName = r.getString(7);
+        String imageUrl = r.getString(8);
 
+        return new GatewayUser(id, provider, username, email,name,givenName,familyName,imageUrl);
+    }
 }

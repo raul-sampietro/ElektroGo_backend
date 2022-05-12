@@ -5,10 +5,10 @@
  * @brief Implementació dels Tests DriverTest
  */
 package elektroGo.back;
-
-import elektroGo.back.data.Database;
 import elektroGo.back.data.finders.FinderUser;
 import elektroGo.back.data.gateways.GatewayUser;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -21,63 +21,58 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @SpringBootTest
 public class UserTest {
-    @Test
-    public void createUserTest1() throws SQLException {
-        GatewayUser gV = new GatewayUser("TestUser","test@mail.com","5755");
-        Database d = Database.getInstance();
-        gV.insert();
-        FinderUser fU = FinderUser.getInstance();
-        GatewayUser gUTest = fU.findByUserName("TestUser");
-        String res = gUTest.getUserName() + " " + gUTest.getMail() + " " + gUTest.getPassword();
-        d.executeSQLUpdate("delete from USERS where userName = 'TestUser';");
-        assertEquals("TestUser test@mail.com 5755", res);
+
+    FinderUser fU;
+    GatewayUser gU;
+
+    //AFTER AND BEFORE
+    @BeforeEach
+    public void initialize() throws SQLException {
+        fU = FinderUser.getInstance();
+        gU = insertTest();
     }
 
-    private GatewayUser insertTestUser() throws SQLException {
-        GatewayUser gU = new GatewayUser("TestUser","test@mail.com","5755");
+    @AfterEach
+    public void removeGateways() throws SQLException {
+        if(fU.findByUsername(gU.getUsername()) != null)gU.remove();
+    }
+
+    //FUNCTIONS
+    private GatewayUser insertTest() throws SQLException {
+        gU = new GatewayUser("0","p","UserTestClass","t@gmail.com","T","T", "f", "/t");
         gU.insert();
         return gU;
     }
 
+    //TEST
+    @Test
+    public void createUserTest1() throws SQLException {
+        GatewayUser gUR = fU.findByUsername("UserTestClass");
+        assertEquals(gU.json(), gUR.json());
+    }
 
     @Test
     public void updateUser() throws SQLException {
-        insertTestUser();
-        Database d = Database.getInstance();
-        try {
-            FinderUser fU = FinderUser.getInstance();
-            GatewayUser gU = fU.findByUserName("TestUser");
-            gU.setPassword("NewPassword");
-            gU.update();
-            gU = fU.findByUserName("TestUser");
-            String res = gU.getUserName() + " " + gU.getMail() + " " + gU.getPassword();
-            assertEquals("TestUser test@mail.com NewPassword", res);
-        }
-        catch (SQLException s) {
-            s.printStackTrace();
-        }
-        d.executeSQLUpdate("delete from USERS where userName = 'TestUser';");
+        GatewayUser gUpdate = fU.findByUsername("UserTestClass");
+        gUpdate.setName("name32");
+        gUpdate.update();
+        gUpdate = fU.findByUsername("UserTestClass");
+        String res = gUpdate.getName();
+        assertEquals("name32", res);
     }
 
     @Test
     public void deleteUserTest() throws SQLException {
-        GatewayUser gU =  insertTestUser();
-        Database d = Database.getInstance();
         gU.remove();
         FinderUser fU = FinderUser.getInstance();
-        GatewayUser gUtemplate = fU.findByUserName("TestUser");
+        GatewayUser gUtemplate = fU.findByUsername("UserTestClass");
         assertNull(gUtemplate);
-        assertNull(null);
     }
 
     @Test
-    public void readUserTest() throws SQLException {
-        Database d = Database.getInstance();
-        d.executeSQLUpdate("insert into USERS values('UserTesting','mailTesting','testingPassword');");
+    public void getUserByIdTest() throws SQLException {
         FinderUser fU = FinderUser.getInstance();
-        GatewayUser gUTest = fU.findByUserName("UserTesting");
-        String res = gUTest.getUserName() + " " + gUTest.getMail() + " " + gUTest.getPassword();
-        d.executeSQLUpdate("delete from USERS where userName = 'UserTesting';");
-        assertEquals("UserTesting mailTesting testingPassword", res);
+        GatewayUser testG = fU.findById(gU.getId(), gU.getProvider());
+        assertEquals(gU.getUsername(), testG.getUsername(), "Incorrect username get");
     }
 }

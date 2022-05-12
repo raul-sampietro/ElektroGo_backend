@@ -91,7 +91,7 @@ public class VehicleController {
         gV.setImageId(fileName);
         gV.update();
         System.out.println("Filename settled in Database");
-        Path uploadPath = Paths.get("Images/vehicle-images/");
+        Path uploadPath = Paths.get("../Images/vehicle-images/");
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
@@ -134,7 +134,7 @@ public class VehicleController {
         FinderVehicle fV = FinderVehicle.getInstance();
         GatewayVehicle gV = fV.findByNumberPlate(numberPlate);
         if (gV == null) throw new VehicleNotFound(numberPlate);
-        InputStream in = new BufferedInputStream(new FileInputStream("Images/vehicle-images/" + gV.getImageId()));
+        InputStream in = new BufferedInputStream(new FileInputStream("../Images/vehicle-images/" + gV.getImageId()));
         response.setContentType(MediaType.IMAGE_PNG_VALUE);
         IOUtils.copy(in, response.getOutputStream());
         System.out.println("getImage method ended.");
@@ -187,7 +187,7 @@ public class VehicleController {
                     System.out.println("Found that that relation was the last with the vehicle with number plate '" + nPVehicle);
                     System.out.println("Deleting that vehicle...");
                     GatewayVehicle gV = fV.findByNumberPlate(nPVehicle);
-                    File fileToDelete = new File("Images/vehicle-images/" + gV.getImageId());
+                    File fileToDelete = new File("../Images/vehicle-images/" + gV.getImageId());
                     boolean success = fileToDelete.delete();
                     if (success) System.out.println("File was removed succesfully");
                     else System.out.println("WARNING: File couldn't be removed");
@@ -237,7 +237,7 @@ public class VehicleController {
                 ArrayList<GatewayDriverVehicle> aL = fDV.findByNumberPlateV(numberPlate);
                 for (GatewayDriverVehicle gDV : aL) gDV.remove();
                 System.out.println("Deleting image of the vehicle...");
-                File fileToDelete = new File("Images/vehicle-images/" + gV.getImageId());
+                File fileToDelete = new File("../Images/vehicle-images/" + gV.getImageId());
                 boolean success = fileToDelete.delete();
                 if (success) System.out.println("File was removed succesfully");
                 else System.out.println("WARNING: File couldn't be removed");
