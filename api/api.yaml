@@ -2,14 +2,77 @@ openapi: 3.0.1
 info:
   version: 1.0.0
   title: ElektroGo
-  description: "Documentació OpenAPI per a l'API REST desenvolupada a partir de l'aplicació **ElektroGo**. <br> Per tal de poder executar les operacions cal estar conectat a la VPN de l'UPC. Totes les operacions requereixen d'una api_key. En cas de no tenir-ne la podeu solicitar a qualsevol membre de l'equip."
+  description: "Documentació OpenAPI per a l'API REST desenvolupada a partir de l'aplicació **ElektroGo**. <br> Per tal de poder executar les operacions cal estar conectat a la VPN de la UPC. Totes les operacions requereixen d'una api_key. En cas de no tenir-ne la podeu solicitar a qualsevol membre de l'equip."
 servers:
   - url: 'http://10.4.41.58:8080/'
 paths:
+  /charging-stations:
+    get:
+      tags:
+      - Charging Stations
+      summary: Obté totes les estacions de càrrega.
+      operationId: getChargingStations
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChargingStation'
+
+    
+  /charging-stations/byCoord:
+    get:
+      tags:
+      - Charging Stations
+      summary: Obté totes les estacions de càrrega que es troben dintre del rectangle definit pels punts (latitude1, longitude1) i (latitude2, longitude2).
+      operationId: getChargingStationsByCoords
+      parameters:
+      - name: latitude1
+        in: query
+        description: Latitud del punt 1
+        required: true
+        schema:
+          type: number
+          format: double
+      - name: longitude1
+        in: query
+        description: Longitud del punt 1
+        required: true
+        schema:
+          type: number
+          format: double
+      - name: latitude2
+        in: query
+        description: Latitud del punt 2
+        required: true
+        schema:
+          type: number
+          format: double
+      - name: longitude2
+        in: query
+        description: Longitud del punt 2
+        required: true
+        schema:
+          type: number
+          format: double
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChargingStation'
+  
+
   /car-pooling/byCoord:
     get:
       tags:
-      - Car pooling
+      - Car Pooling
       summary: Donades unes coordenades (latitude i longitude) rep la informació de tots els punts de car pooling vigents dins d'un radi indicat per parametre (en km).
       operationId: getCarPooling
       parameters:
@@ -75,6 +138,54 @@ paths:
                   $ref: '#/components/examples/error404'
 components:
   schemas:
+    ChargingStation:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        promotor_gestor:
+          type: string
+          example: "CC ALDI"
+        acces:
+          type: string
+          example: "APARCAMENT CC"
+        tipus_velocitat:
+          type: string
+          example: "NORMAL"
+        tipus_connexio:
+          type: string
+          example: "MENNEKES.F"
+        latitude:
+          type: number
+          format: double
+          example: 41.32116500
+        longitude:
+          type: number
+          format: double
+          example: 2.02770200
+        designacio_descriptiva:
+          type: string
+          example: "CC ALDI"
+        kw:
+          type: number
+          format: double
+          example: 22.0
+        ac_dc:
+          type: string
+          example: "AC"
+        ide_pdr:
+          type: string
+          example: "PIRVEC-24"
+        numberOfChargers:
+          type: string
+          example: "4"
+        tipus_vehicle:
+          type: string
+          example: "cotxe"
+        fcs:
+          type: string
+          example: null
     CarPooling:
       type: object
       properties:
