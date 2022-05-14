@@ -50,6 +50,8 @@ public class GatewayVehicle implements Gateway{
      */
     private String imageId;
 
+    private String verification;
+
     /**
      * @brief Constructora buida
      * @post Crea un GatewayVehicle buit
@@ -70,6 +72,8 @@ public class GatewayVehicle implements Gateway{
     public GatewayVehicle(String brand, String model, String numberPlate, Integer drivingRange, Integer fabricationYear, Integer seats, String imageId) {
         setUp(brand, model, numberPlate, drivingRange, fabricationYear, seats);
         this.imageId = imageId;
+        verification = "pending";
+
     }
 
     /**
@@ -84,7 +88,15 @@ public class GatewayVehicle implements Gateway{
      */
     public GatewayVehicle(String brand, String model, String numberPlate, Integer drivingRange, Integer fabricationYear, Integer seats) {
         setUp(brand, model, numberPlate, drivingRange, fabricationYear, seats);
+        verification = "pending";
     }
+
+    public GatewayVehicle(String brand, String model, String numberPlate, int drivingRange, Integer fabricationYear, int seats, String imageId, String verification) {
+        setUp(brand, model, numberPlate, drivingRange, fabricationYear, seats);
+        this.imageId = imageId;
+        this.verification = verification;
+    }
+
 
     /**
      * @brief Inicialitza els parametres indicats a continuacio.
@@ -163,6 +175,26 @@ public class GatewayVehicle implements Gateway{
         this.imageId = imageId;
     }
 
+    public void setDrivingRange(Integer drivingRange) {
+        this.drivingRange = drivingRange;
+    }
+
+    public void setSeats(Integer seats) {
+        this.seats = seats;
+    }
+
+    public String getVerification() {
+        return verification;
+    }
+
+    public void setVerification(String verification) {
+        this.verification = verification;
+    }
+
+    public void verify() {
+        verification = "verified";
+    }
+
     //SQL operations
 
     /**
@@ -179,6 +211,7 @@ public class GatewayVehicle implements Gateway{
         if (fabricationYear != null) pS.setInt(5,fabricationYear); else pS.setString(5, null);
         if (seats != null) pS.setInt(6,seats); else pS.setString(6, null);
         pS.setString(7, imageId);
+        pS.setString(8,verification);
     }
 
     /**
@@ -194,6 +227,7 @@ public class GatewayVehicle implements Gateway{
         if (fabricationYear != null) pS.setInt(4,fabricationYear); else pS.setString(4, null);
         if (seats != null) pS.setInt(5,seats); else pS.setString(5, null);
         pS.setString(6, imageId);
+        pS.setString(7,verification);
     }
 
     /**
@@ -204,7 +238,7 @@ public class GatewayVehicle implements Gateway{
     public void insert() throws SQLException {
         Database d = Database.getInstance();
         Connection c = d.getConnection();
-        PreparedStatement pS = c.prepareStatement("INSERT INTO VEHICLE VALUES (?,?,?,?,?,?,?); ");
+        PreparedStatement pS = c.prepareStatement("INSERT INTO VEHICLE VALUES (?,?,?,?,?,?,?,?); ");
         setPreparedStatement(pS);
         pS.executeUpdate();
     }
@@ -218,9 +252,9 @@ public class GatewayVehicle implements Gateway{
         Database d = Database.getInstance();
         Connection c = d.getConnection();
         PreparedStatement pS = c.prepareStatement("UPDATE VEHICLE SET brand = ?, model = ?, " +
-                "drivingRange = ?, fabricationYear = ?, seats = ?, imageId = ? WHERE numberPlate = ?;");
+                "drivingRange = ?, fabricationYear = ?, seats = ?, imageId = ?, verification = ? WHERE numberPlate = ?;");
         setPreparedStatementNoNP(pS);
-        pS.setString(7, numberPlate);
+        pS.setString(8, numberPlate);
         pS.executeUpdate();
     }
 
