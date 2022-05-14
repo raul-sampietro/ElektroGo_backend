@@ -55,6 +55,7 @@ public class VehicleController {
         GatewayVehicle gVComp = fV.findByNumberPlate(gV.getNumberPlate());
         if (gVComp == null) {
             System.out.println("Vehicle didn't exists ,creating new vehicle...");
+            if (gV.getVerification() == null) gV.setVerification("pending");
             gV.insert();
             System.out.println("Vehicle created");
         }
@@ -144,8 +145,8 @@ public class VehicleController {
      * @pre numberPlate es son null.
      * @post La imatge demanada esta al response, per tant el client la rep
      */
-    @GetMapping("/image")
-    public void getImage(HttpServletResponse response, @RequestParam String numberPlate) throws IOException, SQLException {
+    @GetMapping("/{numberPlate}/image")
+    public void getImage(HttpServletResponse response, @PathVariable String numberPlate) throws IOException, SQLException {
         System.out.println("\nStarting getImage method");
         FinderVehicle fV = FinderVehicle.getInstance();
         GatewayVehicle gV = fV.findByNumberPlate(numberPlate);
