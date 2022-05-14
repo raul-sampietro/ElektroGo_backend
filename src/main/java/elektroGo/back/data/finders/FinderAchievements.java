@@ -2,6 +2,7 @@ package elektroGo.back.data.finders;
 
 import elektroGo.back.data.Database;
 import elektroGo.back.data.gateways.GatewayAchieviements;
+import elektroGo.back.data.gateways.GatewayUserAchievements;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,21 +13,23 @@ import java.util.ArrayList;
 public class FinderAchievements {
 
     private static FinderAchievements singletonObject;
+    private final Connection conn;
 
-    private FinderAchievements()  {}
+    private FinderAchievements()  {
+        Database d = Database.getInstance();
+        conn = d.getConnection();
+    }
 
-    public FinderAchievements getInstance() {
+    public static FinderAchievements getInstance() {
         if (singletonObject == null) {
             singletonObject = new FinderAchievements();
         }
         return singletonObject;
     }
 
-    public ArrayList<GatewayAchieviements> findAll() throws SQLException {
-        Database d = Database.getInstance();
-        Connection conn = d.getConnection();
+    //pre: pS has a SQL sentence
+    private ArrayList<GatewayAchieviements> findTemplate(PreparedStatement pS) throws SQLException {
         ArrayList<GatewayAchieviements> aL = new ArrayList<>();
-        PreparedStatement pS = conn.prepareStatement("SELECT * FROM ACHIEVEMENTS;");
         ResultSet r = pS.executeQuery();
         while (r.next()) {
             aL.add(createGateway(r));
@@ -34,17 +37,18 @@ public class FinderAchievements {
         return aL;
     }
 
+    public ArrayList<GatewayAchieviements> findAll() throws SQLException {
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM ACHIEVEMENTS;");
+        return findTemplate(pS);
+    }
+
     public GatewayAchieviements findByName(String name) throws SQLException {
-        GatewayAchieviements gA = null;
-        Database d = Database.getInstance();
-        Connection conn = d.getConnection();
         PreparedStatement pS = conn.prepareStatement("SELECT * FROM ACHIEVEMENTS " +
                                                           " WHERE name = ? ;");
-        ResultSet r = pS.executeQuery();
-        if (r.next()) {
-            gA = createGateway(r);
-        }
-        return gA;
+        pS.setString(1, name);
+        ArrayList<GatewayAchieviements> aL = findTemplate(pS);
+        if (aL.isEmpty()) return null;
+        return aL.get(0);
     }
 
     private GatewayAchieviements createGateway(ResultSet r) throws SQLException {

@@ -11,8 +11,8 @@ import java.util.ArrayList;
 
 public class FinderUserAchievement {
 
-    FinderUserAchievement singletonObject;
-    Connection conn;
+    private static FinderUserAchievement singletonObject;
+    private final Connection conn;
 
     private FinderUserAchievement() {
         Database d = Database.getInstance();
@@ -34,7 +34,7 @@ public class FinderUserAchievement {
     }
 
     //pre: pS has a SQL sentence
-    public ArrayList<GatewayUserAchievements> findWithPS(PreparedStatement pS) throws SQLException {
+    private ArrayList<GatewayUserAchievements> findTemplate(PreparedStatement pS) throws SQLException {
         ArrayList<GatewayUserAchievements> aL = new ArrayList<>();
         ResultSet r = pS.executeQuery();
         while (r.next()) {
@@ -45,26 +45,26 @@ public class FinderUserAchievement {
 
     public ArrayList<GatewayUserAchievements> findAll() throws SQLException {
         PreparedStatement pS = conn.prepareStatement("SELECT * FROM USERACHIEVEMENTS;");
-        return findWithPS(pS);
+        return findTemplate(pS);
     }
 
     public ArrayList<GatewayUserAchievements> findByUsername(String username) throws SQLException {
         PreparedStatement pS = conn.prepareStatement("SELECT * FROM USERACHIEVEMENTS WHERE username = ?;");
         pS.setString(1,username);
-        return findWithPS(pS);
+        return findTemplate(pS);
     }
 
     public ArrayList<GatewayUserAchievements> findByAchievement(String achievement) throws SQLException {
         PreparedStatement pS = conn.prepareStatement("SELECT * FROM USERACHIEVEMENTS WHERE achievement = ?;");
         pS.setString(1,achievement);
-        return findWithPS(pS);
+        return findTemplate(pS);
     }
 
     public GatewayUserAchievements findByPK(String username, String achievement) throws SQLException {
         PreparedStatement pS = conn.prepareStatement("SELECT * FROM USERACHIEVEMENTS WHERE username = ? and achievement = ?;");
         pS.setString(1, username);
         pS.setString(2, achievement);
-        ArrayList<GatewayUserAchievements> aL = findWithPS(pS);
+        ArrayList<GatewayUserAchievements> aL = findTemplate(pS);
         if (aL.size() == 0) return null;
         else return aL.get(0);
     }
