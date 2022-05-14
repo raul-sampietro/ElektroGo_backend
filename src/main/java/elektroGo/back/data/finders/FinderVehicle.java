@@ -64,6 +64,11 @@ public class FinderVehicle {
         return findTemplate(pS);
     }
 
+    public ArrayList<GatewayVehicle> findNotVerified() throws SQLException {
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM VEHICLE WHERE verification = 'pending';");
+        return findTemplate(pS);
+    }
+
     /**
      * @brief Funció que agafa un vehicle de la BD i el retorna
      * @param numberPlate matricula del vehicle
@@ -90,7 +95,8 @@ public class FinderVehicle {
         Integer fabricationYear= r.getInt(5);
         int seats = r.getInt(6);
         String imageId = r.getString(7);
-        return new GatewayVehicle(brand, model, numberPlate, drivingRange, fabricationYear, seats,imageId);
+        String verification = r.getString(8);
+        return new GatewayVehicle(brand, model, numberPlate, drivingRange, fabricationYear, seats,imageId, verification);
     }
 
     //Add necessary finders

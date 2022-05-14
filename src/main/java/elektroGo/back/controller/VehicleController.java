@@ -222,7 +222,7 @@ public class VehicleController {
      */
     @DeleteMapping("/{numberPlate}")
     public void deleteVehicle(@PathVariable String numberPlate) {
-        System.out.println("\nIntiating deleteVehicle method...");
+        System.out.println("\nStarting deleteVehicle method...");
         System.out.println("Vehicle that will be deleted is identified by " + numberPlate);
         FinderVehicle fV = FinderVehicle.getInstance();
         try {
@@ -234,7 +234,7 @@ public class VehicleController {
                 System.out.println("Deleting image of the vehicle...");
                 File fileToDelete = new File("../Images/vehicle-images/" + gV.getImageId());
                 boolean success = fileToDelete.delete();
-                if (success) System.out.println("File was removed succesfully");
+                if (success) System.out.println("File was removed successfully");
                 else System.out.println("WARNING: File couldn't be removed");
                 gV.remove();
             }
@@ -243,6 +243,30 @@ public class VehicleController {
             e.printStackTrace();
         }
         System.out.println("End of method deleteVehicle.");
+    }
+
+    @PutMapping("/verify/{numberPlate}")
+    public void verifyVehicle(@PathVariable String numberPlate) throws SQLException {
+        System.out.println("\nStarting verifyVehicle method with vehicle = '" + numberPlate + "' ...");
+        FinderVehicle fV = FinderVehicle.getInstance();
+        GatewayVehicle gV = fV.findByNumberPlate(numberPlate);
+        if (gV == null) throw new VehicleNotFound(numberPlate);
+        System.out.println("Actual state of verification attribute is " + gV.getVerification());
+        gV.verify();
+        gV.update();
+        gV = fV.findByNumberPlate(numberPlate);
+        System.out.println("Now, the vehicle has this attributes (end of method)");
+        System.out.println(gV.json());
+    }
+
+    @GetMapping("/notVerified")
+    public ArrayList<GatewayVehicle> getNotVerified() throws SQLException {
+        System.out.println("Starting getNotVerified method...");
+        FinderVehicle fV = FinderVehicle.getInstance();
+        ArrayList<GatewayVehicle> aL = fV.findNotVerified();
+        System.out.println("Returning this vehicles... (end of method)");
+        for (GatewayVehicle gV : aL) System.out.println(gV.json());
+        return aL;
     }
 
 
