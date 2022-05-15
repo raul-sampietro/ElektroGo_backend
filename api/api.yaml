@@ -6,6 +6,760 @@ info:
 servers:
   - url: 'http://10.4.41.58:8080/'
 paths:
+  /users:
+    get:
+      tags:
+      - Users
+      summary: Obté tots els usuaris.
+      operationId: getAllUsers
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/User'
+    post:
+      tags:
+      - Users
+      summary: Crea un usuari.
+      operationId: postUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        201:
+          description: successful operation
+        438:
+          description: 'Error: User Alredy Exists'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error438'
+
+  /users/{username}:
+    get:
+      tags:
+      - Users
+      summary: Obté un usuari donat un username.
+      operationId: getUserByUsername
+      parameters:
+      - name: username
+        in: path
+        description: Username de l'usuari
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        437:
+          description: 'Error: User Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error437'
+    delete:
+      tags:
+      - Users
+      summary: Esborra un usuari.
+      operationId: deleteUser
+      parameters:
+      - name: username
+        in: path
+        description: Username de l'usuari
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+        437:
+          description: 'Error: User Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error437'
+
+  /users/provider/{provider}/id/{id}:
+    get:
+      tags:
+      - Users
+      summary: Obté un usuari donat un parell (provider, id).
+      operationId: getUseryId
+      parameters:
+      - name: provider
+        in: path
+        description: Proveïdor de login de l'usuari
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: ID de l'usuari pel proveïdor de login
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        437:
+          description: 'Error: User Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error437'
+
+  /users/{username}/ratings/made:
+    get:
+      tags:
+      - Users
+      summary: Obté les valoracions fetes per un usuari.
+      operationId: getRatingsMadeUser
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Rating'
+        437:
+          description: 'Error: User Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error437'
+
+  /users/{username}/ratings/received:
+    get:
+      tags:
+      - Users
+      summary: Obté les valoracions fetes a un usuari.
+      operationId: getRatingsReceivedUser
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Rating'
+        437:
+          description: 'Error: User Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error437'
+
+  /users/{username}/ratings/avg:
+    get:
+      tags:
+      - Users
+      summary: Obté la valoració mitjana d'un usuari.
+      operationId: getAvgRatingUser
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvgRating'
+        437:
+          description: 'Error: User Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error437'
+
+  /users/{username}/reports/made:
+    get:
+      tags:
+      - Users
+      summary: Obté les denuncies fetes per un usuari.
+      operationId: getReportsMadeUser
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Report'
+        437:
+          description: 'Error: User Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error437'
+
+  /users/{username}/reports/received:
+    get:
+      tags:
+      - Users
+      summary: Obté les denuncies fetes a un usuari.
+      operationId: getReportsReceivedUser
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Report'
+        437:
+          description: 'Error: User Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error437'
+
+  /ratings:
+    post:
+      tags:
+      - Ratings
+      summary: Crea una valoració.
+      operationId: postRating
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Rating'
+        required: true
+      responses:
+        201:
+          description: successful operation
+        437:
+          description: 'Error: User Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error437'
+
+  /ratings/from/{userFrom}/to/{userTo}:
+    delete:
+      tags:
+      - Ratings
+      summary: Esborra una valoració.
+      operationId: deleteRating
+      parameters:
+      - name: userFrom
+        in: path
+        description: Username de l'usuari que ha fet la valoració
+        required: true
+        schema:
+          type: string
+      - name: userTo
+        in: path
+        description: Username de l'usuari que ha rebut la valoració
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+        437:
+          description: 'Error: User Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error437'
+        442:
+          description: 'Error: Rating Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error442'
+
+  /reports:
+    get:
+      tags:
+      - Reports
+      summary: Obté totes les denuncies.
+      operationId: getAllReports
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Report'
+    post:
+      tags:
+      - Reports
+      summary: Crea una denuncia.
+      operationId: postReport
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Report'
+        required: true
+      responses:
+        201:
+          description: successful operation
+        445:
+          description: 'Error: Report Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error445'
+
+  /reports/from/{userFrom}/to/{userTo}:
+    delete:
+      tags:
+      - Reports
+      summary: Esborra una denucnia.
+      operationId: deleteReport
+      parameters:
+      - name: userFrom
+        in: path
+        description: Username de l'usuari que ha fet la denuncia
+        required: true
+        schema:
+          type: string
+      - name: userTo
+        in: path
+        description: Username de l'usuari que ha rebut la denuncia
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+        437:
+          description: 'Error: User Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error437'
+        445:
+          description: 'Error: Report Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error445'
+
+  /drivers/{username}:
+    get:
+      tags:
+      - Drivers
+      summary: Obté un conductor.
+      operationId: getDriver
+      parameters:
+      - name: username
+        in: path
+        description: Username del conductor
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object 
+                $ref: '#/components/schemas/Driver'
+        432:
+          description: 'Error: Driver Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error432'
+    post:
+      tags:
+      - Drivers
+      summary: Crea un conductor.
+      operationId: createDriver
+      parameters:
+      - name: username
+        in: path
+        description: Username del conductor
+        required: true
+        schema:
+          type: string
+      responses:
+        201:
+          description: successful operation
+        439:
+          description: 'Error: Driver Alredy Exists'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error439'
+    delete:
+      tags:
+      - Drivers
+      summary: Esborra un conductor.
+      operationId: deleteDriver
+      parameters:
+      - name: username
+        in: path
+        description: Username del conductor
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object 
+                $ref: '#/components/schemas/Driver'
+        432:
+          description: 'Error: Driver Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error432'
+  
+  /vehicles:
+    post:
+      tags:
+      - Vehicles
+      summary: Crea un vehicle.
+      operationId: postVehicle
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vehicle'
+        required: true
+      responses:
+        201:
+          description: successful operation
+        435:
+          description: 'Error: Vehicle Already Exists'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error435'
+  
+  /vehicles/{numberPlate}:
+    get:
+      tags:
+      - Vehicles
+      summary: Obté un vehicle.
+      operationId: getVehicle
+      parameters:
+      - name: numberPlate
+        in: path
+        description: Matrícula del vehicle
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Vehicle'
+        436:
+          description: 'Error: Vehicle Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error436'
+    delete:
+      tags:
+      - Vehicles
+      summary: Esborra un vehicle.
+      operationId: deleteVehicle
+      parameters:
+      - name: numberPlate
+        in: path
+        description: Matrícula del vehicle
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+        436:
+          description: 'Error: Vehicle Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error436'
+
+  /vehicles/{numberPlate}/image:
+    get:
+      tags:
+      - Vehicles
+      summary: Obté la imatge d'un vehicle.
+      operationId: getImatgeVehicle
+      parameters:
+      - name: numberPlate
+        in: path
+        description: Matrícula del vehicle
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation. S'obté un arxiu PNG.
+          content:
+            application/json:
+              schema:
+                type: object 
+                $ref: '#/components/schemas/Blank'
+        436:
+          description: 'Error: Vehicle Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error436'
+    put:
+      tags:
+      - Vehicles
+      summary: Afegeix o modifica la imatge d'un vehicle.
+      operationId: putImatgeVehicle
+      requestBody:
+        description: Un arxiu PNG
+        content:
+            application/json:
+              schema:
+                type: object 
+                $ref: '#/components/schemas/Blank'
+      parameters:
+      - name: numberPlate
+        in: path
+        description: Matrícula del vehicle
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+        436:
+          description: 'Error: Vehicle Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error436'
+
+  /drivers/{username}/vehicles:
+    get:
+      tags:
+      - Vehicles
+      summary: Obté tots els vehicles d'un conductor.
+      operationId: getVehiclesDriver
+      parameters:
+        - name: username
+          in: path
+          description: Username del conductor
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vehicle'
+        432:
+          description: 'Error: Driver Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error432'
+      
+  /drivers/{username}/vehicles/{numberPlate}:
+    post:
+      tags:
+      - Vehicles
+      summary: Associa un conductor amb un vehicle.
+      operationId: postDriverVehicle
+      parameters:
+        - name: username
+          in: path
+          description: Username del conductor
+          required: true
+          schema:
+            type: string
+        - name: numberPlate
+          in: path
+          description: Matrícula del vehicle
+          required: true
+          schema:
+            type: string
+      responses:
+        201:
+          description: successful operation
+        432:
+          description: 'Error: Driver Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error432'
+        436:
+          description: 'Error: Vehicle Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error436'
+        433:
+          description: 'Error: Driver Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error433'
+    delete:
+      tags:
+      - Vehicles
+      summary: Associa un conductor amb un vehicle.
+      operationId: deleteDriverVehicle
+      parameters:
+        - name: username
+          in: path
+          description: Username del conductor
+          required: true
+          schema:
+            type: string
+        - name: numberPlate
+          in: path
+          description: Matrícula del vehicle
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: successful operation
+        432:
+          description: 'Error: Driver Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error432'
+        436:
+          description: 'Error: Vehicle Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error436'
+        433:
+          description: 'Error: DriverVehicle Already Exists'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error433'
+
   /charging-stations:
     get:
       tags:
@@ -22,7 +776,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/ChargingStation'
 
-    
   /charging-stations/byCoord:
     get:
       tags:
@@ -68,13 +821,189 @@ paths:
                 items:
                   $ref: '#/components/schemas/ChargingStation'
   
+  /car-pooling:
+    get:
+      tags:
+      - Car Pooling
+      summary: Obté tots els trajectes de carpooling.
+      operationId: getAllCarPoolings
+      parameters:
+      - name: order
+        in: query
+        description: Ordenació del llistat resultant ["asc", "desc"]
+        required: false
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarPooling'
+    post:
+      tags:
+      - Car Pooling
+      summary: Crea un trajecte de carpooling.
+      operationId: postCarPooling
+      requestBody:
+        content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/ChargingStation'
+      responses:
+        201:
+          description: successful operation
+        444:
+          description: 'Error: Trip Already Exists'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error444'
+
+
+  /car-pooling/{id}:
+    get:
+      tags:
+      - Car Pooling
+      summary: Obté un trajecte de carpooling.
+      operationId: getCarPooling
+      parameters:
+      - name: id
+        in: path
+        description: ID del trajecte de carpooling
+        required: true
+        schema:
+          type: number
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/CarPooling'
+        404:
+          description: 'Error: Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error404'
+    delete:
+      tags:
+      - Car Pooling
+      summary: Esborra un trajecte de carpooling.
+      operationId: deleteCarPooling
+      parameters:
+      - name: id
+        in: path
+        description: ID del trajecte de carpooling
+        required: true
+        schema:
+          type: number
+      responses:
+        200:
+          description: successful operation
+        404:
+          description: 'Error: Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error404'
+
+  /car-pooling/search:
+    get:
+      tags:
+      - Car Pooling
+      summary: Cerca trajectes de carpooling segons origen, destí, data i hora.
+      operationId: searchCarPooling
+      parameters:
+      - name: latO
+        in: query
+        description: Coordenada latitud de l'origen
+        required: true
+        schema:
+          type: number
+          format: double
+      - name: longO
+        in: query
+        description: Coordenada longitud de l'origen
+        required: true
+        schema:
+          type: number
+          format: double
+      - name: latD
+        in: query
+        description: Coordenada latitud del destí
+        required: true
+        schema:
+          type: number
+          format: double
+      - name: longD
+        in: query
+        description: Coordenada longitud del destí
+        required: true
+        schema:
+          type: number
+          format: double
+      - name: startDate
+        in: query
+        description: Data a partir de la qual es busca. Si no s'especifica data es busca a partir del dia actual.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: startTimeMin
+        in: query
+        description: Hora d'inici de l'interval de cerca. Si no s'especifica hora d'inici de l'interval ni data, es busca a partir de l'hora actual a tots els dies a partir de l'actual. Si no s'especifica hora d'inici de l'interval però si data, es busca a partir de l'hora actual y la data indicada.
+        required: false
+        schema:
+          type: string
+          format: time
+      - name: startTimeMax
+        in: query
+        description: Hora final de l'interval de cerca. Si no s'especifica hora final de l'interval ni data, es busca fins les 23:59 de tots els dies a partir de l'actual. Si no s'especifica hora final de l'interval però si data, es busca fins les 23:59 y la data indicada.
+        required: false
+        schema:
+          type: string
+          format: time
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarPooling'
+        400:
+          description: 'Error: Bad request'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error400'
 
   /car-pooling/byCoord:
     get:
       tags:
       - Car Pooling
       summary: Donades unes coordenades (latitude i longitude) rep la informació de tots els punts de car pooling vigents dins d'un radi indicat per parametre (en km).
-      operationId: getCarPooling
+      operationId: getCarPoolingByCoord
       parameters:
       - name: latitude
         in: query
@@ -136,8 +1065,113 @@ paths:
               examples:
                 errorExample:
                   $ref: '#/components/examples/error404'
+
+
 components:
   schemas:
+    Blank:
+      type: object
+
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+          example: "samito"
+        email:
+          type: string
+          example: "samito33@gmail.com"
+        id:
+          type: string
+          example: "104069839557168305566"
+        provider:
+          type: string
+          example: "GOOGLE"
+        name:
+          type: string
+          example: "Samuel Daniel Foster"
+        givenName:
+          type: string
+          example: "Samuel"
+        familyName:
+          type: string
+          example: "Daniel Foster"
+        imageUrl:
+          type: string
+          example: "https://lh3.googleusercontent.com/a-/AOh14GiIcAvvngHoDsa9CP5KmAgA1CfJglhCJjnjJR-z"
+    
+    Rating:
+      type: object
+      properties:
+        userWhoRates:
+          type: string
+          example: "samito"
+        ratedUser:
+          type: string
+          example: "cuquet"
+        points:
+          type: integer
+          example: 4
+        comment:
+          type: string
+          example: "Molt bon conductor"
+
+    AvgRating:
+      type: object
+      properties:
+        ratingValue:
+          type: number
+          format: float
+          example: 6.0
+        numberOfRatings:
+          type: integer
+          example: 2
+
+    Report:
+      type: object
+      properties:
+        userWhoReports:
+          type: string
+          example: "samito"
+        reportedUser:
+          type: string
+          example: "cuquet"
+        reason:
+          type: string
+          example: "Es un mal company de cotxe"
+
+    Driver:
+      type: object
+      properties:
+        username:
+          type: string
+          example: "samito"
+        status:
+          type: string
+          example: "verified"
+
+    Vehicle:
+      type: object
+      properties:
+        brand:
+          type: string
+          example: Tesla
+        model:
+          type: string
+          example: Model X
+        numberPlate:
+          type: string
+          example: 4692HKL
+        drivingRange:
+          type: integer
+          example: 540
+        fabricationYear:
+          type: integer
+          example: 2021
+        seats:
+          type: integer
+          example: 6
+
     ChargingStation:
       type: object
       properties:
@@ -186,6 +1220,7 @@ components:
         fcs:
           type: string
           example: null
+    
     CarPooling:
       type: object
       properties:
@@ -240,9 +1275,7 @@ components:
         longitudeDestination:
           type: number
           example: 2.8279
-        
-        
-          
+         
     ErrorResult:
       type: object
       properties:
@@ -254,6 +1287,20 @@ components:
           enum: ["Bad Request", "Unauthorized", "Not found"]
         message: 
           type: string
+
+    ErrorResultElektroGo:
+      type: object
+      properties:
+        timestamp:
+          type: string
+        status:
+          type: integer
+        error:
+          type: string
+        path:
+          type: string
+
+
   examples:
     error400:
       value:
@@ -270,3 +1317,63 @@ components:
         status: 404
         error: "Not found"
         message: "There are no trips in the radius specified"
+    error432:
+      value:
+        timestamp: "2022-05-13T21:41:52.369+00:00"
+        status: 432
+        error: "Http Status 432"
+        path: "/drivers"
+    error433:
+      value:
+        timestamp: "2022-05-13T21:41:52.369+00:00"
+        status: 433
+        error: "Http Status 433"
+        path: "/drivers/samito/vehicles/4692HKL"
+    error435:
+      value:
+        timestamp: "2022-05-13T21:41:52.369+00:00"
+        status: 435
+        error: "Http Status 435"
+        path: "/vehicles"
+    error436:
+      value:
+        timestamp: "2022-05-13T21:41:52.369+00:00"
+        status: 436
+        error: "Http Status 436"
+        path: "/vehicles/4692HKL/image"
+    error437:
+      value:
+        timestamp: "2022-05-13T21:41:52.369+00:00"
+        status: 437
+        error: "Http Status 437"
+        path: "/users"
+    error438:
+      value:
+        timestamp: "2022-05-13T21:41:52.369+00:00"
+        status: 438
+        error: "Http Status 438"
+        path: "/users"
+    error439:
+      value:
+        timestamp: "2022-05-13T21:41:52.369+00:00"
+        status: 439
+        error: "Http Status 439"
+        path: "/drivers/samito"
+    error442:
+      value:
+        timestamp: "2022-05-13T21:41:52.369+00:00"
+        status: 442
+        error: "Http Status 442"
+        path: "/users/ratings"
+    error444:
+      value:
+        timestamp: "2022-05-13T21:41:52.369+00:00"
+        status: 444
+        error: "Http Status 444"
+        path: "/users/reports"
+    error445:
+      value:
+        timestamp: "2022-05-13T21:41:52.369+00:00"
+        status: 445
+        error: "Http Status 445"
+        path: "/users/reports"
