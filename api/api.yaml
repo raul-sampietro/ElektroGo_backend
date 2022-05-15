@@ -714,7 +714,7 @@ paths:
     delete:
       tags:
       - Vehicles
-      summary: Associa un conductor amb un vehicle.
+      summary: Desassocia un conductor y un vehicle.
       operationId: deleteDriverVehicle
       parameters:
         - name: username
@@ -1066,6 +1066,295 @@ paths:
                 errorExample:
                   $ref: '#/components/examples/error404'
 
+  /users/{username}/trips:
+    get:
+      tags:
+      - Car Pooling
+      summary: Obté tots els trajectes de carpooling d'un usuari.
+      operationId: getCarPoolingsUser
+      parameters:
+      - name: username
+        in: path
+        description: Username de l'usuari
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarPooling'
+        437:
+          description: 'Error: User Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error437'
+    
+  /users/{username}/trips/{id}:
+    post:
+      tags:
+      - Car Pooling
+      summary: Associa un trajecte de carpooling i un usuari.
+      operationId: deleteCarPoolingsUser
+      parameters:
+      - name: username
+        in: path
+        description: Username de l'usuari
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: ID del trajecte de carpooling
+        required: true
+        schema:
+          type: number
+      responses:
+        200:
+          description: successful operation
+        437:
+          description: 'Error: User Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error437'
+        404:
+          description: 'Error: Trip Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error404'
+        448:
+          description: 'Error: UserTrip Already Exists'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error448'
+    delete:
+      tags:
+      - Car Pooling
+      summary: Desassocia un trajecte de carpooling amb un usuari.
+      operationId: postCarPoolingsUser
+      parameters:
+      - name: username
+        in: path
+        description: Username de l'usuari
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: ID del trajecte de carpooling
+        required: true
+        schema:
+          type: number
+      responses:
+        201:
+          description: successful operation
+        437:
+          description: 'Error: User Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error437'
+        404:
+          description: 'Error: Trip Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error404'
+        447:
+          description: 'Error: UserTrip Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error447'
+    
+  /routes/calculate:
+    get:
+      tags:
+      - Routes
+      summary: Obté tots els trajectes de carpooling d'un usuari.
+      operationId: calculateRoute
+      parameters:
+      - name: latO
+        in: query
+        description: Coordenada latitud de l'origen
+        required: true
+        schema:
+          type: number
+          format: double
+      - name: longO
+        in: query
+        description: Coordenada longitud de l'origen
+        required: true
+        schema:
+          type: number
+          format: double
+      - name: latD
+        in: query
+        description: Coordenada latitud del destí
+        required: true
+        schema:
+          type: number
+          format: double
+      - name: longD
+        in: query
+        description: Coordenada longitud del destí
+        required: true
+        schema:
+          type: number
+          format: double
+      - name: range
+        in: query
+        description: Rang del vehicle en km
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Route'
+
+  /chats/messages:
+    get:
+      tags:
+      - Chats
+      summary: Obté tots els missatges.
+      operationId: getAllMessages
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+  
+  /chats/messages/{username1}/{username2}:
+    get:
+      tags:
+      - Chats
+      summary: Obté tots els missatges entre dos usuaris.
+      operationId: getAllMessagesUsers
+      parameters:
+      - name: username1
+        in: path
+        description: Username de l'usuari1
+        required: true
+        schema:
+          type: string
+      - name: username2
+        in: path
+        description: Username de l'usuari2
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+        437:
+          description: 'Error: User Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error437'
+    post:
+      tags:
+      - Chats
+      summary: Crea un missatge.
+      operationId: postMessage
+      parameters:
+      - name: username1
+        in: path
+        description: Username de l'usuari remitent
+        required: true
+        schema:
+          type: string
+      - name: username2
+        in: path
+        description: Username de l'usuari revedor
+        required: true
+        schema:
+          type: string
+      responses:
+        201:
+          description: successful operation
+        437:
+          description: 'Error: User Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error437'
+
+  /chats/{username}:
+    get:
+      tags:
+      - Chats
+      summary: Obté tots els xats de l'usuari.
+      operationId: getAllChats
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Chat'
+        437:
+          description: 'Error: User Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error437'
 
 components:
   schemas:
@@ -1275,6 +1564,47 @@ components:
         longitudeDestination:
           type: number
           example: 2.8279
+    
+    Point:
+      type: object
+      properties:
+        name:
+          type: string
+          example: point
+        latitude:
+          type: number
+          format: double
+          example: 41.3894
+        longitude:
+          type: number
+          format: double
+          example: 2.1134
+
+    Route:
+      type: integer
+      example: 41.3894
+
+    Message:
+      type: object
+      properties:
+        sender:
+          type: string
+          example: "samito"
+        receiver:
+          type: string
+          example: "cuquet"
+        message:
+          type: string
+          example: "Hola, com estas?"
+        sentAt:
+          type: string
+          format: date-time
+          example: "2022-05-13T21:41:52.369+00:00"
+
+    Chat:
+      type: string
+      example: "cuquet"
+
          
     ErrorResult:
       type: object
@@ -1377,3 +1707,15 @@ components:
         status: 445
         error: "Http Status 445"
         path: "/users/reports"
+    error447:
+      value:
+        timestamp: "2022-05-13T21:41:52.369+00:00"
+        status: 447
+        error: "Http Status 447"
+        path: "/users/samito/trips/2"
+    error448:
+      value:
+        timestamp: "2022-05-13T21:41:52.369+00:00"
+        status: 448
+        error: "Http Status 448"
+        path: "/users/samito/trips/2"
