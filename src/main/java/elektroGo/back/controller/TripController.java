@@ -89,8 +89,8 @@ public class TripController {
     }
 
     /**
-     * @brief Funció amb metode 'GET' que retorna la informació de tots els Users a la BD
-     * @return Es retorna un String amb la info dels usuaris
+     * @brief Funció amb metode 'GET' que retorna la informació de tots els Trips a la BD
+     * @return Es retorna un String amb la info dels trips
      */
     @GetMapping("/car-poolings")
     public ArrayList<GatewayTrip> getTrips() throws SQLException, JsonProcessingException {
@@ -128,12 +128,12 @@ public class TripController {
         GatewayUserTrip gU = new GatewayUserTrip(gNew.getId(),gNew.getUsername());
         gU.insert();
     }
+
     /**
      * @brief Funció amb metode 'POST' que demana que s'esborri un Trip de la BD
      * @param id  que volem eliminar
      * @post El trip s'elimina de la BD
      */
-
     @PostMapping("/car-pooling/delete")
     public void deleteTrip(@RequestParam Integer id) {
         FinderTrip fU = FinderTrip.getInstance();

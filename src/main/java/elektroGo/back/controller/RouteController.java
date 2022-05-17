@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * @brief La classe RouteController és la classe que comunicarà front-end i back-end a l'hora de calcular rutes
  */
 @RestController
-@RequestMapping("/route")
+@RequestMapping("/routes")
 public class RouteController {
 
     /**

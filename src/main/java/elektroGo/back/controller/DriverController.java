@@ -34,9 +34,9 @@ public class DriverController {
     @GetMapping("/driver")
     public String getDriver(@RequestParam String userName) throws SQLException {
         FinderDriver fU = FinderDriver.getInstance();
-        GatewayDriver gU = fU.findByUserName(userName);
-        if(gU == null)throw new DriverNotFound(userName);
-        return gU.json();
+        GatewayDriver gD = fU.findByUserName(userName);
+        if(gD == null)throw new DriverNotFound(userName);
+        return gD.json();
     }
 
     /**

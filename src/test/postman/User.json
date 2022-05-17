@@ -1,0 +1,591 @@
+{
+	"info": {
+		"_postman_id": "de9de9b4-5192-4cc9-98b2-4397543bc861",
+		"name": "User",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/users",
+			"item": [
+				{
+					"name": "/users by username",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/users?username=samragu",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "samragu"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users by provider+id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/users?provider=GOOGLE&id=104069839557168305566",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "provider",
+									"value": "GOOGLE"
+								},
+								{
+									"key": "id",
+									"value": "104069839557168305566"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"samito\",\n  \"email\": \"samito33@gmail.com\",\n  \"id\": \"104069839557168305566\",\n  \"provider\": \"GOOGLE\",\n  \"name\": \"Samuel Daniel Foster\",\n  \"givenName\": \"Samuel\",\n  \"familyName\": \"Daniel Foster\",\n  \"imageUrl\": \"https://lh3.googleusercontent.com/a-/AOh14GiIcAvvngHoDsa9CP5KmAgA1CfJglhCJjnjJR-z\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/:username",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/users/:username",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								":username"
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "samragu"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/all",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/users/all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"all"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/users/:username/ratings",
+			"item": [
+				{
+					"name": "/users/:username/ratings/made",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/users/:username/ratings/made",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								":username",
+								"ratings",
+								"made"
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "samragu"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/:username/ratings/received",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/users/:username/ratings/received",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								":username",
+								"ratings",
+								"received"
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "samragu"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/:username/ratings/avg",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/users/:username/ratings/avg",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								":username",
+								"ratings",
+								"avg"
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "samragu"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/users/ratings",
+			"item": [
+				{
+					"name": "/users/ratings",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userWhoRates\": \"samragu\",\n  \"ratedUser\": \"abadadria\",\n  \"points\": 5,\n  \"comment\": \"Molt bon conductor\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/users/ratings",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"ratings"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/ratings",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/users/ratings?userWhoRates=samragu&ratedUser=abadadria",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"ratings"
+							],
+							"query": [
+								{
+									"key": "userWhoRates",
+									"value": "samragu"
+								},
+								{
+									"key": "ratedUser",
+									"value": "abadadria"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/users/:username/reports",
+			"item": [
+				{
+					"name": "/users/:username/reports/made",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/users/:username/reports/made",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								":username",
+								"reports",
+								"made"
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "samragu"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/:username/reports/received",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/users/:username/reports/received",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								":username",
+								"reports",
+								"received"
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "samragu"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/users/reports",
+			"item": [
+				{
+					"name": "/users/reports/all",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/users/reports/all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"reports",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/reports",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userWhoReports\": \"samragu\",\n  \"reportedUser\": \"abadadria\",\n  \"reason\": \"Persona molesta\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/users/reports",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"reports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/reports",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/users/reports?userWhoReports=samragu&reportedUser=abadadria",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"reports"
+							],
+							"query": [
+								{
+									"key": "userWhoReports",
+									"value": "samragu"
+								},
+								{
+									"key": "reportedUser",
+									"value": "abadadria"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

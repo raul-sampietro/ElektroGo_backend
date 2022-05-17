@@ -27,6 +27,7 @@ import java.util.ArrayList;
 @RestController
 public class UserTripController {
 
+    //NO TE SENTIT
     /**
      * @brief Funció amb metode 'GET' que retorna la informació del membre amb el username i l'id del viatgecorresponen
      * @param username Usuari del que volem agafar la info
@@ -47,6 +48,7 @@ public class UserTripController {
         return gU.json();
     }
 
+    // Obté els UserTrip d'un user. ELIMINAR.
     @GetMapping("/userTrip/byUser")
     public ArrayList<GatewayUserTrip> getUserTripUSer(@RequestParam String username) throws SQLException {
         FinderUser fU = FinderUser.getInstance();
@@ -58,6 +60,7 @@ public class UserTripController {
         return gUT;
     }
 
+    // Obté els trips d'un user
     @GetMapping("/userTrip/TripByUser")
     public ArrayList<GatewayTrip> getUserTripUSerinfo(@RequestParam String username) throws SQLException {
         FinderUser fU = FinderUser.getInstance();
@@ -75,6 +78,7 @@ public class UserTripController {
         return end;
     }
 
+    // ELIMINAR
     /**
      * @brief Funció amb metode 'GET' que retorna la informació de tots els trips a la BD
      * @return Es retorna un String amb la info dels trips

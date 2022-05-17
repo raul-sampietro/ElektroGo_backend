@@ -21,7 +21,7 @@ import java.util.ArrayList;
  * @brief La classe ChatsController és la classe que comunicarà front-end i back-end a l'hora de gestionar el chat
  */
 @RestController
-@RequestMapping("/chat")
+@RequestMapping("/chats")
 public class ChatsController {
 
     /**

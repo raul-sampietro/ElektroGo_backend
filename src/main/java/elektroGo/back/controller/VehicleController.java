@@ -34,7 +34,7 @@ import java.util.List;
  * @brief La classe VehicleController mapeja els diferents metodes http de la classe Vehicle.
  */
 @RestController
-@RequestMapping("/vehicle")
+    @RequestMapping("/vehicles")
 public class VehicleController {
 
     /**
