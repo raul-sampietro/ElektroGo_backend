@@ -488,31 +488,6 @@ paths:
                 errorExample:
                   $ref: '#/components/examples/error432'
   
-  /vehicles:
-    post:
-      tags:
-      - Vehicles
-      summary: Crea un vehicle.
-      operationId: postVehicle
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Vehicle'
-        required: true
-      responses:
-        201:
-          description: successful operation
-        435:
-          description: 'Error: Vehicle Already Exists'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResultElektroGo'
-              examples:
-                errorExample:
-                  $ref: '#/components/examples/error435'
-  
   /vehicles/{numberPlate}:
     get:
       tags:
@@ -661,8 +636,6 @@ paths:
               examples:
                 errorExample:
                   $ref: '#/components/examples/error432'
-      
-  /drivers/{username}/vehicles/{numberPlate}:
     post:
       tags:
       - Vehicles
@@ -675,12 +648,11 @@ paths:
           required: true
           schema:
             type: string
-        - name: numberPlate
-          in: path
-          description: Matrícula del vehicle
-          required: true
-          schema:
-            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vehicle'
       responses:
         201:
           description: successful operation
@@ -711,6 +683,8 @@ paths:
               examples:
                 errorExample:
                   $ref: '#/components/examples/error433'
+      
+  /drivers/{username}/vehicles/{numberPlate}:
     delete:
       tags:
       - Vehicles
