@@ -162,7 +162,7 @@ public class VehicleController {
      * @pre nPVehicle i userNDriver no son null
      * @post Elimina com a driver el driver identificat per userNDriver al vehicle identificat per nPVehicle
      */
-    @DeleteMapping("/drivers/{userDriver}/vehicles/{userDriver}")
+    @DeleteMapping("/drivers/{userDriver}/vehicles/{nPVehicle}")
     public void removeDriverVehicle(@PathVariable String nPVehicle, @PathVariable String userDriver) {
         System.out.println("\nInicianting the delete of the relation between vehicle with numberPlate '" + nPVehicle + "' and" +
                 "driver '" + userDriver + "' ...");
@@ -260,7 +260,7 @@ public class VehicleController {
 
     @GetMapping("/vehicles/notVerified")
     public ArrayList<GatewayVehicle> getNotVerified() throws SQLException {
-        System.out.println("Starting getNotVerified method...");
+        System.out.println("\nStarting getNotVerified method...");
         FinderVehicle fV = FinderVehicle.getInstance();
         ArrayList<GatewayVehicle> aL = fV.findNotVerified();
         System.out.println("Returning this vehicles... (end of method)");
