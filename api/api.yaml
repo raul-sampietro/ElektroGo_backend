@@ -794,7 +794,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ChargingStation'
-  
+
   /car-pooling:
     get:
       tags:
@@ -889,6 +889,38 @@ paths:
           description: successful operation
         404:
           description: 'Error: Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error404'
+
+  /car-pooling/{id}/users:
+    get:
+      tags:
+      - Car Pooling
+      summary: Obté tots els usuaris d'un trajecte de carpooling.
+      operationId: getCarPoolingUsers
+      parameters:
+      - name: id
+        in: path
+        description: Ordenació del llistat resultant ["asc", "desc"]
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/User'
+        404:
+          description: 'Error: Trip Not Found'
           content:
             application/json:
               schema:
