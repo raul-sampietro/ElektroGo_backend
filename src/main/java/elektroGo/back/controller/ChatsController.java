@@ -58,6 +58,17 @@ public class ChatsController {
     }
 
     /**
+     * @brief Metode 'GET' que retorna tots els missatges d'un usuari de la base de dades
+     * @param user nom de l'usuari
+     * @return Retorna el llistat de missatges de l'usuari ordenats per data
+     */
+    @GetMapping("/findByReceived")
+    public ArrayList<GatewayChats> getChatByReceived(@RequestParam String user) throws SQLException {
+        FinderChats fC = FinderChats.getInstance();
+        return fC.findByReceived(user);
+    }
+
+    /**
      * @brief Metode 'POST' que crea un missatge entre dos usuaris
      * @param sender nom de l'usuari que envia el missatge
      * @param receiver nom de l'usuari que rep el missatge
