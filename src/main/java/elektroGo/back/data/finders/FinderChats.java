@@ -125,6 +125,26 @@ public class FinderChats {
         return chats;
     }
 
+    /**
+     * @brief Funció que agafa tots els missatges que ha rebut l'usuari
+     * @param user nom de l'usuari
+     * @return Es retorna un llistat de missatges
+     */
+    public ArrayList<GatewayChats> findByReceived(String user) throws SQLException {
+        Database d = Database.getInstance();
+        Connection conn = d.getConnection();
+        PreparedStatement pS = conn.prepareStatement("" +
+                "SELECT * FROM CHATS WHERE receiver = ? " +
+                "ORDER BY sentAt;");
+        pS.setString(1,user);
+        ResultSet r = pS.executeQuery();
+        ArrayList<GatewayChats> aL = new ArrayList<>();
+        while (r.next()) {
+            aL.add(this.createGateway(r));
+        }
+        return aL;
+    }
+
 
     /**
      * @brief Crear un gateway amb els parametres passats

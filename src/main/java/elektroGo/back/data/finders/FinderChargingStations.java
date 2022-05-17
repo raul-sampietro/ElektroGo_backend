@@ -57,6 +57,18 @@ public class FinderChargingStations {
         return aL;
     }
 
+    public ArrayList<GatewayChargingStations> findSuperchargers() throws  SQLException {
+        Database d = Database.getInstance();
+        Connection conn = d.getConnection();
+        ArrayList<GatewayChargingStations> aL = new ArrayList<>();
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM CHARGINGSTATIONS WHERE tipusVelocitat = 'superRAPID';");
+        ResultSet r = pS.executeQuery();
+        while (r.next()) {
+            aL.add(createGateway(r));
+        }
+        return aL;
+    }
+
     /**
      * @brief Retorna el punt de carrega seguint l'id donat
      * @param idChargingStation id del punt de carrega
