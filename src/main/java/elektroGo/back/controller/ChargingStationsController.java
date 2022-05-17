@@ -29,7 +29,9 @@ public class ChargingStationsController {
      */
     @GetMapping("/ChargingStations")
     public ArrayList<GatewayChargingStations> getChargingStations() throws SQLException {
+        System.out.println("\nGetting all charging stations:\n");
         FinderChargingStations fCS = FinderChargingStations.getInstance();
+        System.out.println("End getChargingStations method");
         return fCS.findAll();
     }
 
