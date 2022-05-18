@@ -79,7 +79,7 @@ public class VehicleController {
      * @pre numberPlate i file no son null.
      * @post El Vehicle identificat per numberPlate te la imatge continguda a file.
      */
-    @PutMapping("/vehicles/{numberPlate}/image")
+    @PostMapping("/vehicles/{numberPlate}/image")
     public void setImage(@PathVariable String numberPlate  ,@RequestParam("image") MultipartFile file) throws IOException, SQLException {
         System.out.println("\nSetting image with original filename '" + file.getOriginalFilename() + "' with size "+ file.getSize() + " bytes");
         FinderVehicle fV = FinderVehicle.getInstance();
