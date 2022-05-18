@@ -43,7 +43,7 @@ public class VehicleController {
      * @pre gV i userNDriver no son null.
      * @post Es crea un nou Vehicle amb la informacio de gV en cas que no existeixi el vehicle i es relaciona amb el driver identificat amb userNDriver.
      */
-    @PostMapping("/drivers/{username}/vehicles")
+    @PostMapping("/drivers/{userNDriver}/vehicles")
     public void createVehicle(@RequestBody GatewayVehicle gV, @PathVariable String userNDriver) throws SQLException {
         System.out.println("\nCreating vehicle, vehicle arrived with this information:" + gV.json() + "\nAnd with username of driver " + "'" +userNDriver+"'");
         FinderDriver fD = FinderDriver.getInstance();
