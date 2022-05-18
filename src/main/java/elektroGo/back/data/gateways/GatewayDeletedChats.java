@@ -97,6 +97,11 @@ public class GatewayDeletedChats implements Gateway{
         pS.executeUpdate();
     }
 
+    /**
+     * @brief Update de l'objecte en la BD
+     * @pre Els atributs de l'objecte no son nuls
+     * @post Es fa un update en la BD amb els atributs de l'objecte
+     */
     @Override
     public void update() throws SQLException {
         // NO SE UTILIZA, NO TIENE SENTIDO (sonarcloud)
