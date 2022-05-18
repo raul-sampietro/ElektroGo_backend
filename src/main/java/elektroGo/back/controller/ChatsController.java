@@ -9,13 +9,16 @@ package elektroGo.back.controller;
 
 import elektroGo.back.data.finders.FinderChats;
 import elektroGo.back.data.gateways.GatewayChats;
+import elektroGo.back.data.gateways.GatewayDeletedChats;
+import elektroGo.back.model.DeletedChats;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 
-//todo exceptions
 
 /**
  * @brief La classe ChatsController és la classe que comunicarà front-end i back-end a l'hora de gestionar el chat
@@ -54,7 +57,11 @@ public class ChatsController {
     @GetMapping("/findByUser")
     public ArrayList<String> getChatByConversation(@RequestParam String user) throws SQLException {
         FinderChats fC = FinderChats.getInstance();
-        return fC.findByUser(user);
+        DeletedChats dCS = new DeletedChats();
+        ArrayList<String> usersChats = fC.findByUser(user);
+        ArrayList<String> deletedChats = dCS.getDeletedChatsFromUser(user);
+        usersChats.removeAll(deletedChats);
+        return usersChats;
     }
 
     /**
@@ -82,5 +89,21 @@ public class ChatsController {
         GatewayChats gC = new GatewayChats(sender, receiver, message,timestamp);
         gC.insert();
     }
+
+    /**
+     * @brief Metode 'DELETE' que crea elimina el chat entre dos usuaris
+     * @param userA Nom de l'usuari que elimina el xat
+     * @param userB Nom de l'usuari sobre el que s'elimina el xat
+     * @post El xat s'ha eliminat correctament
+     */
+    @DeleteMapping
+    public void deleteChat(@RequestParam String userA, @RequestParam String userB) throws SQLException {
+        GatewayDeletedChats gDC = new GatewayDeletedChats(userA, userB);
+        DeletedChats dCS = new DeletedChats();
+        gDC.insert();
+        dCS.deleteMessagesIfNeeded(userA, userB);
+    }
+
+
 
 }
