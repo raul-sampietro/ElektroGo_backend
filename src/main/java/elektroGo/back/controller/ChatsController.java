@@ -11,13 +11,11 @@ import elektroGo.back.data.finders.FinderChats;
 import elektroGo.back.data.gateways.GatewayChats;
 import elektroGo.back.data.gateways.GatewayDeletedChats;
 import elektroGo.back.model.DeletedChats;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collections;
 
 
 /**

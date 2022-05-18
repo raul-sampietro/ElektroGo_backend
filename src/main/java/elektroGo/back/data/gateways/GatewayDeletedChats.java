@@ -99,8 +99,15 @@ public class GatewayDeletedChats implements Gateway{
 
     @Override
     public void update() throws SQLException {
-
+        // NO SE UTILIZA, NO TIENE SENTIDO (sonarcloud)
+        Database d = Database.getInstance();
+        Connection c = d.getConnection();
+        PreparedStatement pS = c.prepareStatement("UPDATE DELETEDCHATS SET userB = ? WHERE userA = ? ;");
+        pS.setString(1, userB);
+        pS.setString(2, userA);
+        pS.executeUpdate();
     }
+
 
     /**
      * @brief Borra l'objecte de la BD
