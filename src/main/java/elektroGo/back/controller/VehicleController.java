@@ -163,7 +163,7 @@ public class VehicleController {
      * @post Elimina com a driver el driver identificat per userNDriver al vehicle identificat per nPVehicle
      */
     @DeleteMapping("/drivers/{userDriver}/vehicles/{nPVehicle}")
-    public void removeDriverVehicle(@PathVariable String nPVehicle, @PathVariable String userDriver) {
+    public void removeDriverVehicle(@PathVariable String userDriver, @PathVariable String nPVehicle) {
         System.out.println("\nInicianting the delete of the relation between vehicle with numberPlate '" + nPVehicle + "' and" +
                 "driver '" + userDriver + "' ...");
         FinderDriverVehicle fDV = FinderDriverVehicle.getInstance();
