@@ -9,6 +9,7 @@ public class CustomLogger {
     private static CustomLogger singletonObject;
 
     private CustomLogger() {
+
         logger = LoggerFactory.getLogger(CustomLogger.class);
     };
 
@@ -25,13 +26,11 @@ public class CustomLogger {
     public void log(String message, logType type) {
         switch (type) {
             case TRACE:
-                logger.trace(message);
+            case INFO:
+                logger.info(message);
                 break;
             case DEBUG:
                 logger.debug(message);
-                break;
-            case INFO:
-                logger.info(message);
                 break;
             case WARN:
                 logger.warn(message);

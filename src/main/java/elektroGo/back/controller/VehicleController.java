@@ -49,7 +49,7 @@ public class VehicleController {
      */
     @PostMapping("/drivers/{userNDriver}/vehicles")
     public void createVehicle(@RequestBody GatewayVehicle gV, @PathVariable String userNDriver) throws SQLException {
-        System.out.println("\nCreating vehicle, vehicle arrived with this information:" + gV.json() + "\nAnd with username of driver " + "'" +userNDriver+"'");
+        logger.log("\nCreating vehicle, vehicle arrived with this information:" + gV.json() + "\nAnd with username of driver " + "'" +userNDriver+"'", logType.TRACE);
         FinderDriver fD = FinderDriver.getInstance();
         FinderVehicle fV = FinderVehicle.getInstance();
         FinderDriverVehicle fDV = FinderDriverVehicle.getInstance();
@@ -57,7 +57,7 @@ public class VehicleController {
         if (fD.findByUserName(userNDriver) == null) throw new DriverNotFound(userNDriver);
         GatewayVehicle gVComp = fV.findByNumberPlate(gV.getNumberPlate());
         if (gVComp == null) {
-            System.out.println("Vehicle didn't exists ,creating new vehicle...");
+            logger.log("Vehicle didn't exists ,creating new vehicle...", logType.TRACE);
             if (gV.getVerification() == null) gV.setVerification("pending");
             gV.insert();
             logger.log("Vehicle created", logType.TRACE);
@@ -84,7 +84,7 @@ public class VehicleController {
      */
     @PostMapping("/vehicles/{numberPlate}/image")
     public void setImage(@PathVariable String numberPlate  ,@RequestParam("image") MultipartFile file) throws IOException, SQLException {
-        System.out.println("\nSetting image with original filename '" + file.getOriginalFilename() + "' with size "+ file.getSize() + " bytes");
+        logger.log("\nSetting image with original filename '" + file.getOriginalFilename() + "' with size "+ file.getSize() + " bytes", logType.TRACE);
         FinderVehicle fV = FinderVehicle.getInstance();
         GatewayVehicle gV = fV.findByNumberPlate(numberPlate);
         if (gV == null) throw new VehicleNotFound(numberPlate);
@@ -118,19 +118,22 @@ public class VehicleController {
      */
     //@GetMapping("/readVehicles")
     public List<GatewayVehicle> readVehiclesUser(String userName) throws SQLException {
-        System.out.println("\nStarting readVehicles method with userName '" + userName + "' ...");
+        logger.log("\nStarting readVehicles method with userName '" + userName + "' ...", logType.TRACE);
         FinderDriverVehicle fDV = FinderDriverVehicle.getInstance();
-        logger.log("Returning the vehicles... (End of method)", logType.TRACE);
-        return fDV.findVehiclesByUser(userName);
+        final List <GatewayVehicle> l = fDV.findVehiclesByUser(userName);
+        String log = "Returning the vehicles... (End of method)\n";
+        for (GatewayVehicle gV: l ) log += gV + "\n";
+        logger.log(log + "End of method", logType.TRACE);
+        return l;
     }
 
     public List<GatewayVehicle> readAllVehicles() throws SQLException {
-        System.out.println("\nStartin readAllVehicles method...");
+        logger.log("\nStarting readAllVehicles method...", logType.TRACE);
         FinderVehicle fV = FinderVehicle.getInstance();
         ArrayList<GatewayVehicle> aL = fV.findAll();
-        System.out.println("Returning this vehicles...");
-        for (GatewayVehicle gV : aL) System.out.println(gV.json());
-        System.out.println("End of method");
+        String log = "Returning this vehicles:\n";
+        for (GatewayVehicle gV : aL) log += gV.json() + "\n";
+        logger.log(log + "End of method", logType.TRACE);
         return aL;
     }
 
@@ -148,7 +151,7 @@ public class VehicleController {
      */
     @GetMapping("/vehicles/{numberPlate}/image")
     public void getImage(HttpServletResponse response, @PathVariable String numberPlate) throws IOException, SQLException {
-        System.out.println("\nStarting getImage method");
+        logger.log("\nStarting getImage method", logType.TRACE);
         FinderVehicle fV = FinderVehicle.getInstance();
         GatewayVehicle gV = fV.findByNumberPlate(numberPlate);
         if (gV == null) throw new VehicleNotFound(numberPlate);
@@ -167,8 +170,8 @@ public class VehicleController {
      */
     @DeleteMapping("/drivers/{userDriver}/vehicles/{nPVehicle}")
     public void removeDriverVehicle(@PathVariable String userDriver, @PathVariable String nPVehicle) {
-        System.out.println("\nInicianting the delete of the relation between vehicle with numberPlate '" + nPVehicle + "' and" +
-                "driver '" + userDriver + "' ...");
+        logger.log("\nInicianting the delete of the relation between vehicle with numberPlate '" + nPVehicle + "' and" +
+                "driver '" + userDriver + "' ...", logType.TRACE);
         FinderDriverVehicle fDV = FinderDriverVehicle.getInstance();
         FinderVehicle fV = FinderVehicle.getInstance();
         FinderDriver fD = FinderDriver.getInstance();
@@ -208,11 +211,11 @@ public class VehicleController {
      */
     @GetMapping("/vehicles/{numberPlate}")
     public GatewayVehicle readVehicle(@PathVariable String numberPlate) throws SQLException {
-        System.out.println("\nStarting readVehicle method with numberPlate '" + numberPlate + "' ...");
+        logger.log("\nStarting readVehicle method with numberPlate '" + numberPlate + "' ...", logType.TRACE);
         FinderVehicle fV = FinderVehicle.getInstance();
         GatewayVehicle gV = fV.findByNumberPlate(numberPlate);
         if (gV == null) throw new VehicleNotFound(numberPlate);
-        logger.log("Returning the vehicle (end of method)", logType.TRACE);
+        logger.log("Returning the vehicle " + gV.json() +"\nEnd of method", logType.TRACE);
         return gV;
     }
 
@@ -224,8 +227,8 @@ public class VehicleController {
      */
     @DeleteMapping("/vehicles/{numberPlate}")
     public void deleteVehicle(@PathVariable String numberPlate) {
-        System.out.println("\nStarting deleteVehicle method...");
-        System.out.println("Vehicle that will be deleted is identified by " + numberPlate);
+        logger.log("\nStarting deleteVehicle method...", logType.TRACE);
+        logger.log("Vehicle that will be deleted is identified by " + numberPlate, logType.TRACE);
         FinderVehicle fV = FinderVehicle.getInstance();
         try {
             GatewayVehicle gV = fV.findByNumberPlate(numberPlate);
@@ -236,8 +239,8 @@ public class VehicleController {
                 logger.log("Deleting image of the vehicle...", logType.TRACE);
                 File fileToDelete = new File("../Images/vehicle-images/" + gV.getImageId());
                 boolean success = fileToDelete.delete();
-                if (success) System.out.println("File was removed successfully");
-                else System.out.println("WARNING: File couldn't be removed");
+                if (success) logger.log("File was removed successfully", logType.TRACE);
+                else logger.log("WARNING: File couldn't be removed", logType.TRACE);
                 if (success) logger.log("File was removed succesfully", logType.TRACE);
                 else logger.log("WARNING: File couldn't be removed", logType.TRACE);
                 gV.remove();
@@ -251,25 +254,26 @@ public class VehicleController {
 
     @PutMapping("/vehicles/verify/{numberPlate}")
     public void verifyVehicle(@PathVariable String numberPlate) throws SQLException {
-        System.out.println("\nStarting verifyVehicle method with vehicle = '" + numberPlate + "' ...");
+        logger.log("\nStarting verifyVehicle method with vehicle = '" + numberPlate + "' ...", logType.TRACE);
         FinderVehicle fV = FinderVehicle.getInstance();
         GatewayVehicle gV = fV.findByNumberPlate(numberPlate);
         if (gV == null) throw new VehicleNotFound(numberPlate);
-        System.out.println("Actual state of verification attribute is " + gV.getVerification());
+        logger.log("Actual state of verification attribute is " + gV.getVerification(), logType.TRACE);
         gV.verify();
         gV.update();
         gV = fV.findByNumberPlate(numberPlate);
-        System.out.println("Now, the vehicle has this attributes (end of method)");
-        System.out.println(gV.json());
+        logger.log("Now, the vehicle has this attributes (end of method)", logType.TRACE);
+        logger.log(gV.json(), logType.TRACE);
     }
 
     @GetMapping("/vehicles/notVerified")
     public ArrayList<GatewayVehicle> getNotVerified() throws SQLException {
-        System.out.println("\nStarting getNotVerified method...");
+        logger.log("\nStarting getNotVerified method...", logType.TRACE);
         FinderVehicle fV = FinderVehicle.getInstance();
         ArrayList<GatewayVehicle> aL = fV.findNotVerified();
-        System.out.println("Returning this vehicles... (end of method)");
-        for (GatewayVehicle gV : aL) System.out.println(gV.json());
+        String log = "Returning this vehicles:\n";
+        for (GatewayVehicle gV : aL) log += gV.json() + "\n";
+        logger.log(log + "End of method", logType.TRACE);
         return aL;
     }
 
