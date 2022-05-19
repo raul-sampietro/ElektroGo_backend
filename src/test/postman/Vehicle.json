@@ -23,14 +23,13 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/vehicle/create?userNDriver=Test",
+							"raw": "localhost:8080/vehicles?userNDriver=Test",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"vehicle",
-								"create"
+								"vehicles"
 							],
 							"query": [
 								{
@@ -45,10 +44,68 @@
 				{
 					"name": "setImageTestNP",
 					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/Dan-p/Pictures/Atenea Campus/upc_-_forum_fib_-_visiona.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/vehicles/testNP/image?numberPlate=testNP",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicles",
+								"testNP",
+								"image"
+							],
+							"query": [
+								{
+									"key": "numberPlate",
+									"value": "testNP"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createVehicleTestNP2",
+					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"brand\": \"test\",\r\n    \"model\": \"test\",\r\n    \"numberPlate\": \"testNP2\",\r\n    \"drivingRange\": 144,\r\n    \"fabricationYear\": 2010,\r\n    \"seats\": 4,\r\n    \"imageId\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": ""
+							"raw": "localhost:8080/vehicles?userNDriver=Test",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicles"
+							],
+							"query": [
+								{
+									"key": "userNDriver",
+									"value": "Test"
+								}
+							]
 						}
 					},
 					"response": []
@@ -62,7 +119,19 @@
 					"name": "getImageTestNP",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/vehicles/testNP/image",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicles",
+								"testNP",
+								"image"
+							]
+						}
 					},
 					"response": []
 				},
@@ -70,7 +139,61 @@
 					"name": "getVehicleTestNP",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/vehicles/testNP",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicles",
+								"testNP"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getVehicles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/vehicles",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicles"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Verification",
+			"item": [
+				{
+					"name": "VerifyTestNP",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/vehicles/verify/1113AGH",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicles",
+								"verify",
+								"1113AGH"
+							]
+						}
 					},
 					"response": []
 				}
@@ -82,8 +205,38 @@
 				{
 					"name": "removeTestNP",
 					"request": {
-						"method": "GET",
-						"header": []
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/vehicles/testNP",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicles",
+								"testNP"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "removeTestNP2",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/vehicles/testNP2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vehicles",
+								"testNP2"
+							]
+						}
 					},
 					"response": []
 				}
