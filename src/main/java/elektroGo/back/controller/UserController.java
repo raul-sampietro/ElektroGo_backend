@@ -11,9 +11,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import elektroGo.back.data.finders.FinderRating;
 import elektroGo.back.data.finders.FinderReport;
 import elektroGo.back.data.finders.FinderUser;
+import elektroGo.back.data.finders.FinderUserTrip;
 import elektroGo.back.data.gateways.GatewayRating;
 import elektroGo.back.data.gateways.GatewayReport;
 import elektroGo.back.data.gateways.GatewayUser;
+import elektroGo.back.data.gateways.GatewayUserTrip;
 import elektroGo.back.exceptions.RatingNotFound;
 import elektroGo.back.exceptions.ReportNotFound;
 import elektroGo.back.exceptions.UserAlreadyExists;
@@ -272,4 +274,12 @@ public class UserController {
         logger.log(log + "End of method", logType.TRACE);
         return fR.findAll();
     }
+
+    @GetMapping("/users/trips/{id}")
+    public List<GatewayUserTrip> getTripParticipants(@PathVariable Integer id) throws SQLException {
+        logger.log("\nStarting getting Trip Participants...", logType.TRACE);
+        FinderUserTrip fU = FinderUserTrip.getInstance();
+        return fU.findByTrip(id);
+    }
+
 }
