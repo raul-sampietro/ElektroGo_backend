@@ -8,6 +8,8 @@
 package elektroGo.back.controller;
 
 import elektroGo.back.exceptions.*;
+import elektroGo.back.logs.CustomLogger;
+import elektroGo.back.logs.logType;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.servlet.http.HttpServletResponse;
@@ -26,12 +28,13 @@ public class RestControllerAdvice {
      * @post Envia l'error http corresponent al client
      */
     private String handleError(RuntimeException ex, HttpServletResponse response, int httpCode) {
+        CustomLogger logger = CustomLogger.getInstance();
         try {
             response.sendError(httpCode, ex.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(ex.getClass().getCanonicalName() + ": " + ex.getMessage());
+        logger.log(ex.getClass().getCanonicalName() + ": " + ex.getMessage(), logType.ERROR);
         return ex.getMessage();
     }
 

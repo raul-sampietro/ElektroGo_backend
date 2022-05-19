@@ -6,6 +6,9 @@
  */
 
 package elektroGo.back.data;
+import elektroGo.back.logs.CustomLogger;
+import elektroGo.back.logs.logType;
+
 import java.sql.*;
 
 /**
@@ -26,14 +29,16 @@ public class Database {
      * @post Crea un objecte Database i estableix connexio amb la BD
      */
     private Database() {
+        CustomLogger logger = CustomLogger.getInstance();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:mysql://10.4.41.58/elektrogo",
                     "test", "test");
             boolean valid = conn.isValid(50000);
-            System.out.println(valid ? "Connection established" : "Connection failed");
+            if (valid) logger.log("Connection established" , logType.TRACE);
+            else logger.log("Connection established", logType.ERROR);
         } catch (Exception ex) {
-            System.out.println("Error: " + ex);
+            logger.log("Error: " + ex, logType.ERROR);
         }
     }
     /**
