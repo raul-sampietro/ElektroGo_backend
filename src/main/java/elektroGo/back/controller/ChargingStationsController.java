@@ -25,7 +25,7 @@ import java.util.ArrayList;
 @RestController
 public class ChargingStationsController {
 
-    private CustomLogger logger = CustomLogger.getInstance();
+    private final CustomLogger logger = CustomLogger.getInstance();
     /**
      * @brief Metode 'GET' que retorna totes les estacions de càrrega de la base de dades
      * @return Retorna un array amb la informació de tots els punts de càrrega

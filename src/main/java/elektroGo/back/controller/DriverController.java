@@ -28,7 +28,7 @@ import java.util.ArrayList;
 @RestController
 public class DriverController {
 
-    CustomLogger logger = CustomLogger.getInstance();
+    private final CustomLogger logger = CustomLogger.getInstance();
 
     /**
      * @brief Funció amb metode 'GET' que retorna la informació del driver amb el username corresponen
@@ -37,9 +37,11 @@ public class DriverController {
      */
     @GetMapping("/driver")
     public String getDriver(@RequestParam String userName) throws SQLException {
+        logger.log("Starting getDriver method with username '" + userName + "'...", logType.TRACE);
         FinderDriver fU = FinderDriver.getInstance();
         GatewayDriver gU = fU.findByUserName(userName);
         if(gU == null)throw new DriverNotFound(userName);
+        logger.log("Returning this driver:  " + gU.json() + " end of method", logType.TRACE);
         return gU.json();
     }
 

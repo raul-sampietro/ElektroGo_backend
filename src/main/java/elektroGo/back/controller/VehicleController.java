@@ -13,6 +13,8 @@ import elektroGo.back.data.finders.FinderVehicle;
 import elektroGo.back.data.gateways.GatewayDriverVehicle;
 import elektroGo.back.data.gateways.GatewayVehicle;
 import elektroGo.back.exceptions.*;
+import elektroGo.back.logs.CustomLogger;
+import elektroGo.back.logs.logType;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
@@ -37,6 +39,8 @@ import java.util.List;
 @RequestMapping("/vehicle")
 public class VehicleController {
 
+    private final CustomLogger logger = CustomLogger.getInstance();
+
     /**
      * @brief Metode per crear un Vehicle donat un json amb la informacio del vehicle excepte la imatge.
      * @param gV Objecte amb la informacio del vehicle.
@@ -46,7 +50,7 @@ public class VehicleController {
      */
     @PostMapping("/create")
     public void createVehicle(@RequestBody GatewayVehicle gV, @RequestParam String userNDriver) throws SQLException {
-        logger.log("\nCreating vehicle, vehicle arrived with this information:" + gV.json() + "\nAnd with username of driver " + "'" +userNDriver+"'");
+        logger.log("\nCreating vehicle, vehicle arrived with this information:" + gV.json() + "\nAnd with username of driver " + "'" +userNDriver+"'", logType.TRACE);
         FinderDriver fD = FinderDriver.getInstance();
         FinderVehicle fV = FinderVehicle.getInstance();
         FinderDriverVehicle fDV = FinderDriverVehicle.getInstance();
@@ -54,9 +58,9 @@ public class VehicleController {
         if (fD.findByUserName(userNDriver) == null) throw new DriverNotFound(userNDriver);
         GatewayVehicle gVComp = fV.findByNumberPlate(gV.getNumberPlate());
         if (gVComp == null) {
-            logger.log("Vehicle didn't exists ,creating new vehicle...");
+            logger.log("Vehicle didn't exists ,creating new vehicle...", logType.TRACE);
             gV.insert();
-            logger.log("Vehicle created");
+            logger.log("Vehicle created", logType.TRACE);
         }
         else {
             //Set gateway ImageId to null so json method of both gateways should return the same String
@@ -65,11 +69,10 @@ public class VehicleController {
             if (!gV.json().equals(gVComp.json())) throw new WrongVehicleInfo(gV.getNumberPlate());
         }
         logger.log("Creating new relation with the vehicle identified by numberPlate = "+ gV.getNumberPlate() +
-                " and driver identified by username = " + userNDriver);
+                " and driver identified by username = " + userNDriver, logType.TRACE);
         GatewayDriverVehicle gDV = new GatewayDriverVehicle(gV.getNumberPlate(), userNDriver);
         gDV.insert();
-        logger.log("Relation inserted");
-        logger.log("End creation vehicle method");
+        logger.log("Relation inserted\nEnd creation vehicle method", logType.TRACE);
     }
 
     /**
@@ -81,29 +84,29 @@ public class VehicleController {
      */
     @PostMapping("/setImage")
     public void setImage(@RequestParam String numberPlate  ,@RequestParam("image") MultipartFile file) throws IOException, SQLException {
-        logger.log("\nSetting image with original filename '" + file.getOriginalFilename() + "' with size "+ file.getSize() + " bytes");
+        logger.log("\nSetting image with original filename '" + file.getOriginalFilename() + "' with size "+ file.getSize() + " bytes", logType.TRACE);
         FinderVehicle fV = FinderVehicle.getInstance();
         GatewayVehicle gV = fV.findByNumberPlate(numberPlate);
         if (gV == null) throw new VehicleNotFound(numberPlate);
         String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
         String fileName = numberPlate+"."+extension;
-        logger.log("New filename = " + fileName);
+        logger.log("New filename = " + fileName, logType.TRACE);
         gV.setImageId(fileName);
         gV.update();
-        logger.log("Filename settled in Database");
+        logger.log("Filename settled in Database", logType.TRACE);
         Path uploadPath = Paths.get("../Images/vehicle-images/");
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
-        else logger.log("WARNING: file with same filename already exists");
+        else logger.log("WARNING: file with same filename already exists", logType.TRACE);
         try (InputStream inputStream = file.getInputStream()) {
             Path filePath = uploadPath.resolve(fileName);
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-            logger.log("File saved correctly");
+            logger.log("File saved correctly", logType.TRACE);
         } catch (IOException ioe) {
             throw new IOException("Could not save image file: " + fileName, ioe);
         }
-        logger.log("End setting image");
+        logger.log("End setting image", logType.TRACE);
 
     }
 
@@ -115,9 +118,9 @@ public class VehicleController {
      */
     @GetMapping("/readVehicles")
     public List<GatewayVehicle> readVehicles(@RequestParam String userName) throws SQLException {
-        logger.log("\nStarting readVehicles method with userName '" + userName + "' ...");
+        logger.log("\nStarting readVehicles method with userName '" + userName + "' ...", logType.TRACE);
         FinderDriverVehicle fDV = FinderDriverVehicle.getInstance();
-        logger.log("Returning the vehicles... (End of method)");
+        logger.log("Returning the vehicles... (End of method)", logType.TRACE);
         return fDV.findVehiclesByUser(userName);
     }
 
@@ -130,14 +133,14 @@ public class VehicleController {
      */
     @GetMapping("/getImage")
     public void getImage(HttpServletResponse response, @RequestParam String numberPlate) throws IOException, SQLException {
-        logger.log("\nStarting getImage method");
+        logger.log("\nStarting getImage method", logType.TRACE);
         FinderVehicle fV = FinderVehicle.getInstance();
         GatewayVehicle gV = fV.findByNumberPlate(numberPlate);
         if (gV == null) throw new VehicleNotFound(numberPlate);
         InputStream in = new BufferedInputStream(new FileInputStream("../Images/vehicle-images/" + gV.getImageId()));
         response.setContentType(MediaType.IMAGE_PNG_VALUE);
         IOUtils.copy(in, response.getOutputStream());
-        logger.log("getImage method ended.");
+        logger.log("getImage method ended.", logType.TRACE);
     }
 
     /**
@@ -149,7 +152,7 @@ public class VehicleController {
      */
     @PostMapping("/addDriverVehicle")
     public void addDriverVehicle(@RequestParam String nPVehicle, @RequestParam String userDriver) throws SQLException {
-        logger.log("\nStarting addDriverVehicle method...");
+        logger.log("\nStarting addDriverVehicle method...", logType.TRACE);
         GatewayDriverVehicle gDV = new GatewayDriverVehicle(nPVehicle,userDriver);
         FinderDriverVehicle fDV = FinderDriverVehicle.getInstance();
         FinderVehicle fV = FinderVehicle.getInstance();
@@ -158,7 +161,7 @@ public class VehicleController {
         if (fD.findByUserName(userDriver) == null) throw new DriverNotFound(userDriver);
         if (fDV.findByNumberPlateDriver(userDriver, nPVehicle) != null) throw new DriverVehicleAlreadyExists(userDriver, nPVehicle);
         gDV.insert();
-        logger.log("addDriverVehicle method ended");
+        logger.log("addDriverVehicle method ended", logType.TRACE);
     }
 
     /**
@@ -171,7 +174,7 @@ public class VehicleController {
     @PostMapping("/deleteDriverVehicle")
     public void removeDriverVehicle(@RequestParam String nPVehicle, @RequestParam String userDriver) {
         logger.log("\nInicianting the delete of the relation between vehicle with numberPlate '" + nPVehicle + "' and" +
-                "driver '" + userDriver + "' ...");
+                "driver '" + userDriver + "' ...", logType.TRACE);
         FinderDriverVehicle fDV = FinderDriverVehicle.getInstance();
         FinderVehicle fV = FinderVehicle.getInstance();
         FinderDriver fD = FinderDriver.getInstance();
@@ -180,26 +183,26 @@ public class VehicleController {
             if (fD.findByUserName(userDriver) == null) throw new DriverNotFound(userDriver);
             GatewayDriverVehicle gDV = fDV.findByNumberPlateDriver(userDriver, nPVehicle);
             if ( gDV != null) {
-                logger.log("Removing the relation mentioned before...");
+                logger.log("Removing the relation mentioned before...", logType.TRACE);
                 gDV.remove();
-                logger.log("Relation removed");
+                logger.log("Relation removed", logType.TRACE);
                 if (fDV.findByNumberPlateV(nPVehicle).isEmpty() ) {
-                    logger.log("Found that that relation was the last with the vehicle with number plate '" + nPVehicle);
-                    logger.log("Deleting that vehicle...");
+                    logger.log("Found that that relation was the last with the vehicle with number plate '" + nPVehicle, logType.TRACE);
+                    logger.log("Deleting that vehicle...", logType.TRACE);
                     GatewayVehicle gV = fV.findByNumberPlate(nPVehicle);
                     File fileToDelete = new File("../Images/vehicle-images/" + gV.getImageId());
                     boolean success = fileToDelete.delete();
-                    if (success) logger.log("File was removed succesfully");
-                    else logger.log("WARNING: File couldn't be removed");
+                    if (success) logger.log("File was removed succesfully", logType.TRACE);
+                    else logger.log("WARNING: File couldn't be removed", logType.WARN);
                     gV.remove();
-                    logger.log("Vehicle removed.");
+                    logger.log("Vehicle removed.", logType.TRACE);
                 }
             }
             else throw new DriverVehicleNotFound(userDriver,nPVehicle);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        logger.log("removeDriverVehicle method ended");
+        logger.log("removeDriverVehicle method ended", logType.TRACE);
 
     }
 
@@ -211,11 +214,11 @@ public class VehicleController {
      */
     @GetMapping("/read")
     public GatewayVehicle readVehicle(@RequestParam String numberPlate) throws SQLException {
-        logger.log("\nStarting readVehicle method with numberPlate '" + numberPlate + "' ...");
+        logger.log("\nStarting readVehicle method with numberPlate '" + numberPlate + "' ...", logType.TRACE);
         FinderVehicle fV = FinderVehicle.getInstance();
         GatewayVehicle gV = fV.findByNumberPlate(numberPlate);
         if (gV == null) throw new VehicleNotFound(numberPlate);
-        logger.log("Returning the vehicle (end of method)");
+        logger.log("Returning the vehicle (end of method)", logType.TRACE);
         return gV;
     }
 
@@ -227,8 +230,8 @@ public class VehicleController {
      */
     @PostMapping("/delete")
     public void deleteVehicle(@RequestParam String numberPlate) {
-        logger.log("\nIntiating deleteVehicle method...");
-        logger.log("Vehicle that will be deleted is identified by " + numberPlate);
+        logger.log("\nIntiating deleteVehicle method...", logType.TRACE);
+        logger.log("Vehicle that will be deleted is identified by " + numberPlate, logType.TRACE);
         FinderVehicle fV = FinderVehicle.getInstance();
         try {
             GatewayVehicle gV = fV.findByNumberPlate(numberPlate);
@@ -236,18 +239,18 @@ public class VehicleController {
                 FinderDriverVehicle fDV = FinderDriverVehicle.getInstance();
                 ArrayList<GatewayDriverVehicle> aL = fDV.findByNumberPlateV(numberPlate);
                 for (GatewayDriverVehicle gDV : aL) gDV.remove();
-                logger.log("Deleting image of the vehicle...");
+                logger.log("Deleting image of the vehicle...", logType.TRACE);
                 File fileToDelete = new File("../Images/vehicle-images/" + gV.getImageId());
                 boolean success = fileToDelete.delete();
-                if (success) logger.log("File was removed succesfully");
-                else logger.log("WARNING: File couldn't be removed");
+                if (success) logger.log("File was removed succesfully", logType.TRACE);
+                else logger.log("WARNING: File couldn't be removed", logType.TRACE);
                 gV.remove();
             }
             else throw new VehicleNotFound(numberPlate);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        logger.log("End of method deleteVehicle.");
+        logger.log("End of method deleteVehicle.", logType.TRACE);
     }
 
 

@@ -33,7 +33,7 @@ import static java.lang.Math.cos;
 @RestController
 public class TripController {
     String password = "34ee7e6c4c51e43ed6a7767bc717a7f9127d3d0025a0efbf6af124d15821c6ec";
-    CustomLogger logger = CustomLogger.getInstance();
+    private final CustomLogger logger = CustomLogger.getInstance();
 
     /**
      * @brief Funció amb metode 'GET' que retorna la informació del trip amb el id corresponen
@@ -42,9 +42,11 @@ public class TripController {
      */
     @GetMapping("/car-pooling")
     public GatewayTrip getTrip(@RequestParam Integer id) throws SQLException {
+        logger.log("Starting getTrip method with id = " + id + "...", logType.TRACE);
         FinderTrip fT = FinderTrip.getInstance();
         GatewayTrip gT = fT.findById(id);
         if(gT == null)throw new TripNotFound(id);
+        logger.log("Returning this trip:  " + gT.json(), logType.TRACE);
         return gT;
     }
     /**
@@ -56,6 +58,9 @@ public class TripController {
                                                    @RequestParam BigDecimal LatD, @RequestParam BigDecimal LongD,
                                                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate sDate, Time sTimeMin,
                                                    Time sTimeMax) throws SQLException {
+        logger.log("Starting getTripSelection method with this parameters: " + "\n" +
+                "LatO = "+ LatO + ", LongO = " + LongO + "LatD = " + LatD + ", LongD = " + LongD + "sDate = " + sDate +
+                ", sTimeMin = " + sTimeMin + "and sTimeMax = " + sTimeMax, logType.TRACE);
         FinderTrip fT = FinderTrip.getInstance();
         ArrayList<GatewayTrip> gT;
         BigDecimal a = new BigDecimal("0.05");
@@ -88,6 +93,11 @@ public class TripController {
             }
         }
         if(gT == null)throw new TripNotFound();
+
+        String log = "Returning this trips: \n";
+        for (GatewayTrip gatTrip : gT) log += gatTrip.json() + "\n";
+        logger.log(log + "End of method", logType.TRACE);
+
         return gT;
     }
 
@@ -97,9 +107,14 @@ public class TripController {
      */
     @GetMapping("/car-poolings")
     public ArrayList<GatewayTrip> getTrips() throws SQLException, JsonProcessingException {
+        logger.log("Starting getTrips method...", logType.TRACE);
         FinderTrip fT = FinderTrip.getInstance();
         if(fT.findAll()==null)throw new TripNotFound();
-        return fT.findAll();
+        String log = "Returning this trips: \n";
+        ArrayList<GatewayTrip> aL = fT.findAll();
+        for (GatewayTrip gT : aL)  log += gT.json() + "\n";
+        logger.log(log + "End of method", logType.TRACE);
+        return aL;
     }
 
     /**
@@ -111,6 +126,9 @@ public class TripController {
         FinderTrip fT = FinderTrip.getInstance();
         ArrayList<GatewayTrip> all = fT.findOrdered();
         if(all ==null)throw new TripNotFound();
+        String log = "Returning this trips: \n";
+        for (GatewayTrip gT : all)  log += gT.json() + "\n";
+        logger.log(log + "End of method", logType.TRACE);
         return all;
     }
 
@@ -122,14 +140,14 @@ public class TripController {
      */
     @PostMapping("/car-pooling/create")
     public void createTrip(@RequestBody GatewayTrip gT) throws SQLException {
-        logger.log(gT.json(), logType.TRACE);
-        logger.log(gT.getOfferedSeats() + "", logType.TRACE);
+        logger.log("Starting createTrip method with this trip:\n" + gT.json(), logType.TRACE);
         FinderTrip fT = FinderTrip.getInstance();
         if (fT.findByUser(gT.getUsername(),gT.getStartDate(),gT.getStartTime()) != null) throw new TripAlreadyExists(gT.getUsername());
         gT.insert();
         GatewayTrip gNew = fT.findByUser(gT.getUsername(),gT.getStartDate(),gT.getStartTime());
         GatewayUserTrip gU = new GatewayUserTrip(gNew.getId(),gNew.getUsername());
         gU.insert();
+        logger.log("Inserted the last trip written and this gatewayUserTrip:\n" + gU.json(),logType.TRACE);
     }
     /**
      * @brief Funció amb metode 'POST' que demana que s'esborri un Trip de la BD
@@ -139,11 +157,13 @@ public class TripController {
 
     @PostMapping("/car-pooling/delete")
     public void deleteTrip(@RequestParam Integer id) {
+        logger.log("Starting deleteTrip method with id = " + id, logType.TRACE);
         FinderTrip fU = FinderTrip.getInstance();
         try {
             GatewayTrip gU = fU.findById(id);
             if (gU != null) gU.remove();
             else throw new TripNotFound(id);
+            logger.log("Removed succesfully the trip written before, end of method", logType.TRACE);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -151,6 +171,9 @@ public class TripController {
 
     @GetMapping("/car-pooling/byCoord")
     public ArrayList<GatewayTrip> getTripByCord(@RequestParam BigDecimal latitude, @RequestParam BigDecimal longitude, @RequestParam BigDecimal Radi,  @RequestParam String key) throws SQLException {
+        logger.log("This is an external API method", logType.INFO);
+        logger.log("Starting getTripByCoord method with this parameters: \n" +
+                "latitude = " + latitude + ", longitude = " + longitude + ", radi = " + Radi + "key = " + key, logType.TRACE);
         logger.log("\nStarting getTripByCord method..." , logType.TRACE);
         if(!Objects.equals(key, password))throw new InvalidKey();
         FinderTrip fT = FinderTrip.getInstance();
@@ -159,9 +182,10 @@ public class TripController {
         BigDecimal radiLong = BigDecimal.valueOf(Radi.doubleValue()/(111.320*cos(latitude.doubleValue()))).abs();
         logger.log(radiLong + "", logType.TRACE);
         ArrayList<GatewayTrip> corT = fT.findByCoordinates(latitude.subtract(radiLat),latitude.add(radiLat),longitude.subtract(radiLong), longitude.add(radiLong));
-        logger.log("Returning this coords:", logType.TRACE);
-        for (GatewayTrip gT : corT) logger.log(gT.json(), logType.TRACE);
         if (corT.size() == 0) throw new TripNotFound();
+        String log = "Returning this coords\n";
+        for (GatewayTrip gT : corT) log += gT.json() + "\n";
+        logger.log(log, logType.TRACE);
         return corT;
     }
 

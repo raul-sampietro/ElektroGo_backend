@@ -15,6 +15,8 @@ import elektroGo.back.data.finders.FinderVehicle;
 import elektroGo.back.data.gateways.GatewayChats;
 import elektroGo.back.data.gateways.GatewayDriver;
 import elektroGo.back.data.gateways.GatewayVehicle;
+import elektroGo.back.logs.CustomLogger;
+import elektroGo.back.logs.logType;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -30,6 +32,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @SpringBootTest
 public class ChatTest {
 
+    CustomLogger logger = CustomLogger.getInstance();
+
     private GatewayChats insertChat() throws SQLException {
         GatewayChats gC = new GatewayChats("Test", "Test2", "message", "timestamp");
         gC.insert();
@@ -41,7 +45,7 @@ public class ChatTest {
         Database d = Database.getInstance();
         GatewayChats gC =  insertChat();
         FinderChats fC = FinderChats.getInstance();
-        logger.log(gC.getSender() + " " + gC.getReceiver() + " " + gC.getMessage());
+        logger.log(gC.getSender() + " " + gC.getReceiver() + " " + gC.getMessage(), logType.TRACE);
         GatewayChats gCTest = fC.findByMessage(gC.getSender(), gC.getReceiver(), gC.getMessage());
         String res = gCTest.getSender() + " " + gCTest.getReceiver() + " " + gCTest.getMessage() + " " + gCTest.getSentAt();
         gC.remove();
