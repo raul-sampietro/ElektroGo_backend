@@ -122,7 +122,7 @@ public class VehicleController {
         FinderDriverVehicle fDV = FinderDriverVehicle.getInstance();
         final List <GatewayVehicle> l = fDV.findVehiclesByUser(userName);
         String log = "Returning the vehicles... (End of method)\n";
-        for (GatewayVehicle gV: l ) log += gV + "\n";
+        for (GatewayVehicle gV: l ) log += gV.json() + "\n";
         logger.log(log + "End of method", logType.TRACE);
         return l;
     }
