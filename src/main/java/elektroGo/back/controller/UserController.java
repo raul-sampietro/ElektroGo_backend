@@ -18,6 +18,8 @@ import elektroGo.back.exceptions.RatingNotFound;
 import elektroGo.back.exceptions.ReportNotFound;
 import elektroGo.back.exceptions.UserAlreadyExists;
 import elektroGo.back.exceptions.UserNotFound;
+import elektroGo.back.logs.CustomLogger;
+import elektroGo.back.logs.logType;
 import elektroGo.back.model.avgRate;
 import org.springframework.web.bind.annotation.*;
 import java.sql.SQLException;
@@ -29,6 +31,8 @@ import java.util.List;
  */
 @RestController
 public class UserController {
+
+    CustomLogger logger = CustomLogger.getInstance();
 
     /**
      * @brief Funció amb metode 'GET' que retorna la informació del user amb el username corresponen
@@ -72,11 +76,11 @@ public class UserController {
      */
     @PostMapping("/users/create")
     public void createUser(@RequestBody GatewayUser gU) throws SQLException {
-        System.out.println("\nStarting createUser method with username " + gU.getUsername() + " ...");
+        logger.log("\nStarting createUser method with username " + gU.getUsername() + " ...", logType.TRACE);
         FinderUser fU = FinderUser.getInstance();
         if (fU.findByUsername(gU.getUsername()) != null) throw new UserAlreadyExists(gU.getUsername());
         gU.insert();
-        System.out.println("User inserted (End of method)");
+        logger.log("User inserted (End of method)", logType.TRACE);
     }
 
     /**
@@ -103,13 +107,13 @@ public class UserController {
      */
     @GetMapping("/users/ratings")
     public List<GatewayRating> getRatingsUser(@RequestParam String userName) throws SQLException {
-        System.out.println("\nStarting getRatingsUser method with userName '" + userName + "'...");
+        logger.log("\nStarting getRatingsUser method with userName '" + userName + "'...", logType.TRACE);
         FinderUser fU = FinderUser.getInstance();
         if (fU.findByUsername(userName) == null) throw new UserNotFound(userName);
         FinderRating fR = FinderRating.getInstance();
         List<GatewayRating> l = fR.findByUserWhoRates(userName);
-        System.out.println("Returning this ratings:");
-        for (GatewayRating g : l) System.out.println(g.json());
+        logger.log("Returning this ratings:", logType.TRACE);
+        for (GatewayRating g : l) logger.log(g.json(), logType.TRACE);
         return fR.findByUserWhoRates(userName);
     }
 
@@ -120,13 +124,13 @@ public class UserController {
      */
     @GetMapping("/users/rated")
     public List<GatewayRating> getRated(@RequestParam String userName) throws SQLException {
-        System.out.println("\nStarting getRated method with userName '" + userName + "'...");
+        logger.log("\nStarting getRated method with userName '" + userName + "'...", logType.TRACE);
         FinderUser fU = FinderUser.getInstance();
         if (fU.findByUsername(userName) == null) throw new UserNotFound(userName);
         FinderRating fR = FinderRating.getInstance();
         List<GatewayRating> l = fR.findByRatedUser(userName);
-        System.out.println("Returning this ratings:");
-        for (GatewayRating g : l) System.out.println(g.json());
+        logger.log("Returning this ratings:", logType.TRACE);
+        for (GatewayRating g : l) logger.log(g.json(), logType.TRACE);
         return fR.findByRatedUser(userName);
     }
 
@@ -137,24 +141,24 @@ public class UserController {
      */
     @PostMapping("/users/rate")
     public void rateUser(@RequestBody GatewayRating gR) throws SQLException {
-        System.out.println("\nStarting rateUser method with this rating:");
-        System.out.println(gR.json());
+        logger.log("\nStarting rateUser method with this rating:", logType.TRACE);
+        logger.log(gR.json(), logType.TRACE);
         FinderUser fU = FinderUser.getInstance();
         if (fU.findByUsername(gR.getUserWhoRates()) == null) throw new UserNotFound(gR.getUserWhoRates());
         if (fU.findByUsername(gR.getRatedUser()) == null) throw new UserNotFound(gR.getRatedUser());
         FinderRating fR = FinderRating.getInstance();
         if (fR.findByPrimaryKey(gR.getUserWhoRates(), gR.getRatedUser()) != null) {
             //Rating already exists, we have to modify it
-            System.out.println("Rating already exist, modifying it...");
+            logger.log("Rating already exist, modifying it...", logType.TRACE);
             gR.update();
-            System.out.println("Rating updated successfully");
+            logger.log("Rating updated successfully", logType.TRACE);
         }
         else {
-            System.out.println("Rating didn't exist, creating it...");
+            logger.log("Rating didn't exist, creating it...", logType.TRACE);
             gR.insert();
-            System.out.println("Rating created successfully");
+            logger.log("Rating created successfully", logType.TRACE);
         }
-        System.out.println("End of method");
+        logger.log("End of method", logType.TRACE);
     }
 
     /**
@@ -165,18 +169,18 @@ public class UserController {
      */
     @PostMapping("/users/unrate")
     public void unrateUser(@RequestParam String userWhoRates, String ratedUser) throws SQLException {
-        System.out.println("\nStarting unrateUser method with userWhoRates : '" + userWhoRates + "' and ratedUser: '" + ratedUser + "'...");
+        logger.log("\nStarting unrateUser method with userWhoRates : '" + userWhoRates + "' and ratedUser: '" + ratedUser + "'...", logType.TRACE);
         FinderRating fR = FinderRating.getInstance();
         GatewayRating gR = fR.findByPrimaryKey(userWhoRates, ratedUser);
         if (gR == null) throw new RatingNotFound(userWhoRates, ratedUser);
         gR.remove();
-        System.out.println("Rating removed successfully, end of method");
+        logger.log("Rating removed successfully, end of method", logType.TRACE);
     }
 
 
     @GetMapping("/user/avgRate")
     public avgRate avgRate(@RequestParam String userName) throws SQLException {
-        System.out.println("\nStarting avgRate method with userName : '" + userName +"'...");
+        logger.log("\nStarting avgRate method with userName : '" + userName +"'...", logType.TRACE);
         FinderUser fU = FinderUser.getInstance();
         if (fU.findByUsername(userName) == null) throw new UserNotFound(userName);
         FinderRating fR = FinderRating.getInstance();
@@ -185,64 +189,64 @@ public class UserController {
 
     @GetMapping("/user/reports")
     public List<GatewayReport> reportsUser(@RequestParam String userWhoReports) throws SQLException {
-        System.out.println("\nStarting reportsUser method with userWhoReports : '" + userWhoReports + "'");
+        logger.log("\nStarting reportsUser method with userWhoReports : '" + userWhoReports + "'", logType.TRACE);
         FinderReport fR = FinderReport.getInstance();
         FinderUser fU = FinderUser.getInstance();
         if ( fU.findByUsername(userWhoReports) == null) throw new UserNotFound(userWhoReports);
         List<GatewayReport> l = fR.findByUserWhoReports(userWhoReports);
-        System.out.println("Returning reports with userWhoReports: '" + userWhoReports + "' that are:" );
-        for (GatewayReport g : l) System.out.println(g.json());
+        logger.log("Returning reports with userWhoReports: '" + userWhoReports + "' that are:", logType.TRACE);
+        for (GatewayReport g : l) logger.log(g.json(), logType.TRACE);
         return l;
     }
 
     @GetMapping("/user/reported")
     public List<GatewayReport> reportedUser(@RequestParam String reportedUser) throws SQLException {
-        System.out.println("\nStarting reportsUser method with reportedUser : '" + reportedUser + "'");
+        logger.log("\nStarting reportsUser method with reportedUser : '" + reportedUser + "'", logType.TRACE);
         FinderReport fR = FinderReport.getInstance();
         FinderUser fU = FinderUser.getInstance();
         if ( fU.findByUsername(reportedUser) == null) throw new UserNotFound(reportedUser);
         List<GatewayReport> l = fR.findByReportedUser(reportedUser);
-        System.out.println("Returning reports with reportedUser: '" + reportedUser + "' that are:" );
-        for (GatewayReport g : l) System.out.println(g.json());
+        logger.log("Returning reports with reportedUser: '" + reportedUser + "' that are:", logType.TRACE );
+        for (GatewayReport g : l) logger.log(g.json(), logType.TRACE);
         return l;
     }
 
     @PostMapping("/user/report")
     public void reportUser(@RequestBody GatewayReport gR) throws SQLException {
-        System.out.println("\nStarting reportUser method with report:");
-        System.out.println(gR.json());
+        logger.log("\nStarting reportUser method with report:", logType.TRACE);
+        logger.log(gR.json());
         FinderUser fU = FinderUser.getInstance();
         if ( fU.findByUsername(gR.getUserWhoReports()) == null) throw new UserNotFound(gR.getUserWhoReports());
         if ( fU.findByUsername(gR.getReportedUser()) == null) throw new UserNotFound(gR.getReportedUser());
         FinderReport fR = FinderReport.getInstance();
         //Report doesn't already exist
         if (fR.findByPrimaryKey(gR.getUserWhoReports(), gR.getReportedUser()) == null) {
-            System.out.println("Report doesn't already exist, creating new report...");
+            logger.log("Report doesn't already exist, creating new report...", logType.TRACE);
             gR.insert();
-            System.out.println("Report created, end of method");
+            logger.log("Report created, end of method", logType.TRACE);
         }
         //Report exists
         else {
-            System.out.println("Report already exists, updating report...");
+            logger.log("Report already exists, updating report...", logType.TRACE);
             gR.update();
-            System.out.println("Report updated, end of method");
+            logger.log("Report updated, end of method", logType.TRACE);
         }
     }
 
     @PostMapping("/user/unreport")
     public void unreportUser(@RequestParam String userWhoReports, @RequestParam String reportedUser) throws SQLException {
-        System.out.println("\nStarting unreportUser method with userWhoReports: '" + userWhoReports + "' and reportedUser: '" + reportedUser + "'");
+        logger.log("\nStarting unreportUser method with userWhoReports: '" + userWhoReports + "' and reportedUser: '" + reportedUser + "'", logType.TRACE);
         FinderReport fR = FinderReport.getInstance();
         GatewayReport gR = fR.findByPrimaryKey(userWhoReports, reportedUser);
         if (gR == null) throw new ReportNotFound(userWhoReports, reportedUser);
         gR.remove();
-        if (fR.findByPrimaryKey(userWhoReports, reportedUser) == null) System.out.println("Report removed successfully, end of method");
-        else System.out.println("ERROR, couldn't delete the report");
+        if (fR.findByPrimaryKey(userWhoReports, reportedUser) == null) logger.log("Report removed successfully, end of method", logType.TRACE);
+        else logger.log("ERROR, couldn't delete the report", logType.TRACE);
     }
 
     @GetMapping("/users/Allreports")
     public List<GatewayReport> allReports() throws SQLException {
-        System.out.println("\nStarting allReports method...");
+        logger.log("\nStarting allReports method...", logType.TRACE);
         FinderReport fR = FinderReport.getInstance();
         return fR.findAll();
     }

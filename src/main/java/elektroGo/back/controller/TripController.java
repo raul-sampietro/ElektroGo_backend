@@ -14,6 +14,8 @@ import elektroGo.back.data.gateways.GatewayUserTrip;
 import elektroGo.back.exceptions.InvalidKey;
 import elektroGo.back.exceptions.TripAlreadyExists;
 import elektroGo.back.exceptions.TripNotFound;
+import elektroGo.back.logs.CustomLogger;
+import elektroGo.back.logs.logType;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +33,8 @@ import static java.lang.Math.cos;
 @RestController
 public class TripController {
     String password = "34ee7e6c4c51e43ed6a7767bc717a7f9127d3d0025a0efbf6af124d15821c6ec";
+    CustomLogger logger = CustomLogger.getInstance();
+
     /**
      * @brief Funció amb metode 'GET' que retorna la informació del trip amb el id corresponen
      * @param id Trip del que volem agafar la info
@@ -52,7 +56,6 @@ public class TripController {
                                                    @RequestParam BigDecimal LatD, @RequestParam BigDecimal LongD,
                                                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate sDate, Time sTimeMin,
                                                    Time sTimeMax) throws SQLException {
-        System.out.println("hey");
         FinderTrip fT = FinderTrip.getInstance();
         ArrayList<GatewayTrip> gT;
         BigDecimal a = new BigDecimal("0.05");
@@ -119,8 +122,8 @@ public class TripController {
      */
     @PostMapping("/car-pooling/create")
     public void createTrip(@RequestBody GatewayTrip gT) throws SQLException {
-        System.out.println(gT.json());
-        System.out.println(gT.getOfferedSeats());
+        logger.log(gT.json(), logType.TRACE);
+        logger.log(gT.getOfferedSeats() + "", logType.TRACE);
         FinderTrip fT = FinderTrip.getInstance();
         if (fT.findByUser(gT.getUsername(),gT.getStartDate(),gT.getStartTime()) != null) throw new TripAlreadyExists(gT.getUsername());
         gT.insert();
@@ -148,16 +151,16 @@ public class TripController {
 
     @GetMapping("/car-pooling/byCoord")
     public ArrayList<GatewayTrip> getTripByCord(@RequestParam BigDecimal latitude, @RequestParam BigDecimal longitude, @RequestParam BigDecimal Radi,  @RequestParam String key) throws SQLException {
-        System.out.println("\nStarting getTripByCord method..." );
+        logger.log("\nStarting getTripByCord method..." , logType.TRACE);
         if(!Objects.equals(key, password))throw new InvalidKey();
         FinderTrip fT = FinderTrip.getInstance();
         BigDecimal radiLat = Radi.multiply(BigDecimal.valueOf(0.00904371));
-        System.out.println(radiLat);
+        logger.log(radiLat + "", logType.TRACE);
         BigDecimal radiLong = BigDecimal.valueOf(Radi.doubleValue()/(111.320*cos(latitude.doubleValue()))).abs();
-        System.out.println(radiLong);
+        logger.log(radiLong + "", logType.TRACE);
         ArrayList<GatewayTrip> corT = fT.findByCoordinates(latitude.subtract(radiLat),latitude.add(radiLat),longitude.subtract(radiLong), longitude.add(radiLong));
-        System.out.println("Returning this coords:");
-        for (GatewayTrip gT : corT) System.out.println(gT.json());
+        logger.log("Returning this coords:", logType.TRACE);
+        for (GatewayTrip gT : corT) logger.log(gT.json(), logType.TRACE);
         if (corT.size() == 0) throw new TripNotFound();
         return corT;
     }

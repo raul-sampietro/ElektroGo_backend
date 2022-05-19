@@ -15,6 +15,8 @@ import elektroGo.back.data.gateways.GatewayDriver;
 import elektroGo.back.exceptions.DriverNotFound;
 import elektroGo.back.exceptions.UserAlreadyExists;
 import elektroGo.back.exceptions.UserNotFound;
+import elektroGo.back.logs.CustomLogger;
+import elektroGo.back.logs.logType;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
@@ -25,6 +27,8 @@ import java.util.ArrayList;
  */
 @RestController
 public class DriverController {
+
+    CustomLogger logger = CustomLogger.getInstance();
 
     /**
      * @brief Funció amb metode 'GET' que retorna la informació del driver amb el username corresponen
@@ -58,13 +62,13 @@ public class DriverController {
      */
     @PostMapping("/drivers/create")
     public void createDriver(@RequestBody GatewayDriver gD) throws SQLException {
-        System.out.println("\nStarting createDriver method with username " + gD.getUsername() + " ...");
+        logger.log("\nStarting createDriver method with username " + gD.getUsername() + " ...", logType.TRACE);
         FinderUser fU = FinderUser.getInstance();
         if (fU.findByUsername(gD.getUsername()) == null) throw new UserNotFound(gD.getUsername());
         FinderDriver fD = FinderDriver.getInstance();
         if (fD.findByUserName(gD.getUsername()) != null) throw new UserAlreadyExists(gD.getUsername());
         gD.insert();
-        System.out.println("Driver inserted (End of method)");
+        logger.log("Driver inserted (End of method)", logType.TRACE);
     }
 
     /**

@@ -41,7 +41,7 @@ public class ChatTest {
         Database d = Database.getInstance();
         GatewayChats gC =  insertChat();
         FinderChats fC = FinderChats.getInstance();
-        System.out.println(gC.getSender() + " " + gC.getReceiver() + " " + gC.getMessage());
+        logger.log(gC.getSender() + " " + gC.getReceiver() + " " + gC.getMessage());
         GatewayChats gCTest = fC.findByMessage(gC.getSender(), gC.getReceiver(), gC.getMessage());
         String res = gCTest.getSender() + " " + gCTest.getReceiver() + " " + gCTest.getMessage() + " " + gCTest.getSentAt();
         gC.remove();

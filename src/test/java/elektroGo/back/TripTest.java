@@ -94,9 +94,9 @@ public class TripTest {
             GatewayTrip gTest = fT.findByUser("TripTestClass",LocalDate.of(2001, 2, 12),new Time(12*60*60*1000));
             gTest.setRestrictions("NoMascotes");
             gTest.update();
-            System.out.println(gTest.json());
+            logger.log(gTest.json());
             gTest = fT.findByUser("TripTestClass",LocalDate.of(2001, 2, 12),new Time(12*60*60*1000));
-            System.out.println(gTest.json());
+            logger.log(gTest.json());
             String res =gTest.getVehicleNumberPlate() + " " + gTest.getRestrictions();
             assertEquals("1221 NoMascotes", res);
     }
@@ -111,7 +111,7 @@ public class TripTest {
     @Test
     public void getOrd() throws SQLException {
         gT.remove();
-        for (GatewayTrip g : fT.findOrdered()) System.out.println(g.json());
+        for (GatewayTrip g : fT.findOrdered()) logger.log(g.json());
 
     }
 
