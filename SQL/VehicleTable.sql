@@ -8,3 +8,4 @@ seats integer NOT NULL,
 imageId varchar(100),
 CONSTRAINT Vehicle_PK PRIMARY KEY (numberPlate)
 );
+ALTER TABLE VEHICLE ADD COLUMN verification varchar(10) DEFAULT 'pending';
