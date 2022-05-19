@@ -249,7 +249,6 @@ public class UserController {
         return fR.findAll();
     }
 
-
     @GetMapping("/users/{username}/blocks/made")
     public List<GatewayBlock> blocksUser(@PathVariable String username) throws SQLException {
         System.out.println("\nStarting allBlocks method...");

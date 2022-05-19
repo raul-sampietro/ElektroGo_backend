@@ -108,12 +108,6 @@ public class TripTest {
         assertNull(gTtemplate);
     }
 
-    @Test
-    public void getOrd() throws SQLException {
-        gT.remove();
-        for (GatewayTrip g : fT.findOrdered()) System.out.println(g.json());
-
-    }
 
 
 }
