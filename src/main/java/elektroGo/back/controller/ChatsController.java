@@ -86,6 +86,10 @@ public class ChatsController {
         timestamp = timestamp.substring(0, timestamp.length() - 4);
         GatewayChats gC = new GatewayChats(sender, receiver, message,timestamp);
         gC.insert();
+        // TODO check if there are blocks between each other
+        // TODO if the receiver has deleted the chat, delete the instance from the deletedChats table
+        DeletedChats dCS = new DeletedChats();
+        dCS.messageSent(sender, receiver);
     }
 
     /**
