@@ -24,22 +24,15 @@ public class Database {
      */
     private Connection conn;
 
+    private final CustomLogger logger;
+
     /**
      * @brief Constructora de Database
      * @post Crea un objecte Database i estableix connexio amb la BD
      */
     private Database() {
-        CustomLogger logger = CustomLogger.getInstance();
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://10.4.41.58/elektrogo",
-                    "test", "test");
-            boolean valid = conn.isValid(50000);
-            if (valid) logger.log("Connection established" , logType.TRACE);
-            else logger.log("Connection established", logType.ERROR);
-        } catch (Exception ex) {
-            logger.log("Error: " + ex, logType.ERROR);
-        }
+        logger = CustomLogger.getInstance();
+        connectDB();
     }
     /**
      * @brief Dona la instancia de Database
@@ -50,6 +43,19 @@ public class Database {
             singletonObject = new Database();
         }
         return singletonObject;
+    }
+
+    private void connectDB() {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:mysql://10.4.41.58/elektrogo",
+                    "test", "test");
+            boolean valid = conn.isValid(50000);
+            if (valid) logger.log("Connection established" , logType.TRACE);
+            else logger.log("Connection established", logType.ERROR);
+        } catch (Exception ex) {
+            logger.log("Error: " + ex, logType.ERROR);
+        }
     }
 
     /**
@@ -73,7 +79,16 @@ public class Database {
         return s.executeQuery(sql);
     }
 
-    public Connection getConnection() {
+    public void reestablishConnection() {
+        connectDB();
+    }
+
+    public Connection getConnection()  {
+        try {
+            if (!conn.isValid(50000)) connectDB();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return conn;
     }
 
