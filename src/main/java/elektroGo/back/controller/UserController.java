@@ -271,6 +271,7 @@ public class UserController {
 
     @GetMapping("/achievements/{achievement}/users/{username}")
     public GatewayUserAchievements getUserAchievement(@PathVariable String achievement, @PathVariable String username) throws SQLException {
+        logger.log("Starting getUserAchievement method with achievement '" + achievement + "' and user '" + username + "'...", logType.TRACE);
         FinderUserAchievement fUA = FinderUserAchievement.getInstance();
         GatewayUserAchievements gUA =  fUA.findByPK(username, achievement);
         if (gUA == null) {
@@ -278,8 +279,17 @@ public class UserController {
             if (fU.findByUsername(username) == null) throw new UserNotFound(username);
             FinderAchievements fA = FinderAchievements.getInstance();
             if (fA.findByName(achievement) == null) throw new AchievementNotFound(achievement);
+            logger.log("User with this achievement hasn't been created, creating it...", logType.TRACE);
             gUA = new GatewayUserAchievements(username, achievement);
+            gUA.insert();
+            if (fUA.findByPK(username, achievement) != null) logger.log("UserAchievement successfully created", logType.TRACE);
+            else logger.log("UserAchievement couldn't been created" ,logType.ERROR);
         }
+        else {
+            logger.log("UserAchievement exists, returning it...", logType.TRACE);
+
+        }
+        logger.log("Returning this UserAchievement: " + gUA.json(), logType.TRACE);
         return gUA;
     }
 }
