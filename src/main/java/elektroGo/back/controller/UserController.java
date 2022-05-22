@@ -11,6 +11,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import elektroGo.back.data.finders.FinderRating;
 import elektroGo.back.data.finders.FinderReport;
 import elektroGo.back.data.finders.FinderUser;
+import elektroGo.back.data.gateways.Gateway;
 import elektroGo.back.data.gateways.GatewayRating;
 import elektroGo.back.data.gateways.GatewayReport;
 import elektroGo.back.data.gateways.GatewayUser;
@@ -160,6 +161,16 @@ public class UserController {
         for (GatewayRating g : l) log += g.json() + "\n";
         logger.log(log, logType.TRACE);
         return l;
+    }
+
+    @GetMapping("/ratings/from/{userFrom}/to/{userTo}")
+    public GatewayRating getSingleRating(@PathVariable String userFrom, @PathVariable String userTo) throws SQLException {
+        logger.log("\nStarting getSingleRating from ' " + userFrom + "' to '" + userTo, logType.TRACE);
+        FinderRating fR = FinderRating.getInstance();
+        GatewayRating gR = fR.findByPrimaryKey(userFrom, userTo);
+        if (gR == null) throw new RatingNotFound(userFrom, userTo);
+        logger.log("Returning this rating:\n" + gR.json() + "\nEnd of method", logType.TRACE);
+        return gR;
     }
 
     @GetMapping("/{username}/ratings/avg")
