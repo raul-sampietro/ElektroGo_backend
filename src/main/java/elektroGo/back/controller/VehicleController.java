@@ -39,18 +39,18 @@ public class VehicleController {
     /**
      * @brief Metode per crear un Vehicle donat un json amb la informacio del vehicle excepte la imatge.
      * @param gV Objecte amb la informacio del vehicle.
-     * @param userNDriver Username del driver del vehicle.
-     * @pre gV i userNDriver no son null.
-     * @post Es crea un nou Vehicle amb la informacio de gV en cas que no existeixi el vehicle i es relaciona amb el driver identificat amb userNDriver.
+     * @param username Username del driver del vehicle.
+     * @pre gV i username no son null.
+     * @post Es crea un nou Vehicle amb la informacio de gV en cas que no existeixi el vehicle i es relaciona amb el driver identificat amb username.
      */
-    @PostMapping("/drivers/{userNDriver}/vehicles")
-    public void createVehicle(@RequestBody GatewayVehicle gV, @PathVariable String userNDriver) throws SQLException {
-        System.out.println("\nCreating vehicle, vehicle arrived with this information:" + gV.json() + "\nAnd with username of driver " + "'" +userNDriver+"'");
+    @PostMapping("/drivers/{username}/vehicles")
+    public void createVehicle(@RequestBody GatewayVehicle gV, @PathVariable String username) throws SQLException {
+        System.out.println("\nCreating vehicle, vehicle arrived with this information:" + gV.json() + "\nAnd with username of driver " + "'" +username+"'");
         FinderDriver fD = FinderDriver.getInstance();
         FinderVehicle fV = FinderVehicle.getInstance();
         FinderDriverVehicle fDV = FinderDriverVehicle.getInstance();
-        if (fDV.findByNumberPlateDriver(userNDriver, gV.getNumberPlate()) != null) throw new DriverVehicleAlreadyExists(userNDriver, gV.getNumberPlate());
-        if (fD.findByUserName(userNDriver) == null) throw new DriverNotFound(userNDriver);
+        if (fDV.findByNumberPlateDriver(username, gV.getNumberPlate()) != null) throw new DriverVehicleAlreadyExists(username, gV.getNumberPlate());
+        if (fD.findByUserName(username) == null) throw new DriverNotFound(username);
         GatewayVehicle gVComp = fV.findByNumberPlate(gV.getNumberPlate());
         if (gVComp == null) {
             System.out.println("Vehicle didn't exists ,creating new vehicle...");
@@ -65,8 +65,8 @@ public class VehicleController {
             if (!gV.json().equals(gVComp.json())) throw new WrongVehicleInfo(gV.getNumberPlate());
         }
         System.out.println("Creating new relation with the vehicle identified by numberPlate = "+ gV.getNumberPlate() +
-                " and driver identified by username = " + userNDriver);
-        GatewayDriverVehicle gDV = new GatewayDriverVehicle(gV.getNumberPlate(), userNDriver);
+                " and driver identified by username = " + username);
+        GatewayDriverVehicle gDV = new GatewayDriverVehicle(gV.getNumberPlate(), username);
         gDV.insert();
         System.out.println("Relation inserted");
         System.out.println("End creation vehicle method");
