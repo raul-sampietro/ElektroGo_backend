@@ -29,4 +29,15 @@ public class DeletedChats {
             }
         }
     }
+
+    public void messageSent(String sender, String receiver) throws SQLException {
+        FinderDeletedChats fDCS = FinderDeletedChats.getInstance();
+        ArrayList<String> deletedUsers = fDCS.findByUserDeleting(receiver);
+        if (deletedUsers.contains(sender)) {
+            // L'usuari que rep el missatge tenia el xat eliminat
+            // Ha de tornar a d'apereixer el xat a l'usuari
+            GatewayDeletedChats gDC = new GatewayDeletedChats(receiver, sender);
+            gDC.remove();
+        }
+    }
 }
