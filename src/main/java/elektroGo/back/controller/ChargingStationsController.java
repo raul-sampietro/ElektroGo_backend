@@ -9,6 +9,8 @@ package elektroGo.back.controller;
 
 import elektroGo.back.data.finders.FinderChargingStations;
 import elektroGo.back.data.gateways.GatewayChargingStations;
+import elektroGo.back.logs.CustomLogger;
+import elektroGo.back.logs.logType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,13 +25,16 @@ import java.util.ArrayList;
 @RestController
 public class ChargingStationsController {
 
+    private final CustomLogger logger = CustomLogger.getInstance();
     /**
      * @brief Metode 'GET' que retorna totes les estacions de càrrega de la base de dades
      * @return Retorna un array amb la informació de tots els punts de càrrega
      */
     @GetMapping("/ChargingStations")
     public ArrayList<GatewayChargingStations> getChargingStations() throws SQLException {
+        logger.log("\nGetting all charging stations:\n", logType.TRACE);
         FinderChargingStations fCS = FinderChargingStations.getInstance();
+        logger.log("End getChargingStations method", logType.TRACE);
         return fCS.findAll();
     }
 

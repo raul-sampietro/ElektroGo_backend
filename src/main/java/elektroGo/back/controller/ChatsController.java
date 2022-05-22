@@ -9,13 +9,16 @@ package elektroGo.back.controller;
 
 import elektroGo.back.data.finders.FinderChats;
 import elektroGo.back.data.gateways.GatewayChats;
+import elektroGo.back.data.gateways.GatewayDeletedChats;
+import elektroGo.back.logs.CustomLogger;
+import elektroGo.back.logs.logType;
+import elektroGo.back.model.DeletedChats;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
-//todo exceptions
 
 /**
  * @brief La classe ChatsController és la classe que comunicarà front-end i back-end a l'hora de gestionar el chat
@@ -24,13 +27,17 @@ import java.util.ArrayList;
 @RequestMapping("/chat")
 public class ChatsController {
 
+    private final CustomLogger logger = CustomLogger.getInstance();
+
     /**
      * @brief Metode 'GET' que retorna tots els missatges de la base de dades
      * @return Retorna el llistat de tots els missatges
      */
     @GetMapping("/findAll")
     public ArrayList<GatewayChats> getAll() throws SQLException {
+        logger.log("\nStarting Chats.getAll method...", logType.TRACE);
         FinderChats fC = FinderChats.getInstance();
+        logger.log("Ending Chats.getAll method...", logType.TRACE);
         return fC.findAll();
     }
 
@@ -42,7 +49,14 @@ public class ChatsController {
      */
     @GetMapping("/findByConversation")
     public ArrayList<GatewayChats> getChatByConversation(@RequestParam String userA, @RequestParam String userB) throws SQLException {
+        logger.log("\nStarting getChatByConversation method of user '" + userA + "' and '" + userB + "'", logType.TRACE);
         FinderChats fC = FinderChats.getInstance();
+        ArrayList<GatewayChats> aL = fC.findByConversation(userA, userB);
+        logger.log("Returning this messages...", logType.TRACE);
+        String s = "";
+        for (GatewayChats gC : aL) s = s + gC.json() + "\n";
+        logger.log(s, logType.TRACE);
+        logger.log("End of method", logType.TRACE);
         return fC.findByConversation(userA, userB);
     }
 
@@ -53,8 +67,33 @@ public class ChatsController {
      */
     @GetMapping("/findByUser")
     public ArrayList<String> getChatByConversation(@RequestParam String user) throws SQLException {
+        logger.log("\nStarting getChatByConversation method with user '" + user + "'...", logType.TRACE);
         FinderChats fC = FinderChats.getInstance();
-        return fC.findByUser(user);
+        DeletedChats dCS = new DeletedChats();
+        ArrayList<String> usersChats = fC.findByUser(user);
+        ArrayList<String> deletedChats = dCS.getDeletedChatsFromUser(user);
+        usersChats.removeAll(deletedChats);
+        logger.log("Returning this chats:", logType.TRACE);
+        String log = "";
+        for (String s : usersChats ) log = log + s + " ";
+        logger.log(log, logType.TRACE);
+        return usersChats;
+    }
+
+    /**
+     * @brief Metode 'GET' que retorna tots els missatges d'un usuari de la base de dades
+     * @param user nom de l'usuari
+     * @return Retorna el llistat de missatges de l'usuari ordenats per data
+     */
+    @GetMapping("/findByReceived")
+    public ArrayList<GatewayChats> getChatByReceived(@RequestParam String user) throws SQLException {
+        logger.log("Starting getChatByReceived method with user '" + user + "'", logType.TRACE);
+        FinderChats fC = FinderChats.getInstance();
+        ArrayList<GatewayChats> aL = fC.findByReceived(user);
+        String log = "";
+        for (GatewayChats gC : aL) log += gC.json() + "\n";
+        logger.log(log, logType.TRACE);
+        return aL;
     }
 
     /**
@@ -66,10 +105,34 @@ public class ChatsController {
      */
     @PostMapping("/sendMessage")
     public void postSendMessage(@RequestParam String sender, @RequestParam String receiver, @RequestParam String message) throws SQLException {
+        logger.log("Starting sendMessage method with sender '" + sender + "' and reciever '" + receiver + "'...", logType.TRACE);
         String timestamp = String.valueOf(new Timestamp(System.currentTimeMillis()));
         timestamp = timestamp.substring(0, timestamp.length() - 4);
         GatewayChats gC = new GatewayChats(sender, receiver, message,timestamp);
+        logger.log("Inserting this chat: " + gC.json(), logType.TRACE);
         gC.insert();
+        // TODO check if there are blocks between each other
+        DeletedChats dCS = new DeletedChats();
+        dCS.messageSent(sender, receiver);
     }
+
+    /**
+     * @brief Metode 'DELETE' que crea elimina el chat entre dos usuaris
+     * @param userA Nom de l'usuari que elimina el xat
+     * @param userB Nom de l'usuari sobre el que s'elimina el xat
+     * @post El xat s'ha eliminat correctament
+     */
+    @DeleteMapping
+    public void deleteChat(@RequestParam String userA, @RequestParam String userB) throws SQLException {
+        logger.log("Starting deleteChat method with userA '" + userA + "' and userB '" + userB + "'", logType.TRACE);
+        GatewayDeletedChats gDC = new GatewayDeletedChats(userA, userB);
+        logger.log("Deleting this chats: " + gDC.json() ,logType.TRACE ) ;
+        DeletedChats dCS = new DeletedChats();
+        gDC.insert();
+        dCS.deleteMessagesIfNeeded(userA, userB);
+        logger.log("End of method", logType.TRACE);
+    }
+
+
 
 }

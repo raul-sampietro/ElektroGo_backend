@@ -7,10 +7,14 @@
 
 package elektroGo.back.controller;
 
+import elektroGo.back.data.Database;
 import elektroGo.back.exceptions.*;
+import elektroGo.back.logs.CustomLogger;
+import elektroGo.back.logs.logType;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.servlet.http.HttpServletResponse;
+import java.net.SocketException;
 
 /**
  * @brief La classe RestControllerAdvice captura les excepcions i envia els codis d'error corresponents
@@ -25,13 +29,14 @@ public class RestControllerAdvice {
      * @brief Metode que extreu el comportament comu de tots els handlers
      * @post Envia l'error http corresponent al client
      */
-    private String handleError(RuntimeException ex, HttpServletResponse response, int httpCode) {
+    private String handleError(Exception ex, HttpServletResponse response, int httpCode) {
+        CustomLogger logger = CustomLogger.getInstance();
         try {
             response.sendError(httpCode, ex.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(ex.getClass().getCanonicalName() + ": " + ex.getMessage());
+        logger.log(ex.getClass().getCanonicalName() + ": " + ex.getMessage(), logType.ERROR);
         return ex.getMessage();
     }
 
@@ -240,6 +245,15 @@ public class RestControllerAdvice {
     @ExceptionHandler(UserTripAlreadyExists.class)
     public String handleUserTripAlreadyExists(UserTripAlreadyExists ex, HttpServletResponse response) {
         return handleError(ex, response, 448);
+    }
+
+
+    //Exception for DB
+    @ExceptionHandler(SocketException.class)
+    public String handleSocketException(SocketException ex, HttpServletResponse response) {
+        Database db = Database.getInstance();
+        db.reestablishConnection();
+        return handleError(ex, response, 500);
     }
 }
 
