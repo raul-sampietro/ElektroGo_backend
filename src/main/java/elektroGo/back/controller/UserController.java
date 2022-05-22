@@ -8,16 +8,12 @@
 package elektroGo.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import elektroGo.back.data.finders.FinderRating;
-import elektroGo.back.data.finders.FinderReport;
-import elektroGo.back.data.finders.FinderUser;
+import elektroGo.back.data.finders.*;
 import elektroGo.back.data.gateways.GatewayRating;
 import elektroGo.back.data.gateways.GatewayReport;
 import elektroGo.back.data.gateways.GatewayUser;
-import elektroGo.back.exceptions.RatingNotFound;
-import elektroGo.back.exceptions.ReportNotFound;
-import elektroGo.back.exceptions.UserAlreadyExists;
-import elektroGo.back.exceptions.UserNotFound;
+import elektroGo.back.data.gateways.GatewayUserAchievements;
+import elektroGo.back.exceptions.*;
 import elektroGo.back.logs.CustomLogger;
 import elektroGo.back.logs.logType;
 import elektroGo.back.model.avgRate;
@@ -271,5 +267,19 @@ public class UserController {
         for (GatewayReport g : l) log += g.json() + "\n";
         logger.log(log + "End of method", logType.TRACE);
         return fR.findAll();
+    }
+
+    @GetMapping("/achievements/{achievement}/users/{username}")
+    public GatewayUserAchievements getUserAchievement(@PathVariable String achievement, @PathVariable String username) throws SQLException {
+        FinderUserAchievement fUA = FinderUserAchievement.getInstance();
+        GatewayUserAchievements gUA =  fUA.findByPK(username, achievement);
+        if (gUA == null) {
+            FinderUser fU = FinderUser.getInstance();
+            if (fU.findByUsername(username) == null) throw new UserNotFound(username);
+            FinderAchievements fA = FinderAchievements.getInstance();
+            if (fA.findByName(achievement) == null) throw new AchievementNotFound(achievement);
+            gUA = new GatewayUserAchievements(username, achievement);
+        }
+        return gUA;
     }
 }

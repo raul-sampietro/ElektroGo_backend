@@ -19,7 +19,7 @@ public class FinderUserAchievement {
         conn = d.getConnection();
     }
 
-    public FinderUserAchievement getInstance() {
+    public static FinderUserAchievement getInstance() {
         if (singletonObject == null) {
             singletonObject = new FinderUserAchievement();
         }
