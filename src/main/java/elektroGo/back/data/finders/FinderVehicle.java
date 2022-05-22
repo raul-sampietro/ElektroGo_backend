@@ -23,11 +23,16 @@ public class FinderVehicle {
      * @brief FinderVehicle, es un singleton
      */
     private static FinderVehicle singletonObject;
+    private final Connection conn;
 
     /**
      * @brief Creadorà de la clase FinderVehicle
      */
-    private FinderVehicle() {}
+    private FinderVehicle() {
+        Database d = Database.getInstance();
+        conn = d.getConnection();
+    }
+
 
     /**
      * @brief Funció que retorna una instancia Singleton de FinderVehicle
@@ -40,16 +45,9 @@ public class FinderVehicle {
         return singletonObject;
     }
 
-    /**
-     * @brief Funció que agafa tots els Vehicles de la BD i els posa a un Array
-     * @return Es retorna un array de GatewayVehicle amb tota la info dels Vehicles
-     */
-    public ArrayList<GatewayVehicle> findAll() throws SQLException {
-        GatewayVehicle gV = null;
-        Database d = Database.getInstance();
-        Connection conn = d.getConnection();
+    //pre: pS has a SQL sentence
+    public ArrayList<GatewayVehicle> findTemplate(PreparedStatement pS) throws SQLException {
         ArrayList<GatewayVehicle> aL = new ArrayList<>();
-        PreparedStatement pS = conn.prepareStatement("SELECT * FROM VEHICLE;");
         ResultSet r = pS.executeQuery();
         while (r.next()) {
             aL.add(createGateway(r));
@@ -58,19 +56,30 @@ public class FinderVehicle {
     }
 
     /**
+     * @brief Funció que agafa tots els Vehicles de la BD i els posa a un Array
+     * @return Es retorna un array de GatewayVehicle amb tota la info dels Vehicles
+     */
+    public ArrayList<GatewayVehicle> findAll() throws SQLException {
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM VEHICLE;");
+        return findTemplate(pS);
+    }
+
+    public ArrayList<GatewayVehicle> findNotVerified() throws SQLException {
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM VEHICLE WHERE verification = 'pending';");
+        return findTemplate(pS);
+    }
+
+    /**
      * @brief Funció que agafa un vehicle de la BD i el retorna
      * @param numberPlate matricula del vehicle
      * @return Es retorna un GatewayVehicle amb tota la info del Vehivle
      */
     public GatewayVehicle findByNumberPlate(String numberPlate) throws SQLException {
-        GatewayVehicle gV = null;
-        Database d = Database.getInstance();
-        Connection conn = d.getConnection();
         PreparedStatement pS = conn.prepareStatement("SELECT * FROM VEHICLE WHERE numberPlate = ?;");
         pS.setString(1,numberPlate);
-        ResultSet r = pS.executeQuery();
-        if (r.next()) gV = createGateway(r);
-        return gV;
+        ArrayList<GatewayVehicle> aL = findTemplate(pS);
+        if (aL.size() == 0) return null;
+        return aL.get(0);
     }
 
     /**
@@ -86,7 +95,8 @@ public class FinderVehicle {
         Integer fabricationYear= r.getInt(5);
         int seats = r.getInt(6);
         String imageId = r.getString(7);
-        return new GatewayVehicle(brand, model, numberPlate, drivingRange, fabricationYear, seats,imageId);
+        String verification = r.getString(8);
+        return new GatewayVehicle(brand, model, numberPlate, drivingRange, fabricationYear, seats,imageId, verification);
     }
 
     //Add necessary finders

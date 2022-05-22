@@ -98,7 +98,7 @@ public class FinderDriverVehicle {
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
         PreparedStatement pS = conn.prepareStatement(
-                "SELECT v.brand, v.model, v.numberPlate , v.drivingRange , v.fabricationYear , v.seats , v.imageId " +
+                "SELECT v.brand, v.model, v.numberPlate , v.drivingRange , v.fabricationYear , v.seats , v.imageId, v.verification " +
                 "FROM VEHICLE v, DRIVERVEHICLE d " +
                 "WHERE v.numberPlate = d.nPVehicle and d.userDriver = ?;");
         pS.setString(1,userDriver);
