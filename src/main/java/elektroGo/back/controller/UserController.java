@@ -53,6 +53,21 @@ public class UserController {
     }
 
     /**
+     * @brief Funció amb metode 'POST' que crearà un User amb la info requerida
+     * @param gU GatewayUser amb tota la informació necessaria
+     * @post S'afegeix l'usuari a la BD
+     */
+    @PostMapping("") //TODO test in-app de creacion de usuario: borrar samragu y volver a crearlo
+    public ResponseEntity<?> createUser(@RequestBody GatewayUser gU) throws SQLException {
+        logger.log("\nStarting createUser method with username " + gU.getUsername() + " ...", logType.TRACE);
+        FinderUser fU = FinderUser.getInstance();
+        if (fU.findByUsername(gU.getUsername()) != null) throw new UserAlreadyExists(gU.getUsername());
+        gU.insert();
+        logger.log("User inserted (End of method)", logType.TRACE);
+        return new ResponseEntity<>(null, HttpStatus.CREATED);
+    }
+
+    /**
      * @brief Funció amb metode 'GET' que retorna la informació del user amb el username corresponen
      * @param username Usuari del que volem agafar la info
      * @return Es retorna un String amb la info del usuari demanada
@@ -68,41 +83,6 @@ public class UserController {
         if(gU == null) throw new UserNotFound(username);
         logger.log("Returning this user: " + gU.json(), logType.TRACE);
         return gU.json();
-    }
-
-    /**
-     * @brief Funció amb metode 'GET' que retorna la informació del user amb els id i provider donats
-     * @param id ID de l'Usuari
-     * @param provider Proveidor de sessio de l'Usuari
-     * @return Es retorna un String amb la info del usuari demanada
-     */
-    @GetMapping("/provider/{provider}/id/{id}")
-    public String getUserById(@PathVariable String id, @PathVariable String provider) throws SQLException {
-        String log = "\nStarting getUserById method with this parameters:\n";
-        log += " id = " + id;
-        log += " provider =  " + provider;
-        logger.log(log, logType.TRACE);
-        FinderUser fU = FinderUser.getInstance();
-        GatewayUser gU = null;
-        gU = fU.findById(id, provider);
-        if(gU == null) throw new UserNotFound("unknown");
-        logger.log("Returning this user: " + gU.json(), logType.TRACE);
-        return gU.json();
-    }
-
-    /**
-     * @brief Funció amb metode 'POST' que crearà un User amb la info requerida
-     * @param gU GatewayUser amb tota la informació necessaria
-     * @post S'afegeix l'usuari a la BD
-     */
-    @PostMapping("") //TODO test in-app de creacion de usuario: borrar samragu y volver a crearlo
-    public ResponseEntity<?> createUser(@RequestBody GatewayUser gU) throws SQLException {
-        logger.log("\nStarting createUser method with username " + gU.getUsername() + " ...", logType.TRACE);
-        FinderUser fU = FinderUser.getInstance();
-        if (fU.findByUsername(gU.getUsername()) != null) throw new UserAlreadyExists(gU.getUsername());
-        gU.insert();
-        logger.log("User inserted (End of method)", logType.TRACE);
-        return new ResponseEntity<>(null, HttpStatus.CREATED);
     }
 
     /**
@@ -124,6 +104,26 @@ public class UserController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * @brief Funció amb metode 'GET' que retorna la informació del user amb els id i provider donats
+     * @param id ID de l'Usuari
+     * @param provider Proveidor de sessio de l'Usuari
+     * @return Es retorna un String amb la info del usuari demanada
+     */
+    @GetMapping("/provider/{provider}/id/{id}")
+    public String getUserById(@PathVariable String id, @PathVariable String provider) throws SQLException {
+        String log = "\nStarting getUserById method with this parameters:\n";
+        log += " id = " + id;
+        log += " provider =  " + provider;
+        logger.log(log, logType.TRACE);
+        FinderUser fU = FinderUser.getInstance();
+        GatewayUser gU = null;
+        gU = fU.findById(id, provider);
+        if(gU == null) throw new UserNotFound("unknown");
+        logger.log("Returning this user: " + gU.json(), logType.TRACE);
+        return gU.json();
     }
 
     /**
@@ -197,16 +197,5 @@ public class UserController {
         for (GatewayReport g : l) log += g.json() + "\n";
         logger.log(log + "End of method", logType.TRACE);
         return l;
-    }
-
-    @GetMapping("/users/Allreports")
-    public List<GatewayReport> allReports() throws SQLException {
-        logger.log("\nStarting allReports method...", logType.TRACE);
-        FinderReport fR = FinderReport.getInstance();
-        List<GatewayReport> l= fR.findAll();
-        String log = "Returning this reports: \n";
-        for (GatewayReport g : l) log += g.json() + "\n";
-        logger.log(log + "End of method", logType.TRACE);
-        return fR.findAll();
     }
 }

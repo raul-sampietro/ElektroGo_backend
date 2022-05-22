@@ -141,6 +141,13 @@ paths:
       - Users
       summary: Obté les valoracions fetes per un usuari.
       operationId: getRatingsMadeUser
+      parameters:
+      - name: username
+        in: path
+        description: Username de l'usuari
+        required: true
+        schema:
+          type: string
       responses:
         200:
           description: successful operation
@@ -166,6 +173,13 @@ paths:
       - Users
       summary: Obté les valoracions fetes a un usuari.
       operationId: getRatingsReceivedUser
+      parameters:
+      - name: username
+        in: path
+        description: Username de l'usuari
+        required: true
+        schema:
+          type: string
       responses:
         200:
           description: successful operation
@@ -191,6 +205,13 @@ paths:
       - Users
       summary: Obté la valoració mitjana d'un usuari.
       operationId: getAvgRatingUser
+      parameters:
+      - name: username
+        in: path
+        description: Username de l'usuari
+        required: true
+        schema:
+          type: string
       responses:
         200:
           description: successful operation
@@ -214,6 +235,13 @@ paths:
       - Users
       summary: Obté les denuncies fetes per un usuari.
       operationId: getReportsMadeUser
+      parameters:
+      - name: username
+        in: path
+        description: Username de l'usuari
+        required: true
+        schema:
+          type: string
       responses:
         200:
           description: successful operation
@@ -239,6 +267,13 @@ paths:
       - Users
       summary: Obté les denuncies fetes a un usuari.
       operationId: getReportsReceivedUser
+      parameters:
+      - name: username
+        in: path
+        description: Username de l'usuari
+        required: true
+        schema:
+          type: string
       responses:
         200:
           description: successful operation
@@ -282,22 +317,20 @@ paths:
               examples:
                 errorExample:
                   $ref: '#/components/examples/error437'
-
-  /ratings/from/{userFrom}/to/{userTo}:
     delete:
       tags:
       - Ratings
       summary: Esborra una valoració.
       operationId: deleteRating
       parameters:
-      - name: userFrom
-        in: path
+      - name: userWhoRates
+        in: query
         description: Username de l'usuari que ha fet la valoració
         required: true
         schema:
           type: string
-      - name: userTo
-        in: path
+      - name: ratedUser
+        in: query
         description: Username de l'usuari que ha rebut la valoració
         required: true
         schema:
@@ -362,8 +395,6 @@ paths:
               examples:
                 errorExample:
                   $ref: '#/components/examples/error445'
-
-  /reports/from/{userFrom}/to/{userTo}:
     delete:
       tags:
       - Reports
@@ -371,13 +402,13 @@ paths:
       operationId: deleteReport
       parameters:
       - name: userFrom
-        in: path
+        in: query
         description: Username de l'usuari que ha fet la denuncia
         required: true
         schema:
           type: string
       - name: userTo
-        in: path
+        in: query
         description: Username de l'usuari que ha rebut la denuncia
         required: true
         schema:

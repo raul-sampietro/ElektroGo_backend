@@ -41,7 +41,7 @@ public class RatingController {
         FinderRating fR = FinderRating.getInstance();
         if (fR.findByPrimaryKey(gR.getUserWhoRates(), gR.getRatedUser()) != null) {
             //Rating already exists, we have to modify it
-            logger.log("Rating already exist, modifying it...", logType.TRACE);
+            logger.log("Rating already exist, updating it...", logType.TRACE);
             gR.update();
             logger.log("Rating updated successfully", logType.TRACE);
         }
@@ -63,6 +63,9 @@ public class RatingController {
     @DeleteMapping("")
     public void unrateUser(@RequestParam String userWhoRates, String ratedUser) throws SQLException {
         logger.log("\nStarting unrateUser method with userWhoRates : '" + userWhoRates + "' and ratedUser: '" + ratedUser + "'...", logType.TRACE);
+        FinderUser fU = FinderUser.getInstance();
+        if (fU.findByUsername(userWhoRates) == null) throw new UserNotFound(userWhoRates);
+        if (fU.findByUsername(ratedUser) == null) throw new UserNotFound(ratedUser);
         FinderRating fR = FinderRating.getInstance();
         GatewayRating gR = fR.findByPrimaryKey(userWhoRates, ratedUser);
         if (gR == null) throw new RatingNotFound(userWhoRates, ratedUser);

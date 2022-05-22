@@ -16,11 +16,23 @@ import elektroGo.back.logs.CustomLogger;
 import elektroGo.back.logs.logType;
 import org.springframework.web.bind.annotation.*;
 import java.sql.SQLException;
+import java.util.List;
 
 @RequestMapping("/reports")
 @RestController
 public class ReportController {
     private final CustomLogger logger = CustomLogger.getInstance();
+
+    @GetMapping("")
+    public List<GatewayReport> allReports() throws SQLException {
+        logger.log("\nStarting allReports method...", logType.TRACE);
+        FinderReport fR = FinderReport.getInstance();
+        List<GatewayReport> l= fR.findAll();
+        String log = "Returning this reports: \n";
+        for (GatewayReport g : l) log += g.json() + "\n";
+        logger.log(log + "End of method", logType.TRACE);
+        return fR.findAll();
+    }
 
     @PostMapping("")
     public void reportUser(@RequestBody GatewayReport gR) throws SQLException {
