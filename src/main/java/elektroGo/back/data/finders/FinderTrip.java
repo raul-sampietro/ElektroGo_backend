@@ -75,7 +75,7 @@ public class FinderTrip {
                 "from TRIP t " +
                 "LEFT OUTER JOIN RATING  r " +
                 "ON t.username = r.ratedUser " +
-                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?) and (t.startDate > CURDATE() or ( t.startDate = CURDATE()  and  t.startTime >= CURTIME()))"+
+                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?) and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id)and(t.startDate > CURDATE() or ( t.startDate = CURDATE()  and  t.startTime >= CURTIME()))"+
                 "group by t.id " +
                 "order by avgpoints desc;");
         pS.setString(1, username);
@@ -123,7 +123,7 @@ public class FinderTrip {
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
         ArrayList<GatewayTrip> corT = new ArrayList<>();
-        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and (startDate > CURDATE() or ( startDate = CURDATE()  and  startTime >= CURTIME())) ;");
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP t WHERE t.LatitudeOrigin BETWEEN ? AND ? and t.longitudeOrigin BETWEEN ? AND ? and (t.startDate > CURDATE() or ( t.startDate = CURDATE()  and  t.startTime >= CURTIME()))and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id);");
         pS.setBigDecimal(1,lat1);
         pS.setBigDecimal(2,lat2);
         pS.setBigDecimal(3,long1);
@@ -148,7 +148,7 @@ public class FinderTrip {
                         "from TRIP t " +
                         "LEFT OUTER JOIN RATING  r " +
                         "ON t.username = r.ratedUser " +
-                        "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?) and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ?"
+                        "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?)and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id)and  LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ?"
                         +"group by t.id " +
                         "order by avgpoints desc;"));
         pS.setString(1,username);
@@ -180,7 +180,7 @@ public class FinderTrip {
                 "from TRIP t " +
                 "LEFT OUTER JOIN RATING  r " +
                 "ON t.username = r.ratedUser " +
-                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?) and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startTime >= ?"
+                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?) and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id)and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startTime >= ?"
                 +"group by t.id " +
                 "order by avgpoints desc;"));
         pS.setString(1,username);
@@ -213,7 +213,7 @@ public class FinderTrip {
                 "from TRIP t " +
                 "LEFT OUTER JOIN RATING  r " +
                 "ON t.username = r.ratedUser " +
-                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?) and  LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startTime <= ?"
+                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?) and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id)and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startTime <= ?"
                 +"group by t.id " +
                 "order by avgpoints desc;"));
         pS.setString(1,username);
@@ -246,7 +246,7 @@ public class FinderTrip {
                 "from TRIP t " +
                 "LEFT OUTER JOIN RATING  r " +
                 "ON t.username = r.ratedUser " +
-                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?)and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startTime BETWEEN ? AND ?"
+                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?)and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id)and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startTime BETWEEN ? AND ?"
                 +"group by t.id " +
                 "order by avgpoints desc;"));
         pS.setString(1,username);
@@ -279,7 +279,7 @@ public class FinderTrip {
                 "from TRIP t " +
                 "LEFT OUTER JOIN RATING  r " +
                 "ON t.username = r.ratedUser " +
-                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?) and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ?"
+                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?) and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id)and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ?"
                 +"group by t.id " +
                 "order by avgpoints desc;"));
         pS.setString(1,username);
@@ -312,7 +312,7 @@ public class FinderTrip {
                 "from TRIP t " +
                 "LEFT OUTER JOIN RATING  r " +
                 "ON t.username = r.ratedUser " +
-                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?) and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ? and startTime >= ?"
+                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?) and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id)and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ? and startTime >= ?"
                 +"group by t.id " +
                 "order by avgpoints desc;"));
         pS.setString(1,username);
@@ -346,7 +346,7 @@ public class FinderTrip {
                 "from TRIP t " +
                 "LEFT OUTER JOIN RATING  r " +
                 "ON t.username = r.ratedUser " +
-                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?) and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ? and startTime <= ?"
+                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?)and  NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id)and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ? and startTime <= ?"
                 +"group by t.id " +
                 "order by avgpoints desc;"));
         pS.setString(1,username);
@@ -380,7 +380,7 @@ public class FinderTrip {
                 "from TRIP t " +
                 "LEFT OUTER JOIN RATING  r " +
                 "ON t.username = r.ratedUser " +
-                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?)and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ? and startTime <= ? and startTime >= ?"
+                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?)and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id) and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ? and startTime <= ? and startTime >= ?"
                 +"group by t.id " +
                 "order by avgpoints desc;"));
         pS.setString(1,username);
