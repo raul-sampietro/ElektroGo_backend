@@ -10,8 +10,10 @@ package elektroGo.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import elektroGo.back.data.finders.FinderDriver;
+import elektroGo.back.data.finders.FinderRating;
 import elektroGo.back.data.finders.FinderUser;
 import elektroGo.back.data.gateways.GatewayDriver;
+import elektroGo.back.data.gateways.GatewayRating;
 import elektroGo.back.exceptions.DriverNotFound;
 import elektroGo.back.exceptions.UserAlreadyExists;
 import elektroGo.back.exceptions.UserNotFound;
@@ -71,6 +73,14 @@ public class DriverController {
         if (fD.findByUserName(gD.getUsername()) != null) throw new UserAlreadyExists(gD.getUsername());
         gD.insert();
         logger.log("Driver inserted (End of method)", logType.TRACE);
+    }
+
+    @PostMapping("/driver/update")
+    public void updateDriver(@RequestBody GatewayDriver gD) throws SQLException {
+        FinderUser fU = FinderUser.getInstance();
+        if (fU.findByUsername(gD.getUsername()) == null) throw new UserNotFound(gD.getUsername());
+        FinderDriver fD = FinderDriver.getInstance();
+        gD.update();
     }
 
     /**
