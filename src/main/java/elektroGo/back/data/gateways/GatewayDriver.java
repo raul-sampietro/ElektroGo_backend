@@ -17,6 +17,7 @@ import elektroGo.back.data.finders.FinderDriver;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 
 /**
  * @brief La classe GatewayDriver implementa el Gateway de Driver el qual te els atributs de Driver i fa insert/update/delete a la BD
@@ -62,6 +63,7 @@ public class GatewayDriver implements Gateway{
      */
     public void setFullPreparedStatement(PreparedStatement pS) throws SQLException {
         pS.setString(1, username);
+        pS.setInt(2, Types.NULL);
     }
     /**
      * @brief Funció inserta a la BD un Driver
@@ -70,7 +72,7 @@ public class GatewayDriver implements Gateway{
     public void insert() throws SQLException {
         Database d = Database.getInstance();
         Connection c = d.getConnection();
-        PreparedStatement pS = c.prepareStatement("INSERT INTO DRIVER VALUES (?); ");
+        PreparedStatement pS = c.prepareStatement("INSERT INTO DRIVER VALUES (?, ?); ");
         setFullPreparedStatement(pS);
         pS.executeUpdate();
     }

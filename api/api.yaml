@@ -561,6 +561,32 @@ paths:
               examples:
                 errorExample:
                   $ref: '#/components/examples/error432'
+
+  /drivers/{username}/verify:
+    put:
+      tags:
+      - Drivers
+      summary: Verifica un conductor.
+      operationId: verifyDriver
+      parameters:
+      - name: username
+        in: path
+        description: Username del conductor
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+        432:
+          description: 'Error: Driver Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error432'
   
   /vehicles/{numberPlate}:
     get:
@@ -647,7 +673,7 @@ paths:
               examples:
                 errorExample:
                   $ref: '#/components/examples/error436'
-    put:
+    post:
       tags:
       - Vehicles
       summary: Afegeix o modifica la imatge d'un vehicle.
