@@ -588,7 +588,7 @@ paths:
       tags:
       - Vehicles
       summary: Obté tots els vehicles.
-      operationId: getVehicle
+      operationId: getVehicles
       parameters:
       - name: notVerified
         in: query
@@ -835,18 +835,18 @@ paths:
       summary: Esborra un vehicle d'un conductor.
       operationId: deleteDriverVehicle
       parameters:
-        - name: username
-          in: path
-          description: Username del conductor
-          required: true
-          schema:
-            type: string
-        - name: numberPlate
-          in: path
-          description: Matrícula del vehicle
-          required: true
-          schema:
-            type: string
+      - name: numberPlate
+        in: path
+        description: Matrícula del vehicle
+        required: true
+        schema:
+          type: string
+      - name: username
+        in: path
+        description: Username del conductor
+        required: true
+        schema:
+          type: string
       responses:
         200:
           description: successful operation
@@ -948,10 +948,10 @@ paths:
       parameters:
       - name: order
         in: query
-        description: Ordenació del llistat resultant ["asc", "desc"]
+        description: Si es posa a true, el llistat resultant estarà ordenat.
         required: false
         schema:
-          type: string
+          type: boolean
       responses:
         200:
           description: successful operation
@@ -971,7 +971,7 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/ChargingStation'
+                $ref: '#/components/schemas/CarPooling'
       responses:
         201:
           description: successful operation
@@ -1108,21 +1108,21 @@ paths:
         schema:
           type: number
           format: double
-      - name: startDate
+      - name: sDate
         in: query
         description: Data a partir de la qual es busca. Si no s'especifica data es busca a partir del dia actual.
         required: false
         schema:
           type: string
           format: date
-      - name: startTimeMin
+      - name: sTimeMin
         in: query
         description: Hora d'inici de l'interval de cerca. Si no s'especifica hora d'inici de l'interval ni data, es busca a partir de l'hora actual a tots els dies a partir de l'actual. Si no s'especifica hora d'inici de l'interval però si data, es busca a partir de l'hora actual y la data indicada.
         required: false
         schema:
           type: string
           format: time
-      - name: startTimeMax
+      - name: sTimeMax
         in: query
         description: Hora final de l'interval de cerca. Si no s'especifica hora final de l'interval ni data, es busca fins les 23:59 de tots els dies a partir de l'actual. Si no s'especifica hora final de l'interval però si data, es busca fins les 23:59 y la data indicada.
         required: false
@@ -1216,7 +1216,7 @@ paths:
                 errorExample:
                   $ref: '#/components/examples/error404'
 
-  /users/{username}/trips:
+  /car-pooling/from/{username}:
     get:
       tags:
       - Car Pooling
@@ -1248,7 +1248,7 @@ paths:
                 errorExample:
                   $ref: '#/components/examples/error437'
     
-  /users/{username}/trips/{id}:
+  /car-pooling/{id}/from/{username}:
     post:
       tags:
       - Car Pooling

@@ -7,13 +7,13 @@
 
 package elektroGo.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import elektroGo.back.data.finders.FinderRating;
 import elektroGo.back.data.finders.FinderTrip;
+import elektroGo.back.data.finders.FinderUser;
+import elektroGo.back.data.finders.FinderUserTrip;
 import elektroGo.back.data.gateways.GatewayTrip;
+import elektroGo.back.data.gateways.GatewayUser;
 import elektroGo.back.data.gateways.GatewayUserTrip;
-import elektroGo.back.exceptions.InvalidKey;
-import elektroGo.back.exceptions.TripAlreadyExists;
-import elektroGo.back.exceptions.TripNotFound;
+import elektroGo.back.exceptions.*;
 import elektroGo.back.logs.CustomLogger;
 import elektroGo.back.logs.logType;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -30,18 +30,66 @@ import static java.lang.Math.cos;
 /**
  * @brief La classe TripController és la classe que comunicarà front-end i back-end a l'hora de tractar amb dades dels Trips
  */
+@RequestMapping("/car-pooling")
 @RestController
 public class TripController {
     String password = "34ee7e6c4c51e43ed6a7767bc717a7f9127d3d0025a0efbf6af124d15821c6ec";
+
     private final CustomLogger logger = CustomLogger.getInstance();
+
+    /**
+     * @brief Funció amb metode 'GET' que retorna la informació de tots els Trips a la BD
+     * @return Es retorna un String amb la info dels trips
+     */
+    @GetMapping("")
+    public ArrayList<GatewayTrip> getTrips(@RequestParam(required = false) Boolean order) throws SQLException, JsonProcessingException {
+        if (order) {
+            logger.log("Starting getTripsOrdered method...", logType.TRACE);
+            FinderTrip fT = FinderTrip.getInstance();
+            ArrayList<GatewayTrip> all = fT.findOrdered();
+            if(all == null) throw new TripNotFound();
+            String log = "Returning this trips: \n";
+            for (GatewayTrip gT : all)  log += gT.json() + "\n";
+            logger.log(log + "End of method", logType.TRACE);
+            return all;
+        }
+        else {
+            logger.log("Starting getTrips method...", logType.TRACE);
+            FinderTrip fT = FinderTrip.getInstance();
+            if(fT.findAll() == null) throw new TripNotFound();
+            String log = "Returning this trips: \n";
+            ArrayList<GatewayTrip> aL = fT.findAll();
+            for (GatewayTrip gT : aL)  log += gT.json() + "\n";
+            logger.log(log + "End of method", logType.TRACE);
+            return aL;
+        }
+
+    }
+
+    /**
+     * @brief Funció amb metode 'POST' que crearà un Trip amb la info requerida
+     * @param gT GatewayTrip amb tota la informació necessaria
+     * @post S'afegeix el trip a la BD
+     */
+    @PostMapping("")
+    public void createTrip(@RequestBody GatewayTrip gT) throws SQLException {
+        logger.log("Starting createTrip method with this trip:\n" + gT.json(), logType.TRACE);
+        FinderTrip fT = FinderTrip.getInstance();
+        if (fT.findByUser(gT.getUsername(),gT.getStartDate(),gT.getStartTime()) != null) throw new TripAlreadyExists(gT.getUsername());
+        gT.insert();
+        GatewayTrip gNew = fT.findByUser(gT.getUsername(),gT.getStartDate(),gT.getStartTime());
+        GatewayUserTrip gU = new GatewayUserTrip(gNew.getId(),gNew.getUsername());
+        gU.insert();
+        logger.log("Inserted the last trip written and this gatewayUserTrip:\n" + gU.json(),logType.TRACE);
+    }
 
     /**
      * @brief Funció amb metode 'GET' que retorna la informació del trip amb el id corresponen
      * @param id Trip del que volem agafar la info
      * @return Es retorna un String amb la info del trip demanada
      */
-    @GetMapping("/car-pooling")
-    public GatewayTrip getTrip(@RequestParam Integer id) throws SQLException {
+    @GetMapping("/{id}")
+    public GatewayTrip getTrip(@PathVariable Integer id) throws SQLException {
         logger.log("Starting getTrip method with id = " + id + "...", logType.TRACE);
         FinderTrip fT = FinderTrip.getInstance();
         GatewayTrip gT = fT.findById(id);
@@ -49,15 +97,38 @@ public class TripController {
         logger.log("Returning this trip:  " + gT.json(), logType.TRACE);
         return gT;
     }
+
+    /**
+     * @brief Funció amb metode 'DELETE' que demana que s'esborri un Trip de la BD
+     * @param id  que volem eliminar
+     * @post El trip s'elimina de la BD
+     */
+    @DeleteMapping("/{id}")
+    public void deleteTrip(@PathVariable Integer id) {
+        logger.log("Starting deleteTrip method with id = " + id, logType.TRACE);
+        FinderTrip fU = FinderTrip.getInstance();
+        try {
+            GatewayTrip gU = fU.findById(id);
+            if (gU != null) gU.remove();
+            else throw new TripNotFound(id);
+            logger.log("Removed succesfully the trip written before, end of method", logType.TRACE);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * @brief Funció amb metode 'GET' que retorna la informació del trip amb el id corresponen
      * @return Es retorna un String amb la info del trip demanada
      */
-    @GetMapping("/car-pooling/sel")
-    public ArrayList<GatewayTrip> getTripSelection(@RequestParam BigDecimal LatO, @RequestParam BigDecimal LongO,
-                                                   @RequestParam BigDecimal LatD, @RequestParam BigDecimal LongD,
-                                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate sDate, Time sTimeMin,
-                                                   Time sTimeMax) throws SQLException {
+    @GetMapping("/search")
+    public ArrayList<GatewayTrip> getTripSelection(@RequestParam BigDecimal LatO,
+                                                   @RequestParam BigDecimal LongO,
+                                                   @RequestParam BigDecimal LatD,
+                                                   @RequestParam BigDecimal LongD,
+                                                   @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate sDate,
+                                                   @RequestParam(required = false) Time sTimeMin,
+                                                   @RequestParam(required = false) Time sTimeMax) throws SQLException {
         logger.log("Starting getTripSelection method with this parameters: " + "\n" +
                 "LatO = "+ LatO + ", LongO = " + LongO + "LatD = " + LatD + ", LongD = " + LongD + "sDate = " + sDate +
                 ", sTimeMin = " + sTimeMin + "and sTimeMax = " + sTimeMax, logType.TRACE);
@@ -101,74 +172,6 @@ public class TripController {
         return gT;
     }
 
-    /**
-     * @brief Funció amb metode 'GET' que retorna la informació de tots els Trips a la BD
-     * @return Es retorna un String amb la info dels trips
-     */
-    @GetMapping("/car-poolings")
-    public ArrayList<GatewayTrip> getTrips() throws SQLException, JsonProcessingException {
-        logger.log("Starting getTrips method...", logType.TRACE);
-        FinderTrip fT = FinderTrip.getInstance();
-        if(fT.findAll()==null)throw new TripNotFound();
-        String log = "Returning this trips: \n";
-        ArrayList<GatewayTrip> aL = fT.findAll();
-        for (GatewayTrip gT : aL)  log += gT.json() + "\n";
-        logger.log(log + "End of method", logType.TRACE);
-        return aL;
-    }
-
-    /**
-     * @brief Funció amb metode 'GET' que retorna la informació de tots els Users a la BD
-     * @return Es retorna un String amb la info dels usuaris
-     */
-    @GetMapping("/car-poolings/order")
-    public ArrayList<GatewayTrip> getTripsOrdered() throws SQLException {
-        FinderTrip fT = FinderTrip.getInstance();
-        ArrayList<GatewayTrip> all = fT.findOrdered();
-        if(all ==null)throw new TripNotFound();
-        String log = "Returning this trips: \n";
-        for (GatewayTrip gT : all)  log += gT.json() + "\n";
-        logger.log(log + "End of method", logType.TRACE);
-        return all;
-    }
-
-
-    /**
-     * @brief Funció amb metode 'POST' que crearà un Trip amb la info requerida
-     * @param gT GatewayTrip amb tota la informació necessaria
-     * @post S'afegeix el trip a la BD
-     */
-    @PostMapping("/car-pooling/create")
-    public void createTrip(@RequestBody GatewayTrip gT) throws SQLException {
-        logger.log("Starting createTrip method with this trip:\n" + gT.json(), logType.TRACE);
-        FinderTrip fT = FinderTrip.getInstance();
-        if (fT.findByUser(gT.getUsername(),gT.getStartDate(),gT.getStartTime()) != null) throw new TripAlreadyExists(gT.getUsername());
-        gT.insert();
-        GatewayTrip gNew = fT.findByUser(gT.getUsername(),gT.getStartDate(),gT.getStartTime());
-        GatewayUserTrip gU = new GatewayUserTrip(gNew.getId(),gNew.getUsername());
-        gU.insert();
-        logger.log("Inserted the last trip written and this gatewayUserTrip:\n" + gU.json(),logType.TRACE);
-    }
-
-    /**
-     * @brief Funció amb metode 'POST' que demana que s'esborri un Trip de la BD
-     * @param id  que volem eliminar
-     * @post El trip s'elimina de la BD
-     */
-    @PostMapping("/car-pooling/delete")
-    public void deleteTrip(@RequestParam Integer id) {
-        logger.log("Starting deleteTrip method with id = " + id, logType.TRACE);
-        FinderTrip fU = FinderTrip.getInstance();
-        try {
-            GatewayTrip gU = fU.findById(id);
-            if (gU != null) gU.remove();
-            else throw new TripNotFound(id);
-            logger.log("Removed succesfully the trip written before, end of method", logType.TRACE);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     @GetMapping("/car-pooling/byCoord")
     public ArrayList<GatewayTrip> getTripByCord(@RequestParam BigDecimal latitude, @RequestParam BigDecimal longitude, @RequestParam BigDecimal Radi,  @RequestParam String key) throws SQLException {
         logger.log("This is an external API method", logType.INFO);
@@ -189,7 +192,66 @@ public class TripController {
         return corT;
     }
 
+    @GetMapping("/from/{username}")
+    public ArrayList<GatewayTrip> getUserTripUSerinfo(@PathVariable String username) throws SQLException {
+        logger.log("Starting getUserTripUserInfo method with username '"+ username + "'...", logType.TRACE);
+        FinderUser fU = FinderUser.getInstance();
+        GatewayUser gU = fU.findByUsername(username);
+        if(gU == null)throw new UserNotFound(username);
 
+        FinderUserTrip fUT = FinderUserTrip.getInstance();
+        ArrayList<GatewayUserTrip> gUT = fUT.findTripByUser(username);
+        if(gUT == null) throw new UserTripNotFound();
+        ArrayList<GatewayTrip> end = new ArrayList<>();
+        FinderTrip fT = FinderTrip.getInstance();
+        String log = "Returning this userTrips:\n";
+        for (GatewayUserTrip gatewayUserTrip : gUT) {
+            end.add(fT.findById(gatewayUserTrip.getId()));
+            log += gatewayUserTrip.json() + "\n";
+        }
+        logger.log(log + "End of method", logType.TRACE);
+        return end;
+    }
 
+    /**
+     * @brief Funció amb metode 'POST' que crearà un Trip amb la info requerida
+     * @param id id del trip
+     * @param username username del user
+     * @post S'afegeix Trip la BD
+     */
+    @PostMapping("/{id}/from/{username}")
+    public void createUserTrip(@PathVariable Integer id, @PathVariable String username) throws SQLException {
+        logger.log("Starting createUserTrip method with userTrip:\n" + username + " " + id + "...", logType.TRACE);
+        FinderUser fU = FinderUser.getInstance();
+        GatewayUser gU = fU.findByUsername(username);
+        if(gU == null)throw new UserNotFound(username);
+        FinderTrip fT = FinderTrip.getInstance();
+        GatewayTrip gT = fT.findById(id);
+        if(gT == null)throw new TripNotFound(id);
+        FinderUserTrip fUT = FinderUserTrip.getInstance();
+        if (fUT.findByTripUser(id,username) != null) throw new UserTripAlreadyExists(id,username);
+        GatewayUserTrip gUT = new GatewayUserTrip(id, username);
+        gUT.insert();
+        logger.log("userTrip inserted successfully", logType.TRACE);
+    }
 
+    /**
+     * @brief Funció amb metode 'DELETE' que demana que s'esborri un userTrip de la BD
+     * @param username Usuari que volem eliminar
+     * @param id id del Trip
+     * @post El usertrip s'elimina de la BD
+     */
+    @DeleteMapping("/{id}/from/{username}")
+    public void deleteDriver(@PathVariable Integer id,@PathVariable String username) {
+        logger.log("Starting delete driver method with id = " + id + " and username '" + username + "'...", logType.TRACE);
+        FinderUserTrip fD = FinderUserTrip.getInstance();
+        try {
+            GatewayUserTrip gD = fD.findByTripUser(id,username);
+            if (gD != null) gD.remove();
+            else throw new UserTripNotFound(username,id);
+            logger.log("userTrip removed successfully, end of method", logType.TRACE);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

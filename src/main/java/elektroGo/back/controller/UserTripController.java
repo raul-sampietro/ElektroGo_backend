@@ -70,7 +70,7 @@ public class UserTripController {
         return gUT;
     }
 
-    // Obté els trips d'un user
+    // Obté els trips d'un user /car-pooling/from/{username}
     @GetMapping("/userTrip/TripByUser")
     public ArrayList<GatewayTrip> getUserTripUSerinfo(@RequestParam String username) throws SQLException {
         logger.log("Starting getUserTripUserInfo method with username '"+ username + "'...", logType.TRACE);
@@ -107,7 +107,7 @@ public class UserTripController {
         return objectMapper.writeValueAsString(lU);
     }
 
-    /**
+    /** post /car-pooling/{id}/from/{username}
      * @brief Funció amb metode 'POST' que crearà un Trip amb la info requerida
      * @param gD GatewayTrip amb tota la informació necessaria
      * @post S'afegeix Trip la BD
