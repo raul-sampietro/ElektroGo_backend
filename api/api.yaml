@@ -317,20 +317,61 @@ paths:
               examples:
                 errorExample:
                   $ref: '#/components/examples/error437'
+
+  /ratings/from/{userFrom}/to/{userTo}:
+    get:
+      tags:
+      - Ratings
+      summary: Obté una valoració.
+      operationId: getRating
+      parameters:
+      - name: userFrom
+        in: query
+        description: Username de l'usuari que ha fet la valoració
+        required: true
+        schema:
+          type: string
+      - name: userTo
+        in: query
+        description: Username de l'usuari que ha rebut la valoració
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+        437:
+          description: 'Error: User Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error437'
+        442:
+          description: 'Error: Rating Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error442'
     delete:
       tags:
       - Ratings
       summary: Esborra una valoració.
       operationId: deleteRating
       parameters:
-      - name: userWhoRates
-        in: query
+      - name: userFrom
+        in: path
         description: Username de l'usuari que ha fet la valoració
         required: true
         schema:
           type: string
-      - name: ratedUser
-        in: query
+      - name: userTo
+        in: path
         description: Username de l'usuari que ha rebut la valoració
         required: true
         schema:
@@ -401,13 +442,13 @@ paths:
       summary: Esborra una denucnia.
       operationId: deleteReport
       parameters:
-      - name: userFrom
+      - name: userWhoReports
         in: query
         description: Username de l'usuari que ha fet la denuncia
         required: true
         schema:
           type: string
-      - name: userTo
+      - name: reportedUser
         in: query
         description: Username de l'usuari que ha rebut la denuncia
         required: true

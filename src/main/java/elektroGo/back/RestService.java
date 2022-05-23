@@ -54,11 +54,11 @@ public class RestService {
                 GatewayChargingStations gCS = new GatewayChargingStations(id, a.getPromotor_gestor(), a.getAcces(), a.getTipus_velocitat(),
                         a.getTipus_connexi(), lat, log, a.getDesignaci_descriptiva(), kw, a.getAc_dc(), a.getIde_pdr(), a.getNplaces_estaci(), a.getTipus_vehicle());
                 if (gc == null) {
-                    logger.log("M'he inserit: " + id + " " + a.getPromotor_gestor(),logType.INFO);
+                    logger.log("Estacio de carrega inserida: " + id + " " + a.getPromotor_gestor(),logType.INFO);
                     gCS.insert();
                 }
                 else {
-                    logger.log("M'he actualitzat: " + id + " " + a.getPromotor_gestor(),logType.INFO);
+                    logger.log("Estacio de carrega actualitzada: " + id + " " + a.getPromotor_gestor(),logType.INFO);
                     gCS.update();
                 }
                 id++;
