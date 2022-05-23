@@ -547,11 +547,6 @@ paths:
       responses:
         200:
           description: successful operation
-          content:
-            application/json:
-              schema:
-                type: object 
-                $ref: '#/components/schemas/Driver'
         432:
           description: 'Error: Driver Not Found'
           content:
@@ -587,6 +582,29 @@ paths:
               examples:
                 errorExample:
                   $ref: '#/components/examples/error432'
+
+  /vehicles:
+    get:
+      tags:
+      - Vehicles
+      summary: Obté tots els vehicles.
+      operationId: getVehicle
+      parameters:
+      - name: notVerified
+        in: query
+        description: Si es marca com a cert, s'obtenen només els vehicles no verificats. Si es deixa a false o no s'inclou, s'ignora la restricció.
+        required: false
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vehicle'
   
   /vehicles/{numberPlate}:
     get:
@@ -705,7 +723,33 @@ paths:
                 errorExample:
                   $ref: '#/components/examples/error436'
 
-  /drivers/{username}/vehicles:
+  /vehicles/{numberPlate}/verify:
+    put:
+      tags:
+      - Vehicles
+      summary: Verifica un vehicle.
+      operationId: verifyVehicle
+      parameters:
+      - name: numberPlate
+        in: path
+        description: Matrícula del vehicle
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+        436:
+          description: 'Error: Vehicle Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error436'
+
+  /vehicles/from/{username}:
     get:
       tags:
       - Vehicles
@@ -739,7 +783,7 @@ paths:
     post:
       tags:
       - Vehicles
-      summary: Associa un conductor amb un vehicle.
+      summary: Crea un vehicle per un conductor.
       operationId: postDriverVehicle
       parameters:
         - name: username
@@ -784,11 +828,11 @@ paths:
                 errorExample:
                   $ref: '#/components/examples/error433'
       
-  /drivers/{username}/vehicles/{numberPlate}:
+  /vehicles/{numberPlate}/from/{username}:
     delete:
       tags:
       - Vehicles
-      summary: Desassocia un conductor y un vehicle.
+      summary: Esborra un vehicle d'un conductor.
       operationId: deleteDriverVehicle
       parameters:
         - name: username
