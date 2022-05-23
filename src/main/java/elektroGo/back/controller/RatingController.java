@@ -14,11 +14,13 @@ import elektroGo.back.exceptions.RatingNotFound;
 import elektroGo.back.exceptions.UserNotFound;
 import elektroGo.back.logs.CustomLogger;
 import elektroGo.back.logs.logType;
+import elektroGo.back.model.avgRate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.util.List;
 
 @RequestMapping("/ratings")
 @RestController
@@ -55,20 +57,77 @@ public class RatingController {
     }
 
     /**
+     * @brief Metode per llegir els ratings que ha fet un usuari
+     * @param username Usuari que ha fet els ratings
+     * @return Llistat de ratings que ha fet l'usuari
+     */
+    @GetMapping("/from/{username}")
+    public List<GatewayRating> getRatingsMadeUser(@PathVariable String username) throws SQLException {
+        logger.log("\nStarting getRatingsMadeUser method with userName '" + username + "'...", logType.TRACE);
+        FinderUser fU = FinderUser.getInstance();
+        if (fU.findByUsername(username) == null) throw new UserNotFound(username);
+        FinderRating fR = FinderRating.getInstance();
+        List<GatewayRating> l = fR.findByUserWhoRates(username);
+        String log = "Returning this ratings:";
+        for (GatewayRating g : l) log += g.json() + "\n";
+        logger.log(log, logType.TRACE);
+        return l;
+    }
+
+    /**
+     * @brief Metode que retorna els ratings que se li han fet a un usuari
+     * @param username Usuari al qual se li han fet els ratings
+     * @return Llistat de ratings que s'han fet a l'usuari "username"
+     */
+    @GetMapping("/to/{username}")
+    public List<GatewayRating> getRatingsReceivedUser(@PathVariable String username) throws SQLException {
+        logger.log("\nStarting getRatingsReceivedUser method with username '" + username + "'...", logType.TRACE);
+        FinderUser fU = FinderUser.getInstance();
+        if (fU.findByUsername(username) == null) throw new UserNotFound(username);
+        FinderRating fR = FinderRating.getInstance();
+        List<GatewayRating> l = fR.findByRatedUser(username);
+        String log = "Returning this ratings:";
+        for (GatewayRating g : l) log += g.json() + "\n";
+        logger.log(log, logType.TRACE);
+        return l;
+    }
+
+    @GetMapping("/to/{username}/avg")
+    public avgRate avgRate(@PathVariable String username) throws SQLException {
+        logger.log("\nStarting avgRate method with username : '" + username +"'...", logType.TRACE);
+        FinderUser fU = FinderUser.getInstance();
+        if (fU.findByUsername(username) == null) throw new UserNotFound(username);
+        FinderRating fR = FinderRating.getInstance();
+        avgRate ret = fR.findUserRateAvg(username);
+        logger.log("Returning this avgRate: ratingValue = " + ret.getRatingValue() + " and numberOfRatings = " + ret.getNumberOfRatings() + " end of method", logType.TRACE);
+        return ret;
+    }
+
+    @GetMapping("/from/{userFrom}/to/{userTo}")
+    public GatewayRating getSingleRating(@PathVariable String userFrom, @PathVariable String userTo) throws SQLException {
+        logger.log("\nStarting getSingleRating from ' " + userFrom + "' to '" + userTo, logType.TRACE);
+        FinderRating fR = FinderRating.getInstance();
+        GatewayRating gR = fR.findByPrimaryKey(userFrom, userTo);
+        if (gR == null) throw new RatingNotFound(userFrom, userTo);
+        logger.log("Returning this rating:\n" + gR.json() + "\nEnd of method", logType.TRACE);
+        return gR;
+    }
+
+    /**
      * @brief Metode que esborra el rating identificat pels seguents parametres
-     * @param userWhoRates usuari que fa la valoracio
-     * @param ratedUser usuari valorat
+     * @param userFrom usuari que fa la valoracio
+     * @param userTo usuari valorat
      * @post S'esborra l'usuari identificat pels parametres abans esmentats
      */
-    @DeleteMapping("")
-    public void unrateUser(@RequestParam String userWhoRates, String ratedUser) throws SQLException {
-        logger.log("\nStarting unrateUser method with userWhoRates : '" + userWhoRates + "' and ratedUser: '" + ratedUser + "'...", logType.TRACE);
+    @DeleteMapping("/from/{userFrom}/to/{userTo}")
+    public void unrateUser(@PathVariable String userFrom, @PathVariable String userTo) throws SQLException {
+        logger.log("\nStarting unrateUser method from ' " + userFrom + "' to '" + userTo, logType.TRACE);
         FinderUser fU = FinderUser.getInstance();
-        if (fU.findByUsername(userWhoRates) == null) throw new UserNotFound(userWhoRates);
-        if (fU.findByUsername(ratedUser) == null) throw new UserNotFound(ratedUser);
+        if (fU.findByUsername(userFrom) == null) throw new UserNotFound(userFrom);
+        if (fU.findByUsername(userTo) == null) throw new UserNotFound(userTo);
         FinderRating fR = FinderRating.getInstance();
-        GatewayRating gR = fR.findByPrimaryKey(userWhoRates, ratedUser);
-        if (gR == null) throw new RatingNotFound(userWhoRates, ratedUser);
+        GatewayRating gR = fR.findByPrimaryKey(userFrom, userTo);
+        if (gR == null) throw new RatingNotFound(userFrom, userTo);
         gR.remove();
         logger.log("Rating removed successfully, end of method", logType.TRACE);
     }

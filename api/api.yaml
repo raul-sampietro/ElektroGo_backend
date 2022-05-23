@@ -135,10 +135,35 @@ paths:
                 errorExample:
                   $ref: '#/components/examples/error437'
 
-  /users/{username}/ratings/made:
+  /ratings:
+    post:
+      tags:
+      - Ratings
+      summary: Crea una valoració.
+      operationId: postRating
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Rating'
+        required: true
+      responses:
+        201:
+          description: successful operation
+        437:
+          description: 'Error: User Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error437'
+
+  /ratings/from/{username}:
     get:
       tags:
-      - Users
+      - Ratings
       summary: Obté les valoracions fetes per un usuari.
       operationId: getRatingsMadeUser
       parameters:
@@ -167,10 +192,10 @@ paths:
                 errorExample:
                   $ref: '#/components/examples/error437'
 
-  /users/{username}/ratings/received:
+  /ratings/to/{username}:
     get:
       tags:
-      - Users
+      - Ratings
       summary: Obté les valoracions fetes a un usuari.
       operationId: getRatingsReceivedUser
       parameters:
@@ -199,10 +224,10 @@ paths:
                 errorExample:
                   $ref: '#/components/examples/error437'
 
-  /users/{username}/ratings/avg:
+  /ratings/to/{username}/avg:
     get:
       tags:
-      - Users
+      - Ratings
       summary: Obté la valoració mitjana d'un usuari.
       operationId: getAvgRatingUser
       parameters:
@@ -219,95 +244,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AvgRating'
-        437:
-          description: 'Error: User Not Found'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResultElektroGo'
-              examples:
-                errorExample:
-                  $ref: '#/components/examples/error437'
-
-  /users/{username}/reports/made:
-    get:
-      tags:
-      - Users
-      summary: Obté les denuncies fetes per un usuari.
-      operationId: getReportsMadeUser
-      parameters:
-      - name: username
-        in: path
-        description: Username de l'usuari
-        required: true
-        schema:
-          type: string
-      responses:
-        200:
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items: 
-                  $ref: '#/components/schemas/Report'
-        437:
-          description: 'Error: User Not Found'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResultElektroGo'
-              examples:
-                errorExample:
-                  $ref: '#/components/examples/error437'
-
-  /users/{username}/reports/received:
-    get:
-      tags:
-      - Users
-      summary: Obté les denuncies fetes a un usuari.
-      operationId: getReportsReceivedUser
-      parameters:
-      - name: username
-        in: path
-        description: Username de l'usuari
-        required: true
-        schema:
-          type: string
-      responses:
-        200:
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items: 
-                  $ref: '#/components/schemas/Report'
-        437:
-          description: 'Error: User Not Found'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResultElektroGo'
-              examples:
-                errorExample:
-                  $ref: '#/components/examples/error437'
-
-  /ratings:
-    post:
-      tags:
-      - Ratings
-      summary: Crea una valoració.
-      operationId: postRating
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Rating'
-        required: true
-      responses:
-        201:
-          description: successful operation
         437:
           description: 'Error: User Not Found'
           content:
@@ -436,20 +372,86 @@ paths:
               examples:
                 errorExample:
                   $ref: '#/components/examples/error445'
+
+  /reports/from/{username}:
+    get:
+      tags:
+      - Reports
+      summary: Obté les denuncies fetes per un usuari.
+      operationId: getReportsMadeUser
+      parameters:
+      - name: username
+        in: path
+        description: Username de l'usuari
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Report'
+        437:
+          description: 'Error: User Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error437'
+
+  /reports/to/{username}:
+    get:
+      tags:
+      - Reports
+      summary: Obté les denuncies fetes a un usuari.
+      operationId: getReportsReceivedUser
+      parameters:
+      - name: username
+        in: path
+        description: Username de l'usuari
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Report'
+        437:
+          description: 'Error: User Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error437'
+
+  /reports/from/{userFrom}/to/{userTo}:
     delete:
       tags:
       - Reports
       summary: Esborra una denucnia.
       operationId: deleteReport
       parameters:
-      - name: userWhoReports
-        in: query
+      - name: userFrom
+        in: path
         description: Username de l'usuari que ha fet la denuncia
         required: true
         schema:
           type: string
-      - name: reportedUser
-        in: query
+      - name: userTo
+        in: path
         description: Username de l'usuari que ha rebut la denuncia
         required: true
         schema:
