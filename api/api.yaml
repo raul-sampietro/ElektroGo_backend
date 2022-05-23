@@ -1413,6 +1413,38 @@ paths:
                 items:
                   $ref: '#/components/schemas/Message'
   
+  /chats/messages/to/{username}:
+    get:
+      tags:
+      - Chats
+      summary: Obté tots els missatges rebuts per un usuari.
+      operationId: getAllMessagesReceivedUser
+      parameters:
+      - name: username
+        in: path
+        description: Username de l'usuari
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+        437:
+          description: 'Error: User Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error437'
+
   /chats/messages/{username1}/{username2}:
     get:
       tags:
@@ -1450,21 +1482,29 @@ paths:
               examples:
                 errorExample:
                   $ref: '#/components/examples/error437'
+
+  /chats/messages/{sender}/{receiver}:
     post:
       tags:
       - Chats
       summary: Crea un missatge.
       operationId: postMessage
       parameters:
-      - name: username1
+      - name: sender
         in: path
         description: Username de l'usuari remitent
         required: true
         schema:
           type: string
-      - name: username2
+      - name: receiver
         in: path
-        description: Username de l'usuari revedor
+        description: Username de l'usuari destinatari
+        required: true
+        schema:
+          type: string
+      - name: message
+        in: query
+        description: Content of the message
         required: true
         schema:
           type: string
