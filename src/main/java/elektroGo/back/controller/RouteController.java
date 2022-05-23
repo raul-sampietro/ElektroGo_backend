@@ -29,18 +29,18 @@ public class RouteController {
 
     /**
      * @brief Funcio amb metode 'GET' calcula la ruta entre un punt d'origen i un punt de desti
-     * @param oriLat valor de la coordenada de latitud del punt d'origen
-     * @param oriLon valor de la coordenada de longitud del punt d'origen
-     * @param destLat valor de la coordenada de latitud del punt de desti
-     * @param destLon valor de la coordenada de longitud del punt de desti
+     * @param latO valor de la coordenada de latitud del punt d'origen
+     * @param longO valor de la coordenada de longitud del punt d'origen
+     * @param latD valor de la coordenada de latitud del punt de desti
+     * @param longD valor de la coordenada de longitud del punt de desti
      * @param range autonomia del vehicle expressada en kilometres
      * @return Es retorna una llista de punts que formen la ruta entre l'origen i el desti
      */
     @GetMapping("/calculate")
-    public ArrayList<Double> calculateRoute(@RequestParam Double oriLat, @RequestParam Double oriLon, @RequestParam Double destLat, @RequestParam Double destLon, @RequestParam int range) {
+    public ArrayList<Double> calculateRoute(@RequestParam Double latO, @RequestParam Double longO, @RequestParam Double latD, @RequestParam Double longD, @RequestParam int range) {
         logger.log("Starting calculateRoute method with this parameters:" + "\n" +
-                "oriLat = " + oriLat + ", oriLon = " + oriLon + ", destLat = "+ destLat + ", destLon = " + destLon + "and range = " + range, logType.TRACE);
-        RouteCalculation routeCalculation = new RouteCalculation(range, oriLat, oriLon, destLat, destLon);
+                "latO = " + latO + ", longO = " + longO + ", latD = "+ latD + ", longD = " + longD + "and range = " + range, logType.TRACE);
+        RouteCalculation routeCalculation = new RouteCalculation(range, latO, longO, latD, longD);
         String log = "";
         if (!routeCalculation.execute()) throw new DestinationNotReachable();
         else {

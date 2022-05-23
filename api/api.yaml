@@ -1252,23 +1252,23 @@ paths:
     post:
       tags:
       - Car Pooling
-      summary: Associa un trajecte de carpooling i un usuari.
-      operationId: deleteCarPoolingsUser
+      summary: Afegeix un usuari a un trajecte de carpooling.
+      operationId: postCarPoolingsUser
       parameters:
-      - name: username
-        in: path
-        description: Username de l'usuari
-        required: true
-        schema:
-          type: string
       - name: id
         in: path
         description: ID del trajecte de carpooling
         required: true
         schema:
           type: number
+      - name: username
+        in: path
+        description: Username de l'usuari
+        required: true
+        schema:
+          type: string
       responses:
-        200:
+        201:
           description: successful operation
         437:
           description: 'Error: User Not Found'
@@ -1300,23 +1300,23 @@ paths:
     delete:
       tags:
       - Car Pooling
-      summary: Desassocia un trajecte de carpooling amb un usuari.
-      operationId: postCarPoolingsUser
+      summary: Esborra un usuari d'un trajecte de carpooling.
+      operationId: deleteCarPoolingsUser
       parameters:
-      - name: username
-        in: path
-        description: Username de l'usuari
-        required: true
-        schema:
-          type: string
       - name: id
         in: path
         description: ID del trajecte de carpooling
         required: true
         schema:
           type: number
+      - name: username
+        in: path
+        description: Username de l'usuari
+        required: true
+        schema:
+          type: string
       responses:
-        201:
+        200:
           description: successful operation
         437:
           description: 'Error: User Not Found'
