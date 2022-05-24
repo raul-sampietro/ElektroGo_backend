@@ -84,7 +84,8 @@ public class FinderDriver {
      */
     private GatewayDriver createGateway(ResultSet r) throws SQLException {
         String userName = r.getString(1);
-        return new GatewayDriver(userName);
+        Boolean verified = r.getBoolean(2);
+        return new GatewayDriver(userName,verified);
     }
 
 }

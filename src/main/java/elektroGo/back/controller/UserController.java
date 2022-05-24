@@ -8,9 +8,11 @@
 package elektroGo.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import elektroGo.back.data.finders.FinderBlock;
 import elektroGo.back.data.finders.FinderRating;
 import elektroGo.back.data.finders.FinderReport;
 import elektroGo.back.data.finders.FinderUser;
+import elektroGo.back.data.gateways.GatewayBlock;
 import elektroGo.back.data.gateways.Gateway;
 import elektroGo.back.data.gateways.GatewayRating;
 import elektroGo.back.data.gateways.GatewayReport;
@@ -282,5 +284,18 @@ public class UserController {
         for (GatewayReport g : l) log += g.json() + "\n";
         logger.log(log + "End of method", logType.TRACE);
         return fR.findAll();
+    }
+
+    @GetMapping("/users/{username}/blocks/made")
+    public List<GatewayBlock> blocksUser(@PathVariable String username) throws SQLException {
+        System.out.println("\nStarting allBlocks method...");
+        FinderBlock fR = FinderBlock.getInstance();
+        return fR.findByUserBlocking(username);
+    }
+    @GetMapping("/users/{username}/blocks/recieved")
+    public List<GatewayBlock> UserIsBlocked(@PathVariable String username) throws SQLException {
+        System.out.println("\nStarting allBlocks method...");
+        FinderBlock fR = FinderBlock.getInstance();
+        return fR.findByBlockUser(username);
     }
 }

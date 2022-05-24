@@ -59,38 +59,37 @@ public class TripController {
     public ArrayList<GatewayTrip> getTripSelection(@RequestParam BigDecimal LatO, @RequestParam BigDecimal LongO,
                                                    @RequestParam BigDecimal LatD, @RequestParam BigDecimal LongD,
                                                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate sDate, Time sTimeMin,
-                                                   Time sTimeMax) throws SQLException {
-        logger.log("Starting getTripSelection method with this parameters: " + "\n" +
-                "LatO = "+ LatO + ", LongO = " + LongO + "LatD = " + LatD + ", LongD = " + LongD + "sDate = " + sDate +
-                ", sTimeMin = " + sTimeMin + "and sTimeMax = " + sTimeMax, logType.TRACE);
+                                                   Time sTimeMax,
+                                                   @RequestParam String username) throws SQLException {
+        System.out.println("hey");
         FinderTrip fT = FinderTrip.getInstance();
         ArrayList<GatewayTrip> gT;
         BigDecimal a = new BigDecimal("0.05");
         if(sDate == null){
             if(sTimeMax == null){
-                if(sTimeMin == null)gT = fT.findByNot(LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
+                if(sTimeMin == null)gT = fT.findByNot(username,LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
                         LatD.subtract(a),LatD.add(a),LongD.subtract(a),LongD.add(a));
-                else gT = fT.findByMin(LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
+                else gT = fT.findByMin(username,LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
                         LatD.subtract(a),LatD.add(a),LongD.subtract(a),LongD.add(a),sTimeMin);
             }
             else{
-                if(sTimeMin == null)gT = fT.findByMax(LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
+                if(sTimeMin == null)gT = fT.findByMax(username,LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
                         LatD.subtract(a),LatD.add(a),LongD.subtract(a),LongD.add(a),sTimeMax);
-                else gT = fT.findByMaxMin(LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
+                else gT = fT.findByMaxMin(username,LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
                         LatD.subtract(a),LatD.add(a),LongD.subtract(a),LongD.add(a),sTimeMax,sTimeMin);
             }
         }
         else{
             if(sTimeMax == null){
-                if(sTimeMin == null)gT = fT.findByDat(LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
+                if(sTimeMin == null)gT = fT.findByDat(username,LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
                         LatD.subtract(a),LatD.add(a),LongD.subtract(a),LongD.add(a),sDate);
-                else gT = fT.findByDatMin(LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
+                else gT = fT.findByDatMin(username,LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
                         LatD.subtract(a),LatD.add(a),LongD.subtract(a),LongD.add(a),sDate,sTimeMin);
             }
             else{
-                if(sTimeMin == null)gT = fT.findByDatMax(LatO.subtract(a),LatO.add(a),LongO.subtract(a),
+                if(sTimeMin == null)gT = fT.findByDatMax(username,LatO.subtract(a),LatO.add(a),LongO.subtract(a),
                         LongO.add(a),LatD.subtract(a),LatD.add(a),LongD.subtract(a),LongD.add(a),sDate,sTimeMax);
-                else gT = fT.findByDatMaxMin(LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
+                else gT = fT.findByDatMaxMin(username,LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
                         LatD.subtract(a),LatD.add(a),LongD.subtract(a),LongD.add(a),sDate,sTimeMax,sTimeMin);
             }
         }
@@ -124,9 +123,9 @@ public class TripController {
      * @return Es retorna un String amb la info dels usuaris
      */
     @GetMapping("/car-poolings/order")
-    public ArrayList<GatewayTrip> getTripsOrdered() throws SQLException {
+    public ArrayList<GatewayTrip> getTripsOrdered(@RequestParam String username) throws SQLException {
         FinderTrip fT = FinderTrip.getInstance();
-        ArrayList<GatewayTrip> all = fT.findOrdered();
+        ArrayList<GatewayTrip> all = fT.findOrdered(username);
         if(all ==null)throw new TripNotFound();
         String log = "Returning this trips: \n";
         for (GatewayTrip gT : all)  log += gT.json() + "\n";

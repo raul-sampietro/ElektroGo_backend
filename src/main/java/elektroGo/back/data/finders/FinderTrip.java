@@ -63,7 +63,7 @@ public class FinderTrip {
      * @brief Funció que agafa tots els trips de la BD i els posa a un Array
      * @return Es retorna un array de GatewayTrips amb tota la info dels Trips
      */
-    public ArrayList<GatewayTrip> findOrdered() throws SQLException {
+    public ArrayList<GatewayTrip> findOrdered(String username) throws SQLException {
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
         ArrayList<GatewayTrip> gtrip = new ArrayList<>();
@@ -75,9 +75,10 @@ public class FinderTrip {
                 "from TRIP t " +
                 "LEFT OUTER JOIN RATING  r " +
                 "ON t.username = r.ratedUser " +
-                "WHERE t.startDate > CURDATE() or ( t.startDate = CURDATE()  and  t.startTime >= CURTIME() )"+
+                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?) and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id)and(t.startDate > CURDATE() or ( t.startDate = CURDATE()  and  t.startTime >= CURTIME()))"+
                 "group by t.id " +
                 "order by avgpoints desc;");
+        pS.setString(1, username);
         ResultSet r = pS.executeQuery();
         while (r.next()) {
             gtrip.add(createGateway(r));
@@ -122,7 +123,7 @@ public class FinderTrip {
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
         ArrayList<GatewayTrip> corT = new ArrayList<>();
-        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and startDate > CURDATE() or ( startDate = CURDATE()  and  startTime >= CURTIME() ) ;");
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP t WHERE t.LatitudeOrigin BETWEEN ? AND ? and t.longitudeOrigin BETWEEN ? AND ? and (t.startDate > CURDATE() or ( t.startDate = CURDATE()  and  t.startTime >= CURTIME()))and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id);");
         pS.setBigDecimal(1,lat1);
         pS.setBigDecimal(2,lat2);
         pS.setBigDecimal(3,long1);
@@ -134,7 +135,7 @@ public class FinderTrip {
         return corT;
     }
 
-    public ArrayList<GatewayTrip> findByNot(BigDecimal latO1,BigDecimal latO2,BigDecimal longO1 ,BigDecimal longO2,BigDecimal lat1,BigDecimal lat2,BigDecimal long1 ,BigDecimal long2) throws SQLException {
+    public ArrayList<GatewayTrip> findByNot(String username ,BigDecimal latO1,BigDecimal latO2,BigDecimal longO1 ,BigDecimal longO2,BigDecimal lat1,BigDecimal lat2,BigDecimal long1 ,BigDecimal long2) throws SQLException {
         GatewayTrip gT = null;
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
@@ -147,17 +148,18 @@ public class FinderTrip {
                         "from TRIP t " +
                         "LEFT OUTER JOIN RATING  r " +
                         "ON t.username = r.ratedUser " +
-                        "WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ?"
+                        "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?)and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id)and  LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ?"
                         +"group by t.id " +
                         "order by avgpoints desc;"));
-        pS.setBigDecimal(1,latO1);
-        pS.setBigDecimal(2,latO2);
-        pS.setBigDecimal(3,longO1);
-        pS.setBigDecimal(4,longO2);
-        pS.setBigDecimal(5,lat1);
-        pS.setBigDecimal(6,lat2);
-        pS.setBigDecimal(7,long1);
-        pS.setBigDecimal(8,long2);
+        pS.setString(1,username);
+        pS.setBigDecimal(2,latO1);
+        pS.setBigDecimal(3,latO2);
+        pS.setBigDecimal(4,longO1);
+        pS.setBigDecimal(5,longO2);
+        pS.setBigDecimal(6,lat1);
+        pS.setBigDecimal(7,lat2);
+        pS.setBigDecimal(8,long1);
+        pS.setBigDecimal(9,long2);
         ResultSet r = pS.executeQuery();
         while (r.next()) {
             corT.add(createGateway(r));
@@ -165,7 +167,7 @@ public class FinderTrip {
         return corT;
     }
 
-    public ArrayList<GatewayTrip> findByMin(BigDecimal latO1,BigDecimal latO2,BigDecimal longO1 ,BigDecimal longO2,BigDecimal lat1,BigDecimal lat2,BigDecimal long1 ,BigDecimal long2, Time min) throws SQLException {
+    public ArrayList<GatewayTrip> findByMin(String username, BigDecimal latO1,BigDecimal latO2,BigDecimal longO1 ,BigDecimal longO2,BigDecimal lat1,BigDecimal lat2,BigDecimal long1 ,BigDecimal long2, Time min) throws SQLException {
         GatewayTrip gT = null;
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
@@ -178,146 +180,18 @@ public class FinderTrip {
                 "from TRIP t " +
                 "LEFT OUTER JOIN RATING  r " +
                 "ON t.username = r.ratedUser " +
-                "WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startTime >= ?"
+                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?) and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id)and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startTime >= ?"
                 +"group by t.id " +
                 "order by avgpoints desc;"));
-        pS.setBigDecimal(1,latO1);
-        pS.setBigDecimal(2,latO2);
-        pS.setBigDecimal(3,longO1);
-        pS.setBigDecimal(4,longO2);
-        pS.setBigDecimal(5,lat1);
-        pS.setBigDecimal(6,lat2);
-        pS.setBigDecimal(7,long1);
-        pS.setBigDecimal(8,long2);
-        pS.setTime(9,min);
-        ResultSet r = pS.executeQuery();
-        while (r.next()) {
-            corT.add(createGateway(r));
-        }
-        return corT;
-    }
-
-    public ArrayList<GatewayTrip> findByMax(BigDecimal latO1,BigDecimal latO2,BigDecimal longO1 ,BigDecimal longO2,BigDecimal lat1,BigDecimal lat2,BigDecimal long1 ,BigDecimal long2, Time max) throws SQLException {
-        GatewayTrip gT = null;
-        Database d = Database.getInstance();
-        Connection conn = d.getConnection();
-        ArrayList<GatewayTrip> corT = new ArrayList<>();
-        PreparedStatement pS = conn.prepareStatement(("select t.id, t.startDate, t.startTime, " +
-                "t.offeredSeats,t.occupiedSeats,t.restrictions, t.details,t.CancelDate," +
-                "t.vehicleNumberPlate,t.origin,t.destination,t.LatitudeOrigin," +
-                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username," +
-                "AVG(r.points) as avgpoints " +
-                "from TRIP t " +
-                "LEFT OUTER JOIN RATING  r " +
-                "ON t.username = r.ratedUser " +
-                "WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startTime <= ?"
-                +"group by t.id " +
-                "order by avgpoints desc;"));
-        pS.setBigDecimal(1,latO1);
-        pS.setBigDecimal(2,latO2);
-        pS.setBigDecimal(3,longO1);
-        pS.setBigDecimal(4,longO2);
-        pS.setBigDecimal(5,lat1);
-        pS.setBigDecimal(6,lat2);
-        pS.setBigDecimal(7,long1);
-        pS.setBigDecimal(8,long2);
-        pS.setTime(9,max);
-        ResultSet r = pS.executeQuery();
-        while (r.next()) {
-            corT.add(createGateway(r));
-        }
-        return corT;
-    }
-
-    public ArrayList<GatewayTrip> findByMaxMin(BigDecimal latO1,BigDecimal latO2,BigDecimal longO1 ,BigDecimal longO2,BigDecimal lat1,BigDecimal lat2,BigDecimal long1 ,BigDecimal long2, Time max, Time min) throws SQLException {
-        GatewayTrip gT = null;
-        Database d = Database.getInstance();
-        Connection conn = d.getConnection();
-        ArrayList<GatewayTrip> corT = new ArrayList<>();
-        PreparedStatement pS = conn.prepareStatement(("select t.id, t.startDate, t.startTime, " +
-                "t.offeredSeats,t.occupiedSeats,t.restrictions, t.details,t.CancelDate," +
-                "t.vehicleNumberPlate,t.origin,t.destination,t.LatitudeOrigin," +
-                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username," +
-                "AVG(r.points) as avgpoints " +
-                "from TRIP t " +
-                "LEFT OUTER JOIN RATING  r " +
-                "ON t.username = r.ratedUser " +
-                "WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startTime BETWEEN ? AND ?"
-                +"group by t.id " +
-                "order by avgpoints desc;"));
-        pS.setBigDecimal(1,latO1);
-        pS.setBigDecimal(2,latO2);
-        pS.setBigDecimal(3,longO1);
-        pS.setBigDecimal(4,longO2);
-        pS.setBigDecimal(5,lat1);
-        pS.setBigDecimal(6,lat2);
-        pS.setBigDecimal(7,long1);
-        pS.setBigDecimal(8,long2);
-        pS.setTime(10,max);
-        pS.setTime(9,min);
-        ResultSet r = pS.executeQuery();
-        while (r.next()) {
-            corT.add(createGateway(r));
-        }
-        return corT;
-    }
-    public ArrayList<GatewayTrip> findByDat(BigDecimal latO1,BigDecimal latO2,BigDecimal longO1 ,BigDecimal longO2,BigDecimal lat1,BigDecimal lat2,BigDecimal long1 ,BigDecimal long2, LocalDate dat) throws SQLException {
-        GatewayTrip gT = null;
-        Database d = Database.getInstance();
-        Connection conn = d.getConnection();
-        ArrayList<GatewayTrip> corT = new ArrayList<>();
-        PreparedStatement pS = conn.prepareStatement(("select t.id, t.startDate, t.startTime, " +
-                "t.offeredSeats,t.occupiedSeats,t.restrictions, t.details,t.CancelDate," +
-                "t.vehicleNumberPlate,t.origin,t.destination,t.LatitudeOrigin," +
-                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username," +
-                "AVG(r.points) as avgpoints " +
-                "from TRIP t " +
-                "LEFT OUTER JOIN RATING  r " +
-                "ON t.username = r.ratedUser " +
-                "WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ?"
-                +"group by t.id " +
-                "order by avgpoints desc;"));
-        pS.setBigDecimal(1,latO1);
-        pS.setBigDecimal(2,latO2);
-        pS.setBigDecimal(3,longO1);
-        pS.setBigDecimal(4,longO2);
-        pS.setBigDecimal(5,lat1);
-        pS.setBigDecimal(6,lat2);
-        pS.setBigDecimal(7,long1);
-        pS.setBigDecimal(8,long2);
-        pS.setDate(9, Date.valueOf(dat));
-        ResultSet r = pS.executeQuery();
-        while (r.next()) {
-            corT.add(createGateway(r));
-        }
-        return corT;
-    }
-
-    public ArrayList<GatewayTrip> findByDatMin(BigDecimal latO1,BigDecimal latO2,BigDecimal longO1 ,BigDecimal longO2,BigDecimal lat1,BigDecimal lat2,BigDecimal long1 ,BigDecimal long2, LocalDate dat,Time min) throws SQLException {
-        GatewayTrip gT = null;
-        Database d = Database.getInstance();
-        Connection conn = d.getConnection();
-        ArrayList<GatewayTrip> corT = new ArrayList<>();
-        PreparedStatement pS = conn.prepareStatement(("select t.id, t.startDate, t.startTime, " +
-                "t.offeredSeats,t.occupiedSeats,t.restrictions, t.details,t.CancelDate," +
-                "t.vehicleNumberPlate,t.origin,t.destination,t.LatitudeOrigin," +
-                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username," +
-                "AVG(r.points) as avgpoints " +
-                "from TRIP t " +
-                "LEFT OUTER JOIN RATING  r " +
-                "ON t.username = r.ratedUser " +
-                "WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ? and startTime >= ?"
-                +"group by t.id " +
-                "order by avgpoints desc;"));
-        pS.setBigDecimal(1,latO1);
-        pS.setBigDecimal(2,latO2);
-        pS.setBigDecimal(3,longO1);
-        pS.setBigDecimal(4,longO2);
-        pS.setBigDecimal(5,lat1);
-        pS.setBigDecimal(6,lat2);
-        pS.setBigDecimal(7,long1);
-        pS.setBigDecimal(8,long2);
-        pS.setDate(9, Date.valueOf(dat));
+        pS.setString(1,username);
+        pS.setBigDecimal(2,latO1);
+        pS.setBigDecimal(3,latO2);
+        pS.setBigDecimal(4,longO1);
+        pS.setBigDecimal(5,longO2);
+        pS.setBigDecimal(6,lat1);
+        pS.setBigDecimal(7,lat2);
+        pS.setBigDecimal(8,long1);
+        pS.setBigDecimal(9,long2);
         pS.setTime(10,min);
         ResultSet r = pS.executeQuery();
         while (r.next()) {
@@ -326,7 +200,7 @@ public class FinderTrip {
         return corT;
     }
 
-    public ArrayList<GatewayTrip> findByDatMax(BigDecimal latO1,BigDecimal latO2,BigDecimal longO1 ,BigDecimal longO2,BigDecimal lat1,BigDecimal lat2,BigDecimal long1 ,BigDecimal long2, LocalDate dat,Time max) throws SQLException {
+    public ArrayList<GatewayTrip> findByMax(String username, BigDecimal latO1,BigDecimal latO2,BigDecimal longO1 ,BigDecimal longO2,BigDecimal lat1,BigDecimal lat2,BigDecimal long1 ,BigDecimal long2, Time max) throws SQLException {
         GatewayTrip gT = null;
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
@@ -339,18 +213,18 @@ public class FinderTrip {
                 "from TRIP t " +
                 "LEFT OUTER JOIN RATING  r " +
                 "ON t.username = r.ratedUser " +
-                "WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ? and startTime <= ?"
+                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?) and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id)and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startTime <= ?"
                 +"group by t.id " +
                 "order by avgpoints desc;"));
-        pS.setBigDecimal(1,latO1);
-        pS.setBigDecimal(2,latO2);
-        pS.setBigDecimal(3,longO1);
-        pS.setBigDecimal(4,longO2);
-        pS.setBigDecimal(5,lat1);
-        pS.setBigDecimal(6,lat2);
-        pS.setBigDecimal(7,long1);
-        pS.setBigDecimal(8,long2);
-        pS.setDate(9, Date.valueOf(dat));
+        pS.setString(1,username);
+        pS.setBigDecimal(2,latO1);
+        pS.setBigDecimal(3,latO2);
+        pS.setBigDecimal(4,longO1);
+        pS.setBigDecimal(5,longO2);
+        pS.setBigDecimal(6,lat1);
+        pS.setBigDecimal(7,lat2);
+        pS.setBigDecimal(8,long1);
+        pS.setBigDecimal(9,long2);
         pS.setTime(10,max);
         ResultSet r = pS.executeQuery();
         while (r.next()) {
@@ -359,7 +233,7 @@ public class FinderTrip {
         return corT;
     }
 
-    public ArrayList<GatewayTrip> findByDatMaxMin(BigDecimal latO1,BigDecimal latO2,BigDecimal longO1 ,BigDecimal longO2,BigDecimal lat1,BigDecimal lat2,BigDecimal long1 ,BigDecimal long2, LocalDate dat,Time max,Time min) throws SQLException {
+    public ArrayList<GatewayTrip> findByMaxMin(String username, BigDecimal latO1,BigDecimal latO2,BigDecimal longO1 ,BigDecimal longO2,BigDecimal lat1,BigDecimal lat2,BigDecimal long1 ,BigDecimal long2, Time max, Time min) throws SQLException {
         GatewayTrip gT = null;
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
@@ -372,20 +246,155 @@ public class FinderTrip {
                 "from TRIP t " +
                 "LEFT OUTER JOIN RATING  r " +
                 "ON t.username = r.ratedUser " +
-                "WHERE LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ? and startTime <= ? and startTime >= ?"
+                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?)and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id)and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startTime BETWEEN ? AND ?"
                 +"group by t.id " +
                 "order by avgpoints desc;"));
-        pS.setBigDecimal(1,latO1);
-        pS.setBigDecimal(2,latO2);
-        pS.setBigDecimal(3,longO1);
-        pS.setBigDecimal(4,longO2);
-        pS.setBigDecimal(5,lat1);
-        pS.setBigDecimal(6,lat2);
-        pS.setBigDecimal(7,long1);
-        pS.setBigDecimal(8,long2);
-        pS.setDate(9, Date.valueOf(dat));
-        pS.setTime(10,max);
+        pS.setString(1,username);
+        pS.setBigDecimal(2,latO1);
+        pS.setBigDecimal(3,latO2);
+        pS.setBigDecimal(4,longO1);
+        pS.setBigDecimal(5,longO2);
+        pS.setBigDecimal(6,lat1);
+        pS.setBigDecimal(7,lat2);
+        pS.setBigDecimal(8,long1);
+        pS.setBigDecimal(9,long2);
+        pS.setTime(11,max);
+        pS.setTime(10,min);
+        ResultSet r = pS.executeQuery();
+        while (r.next()) {
+            corT.add(createGateway(r));
+        }
+        return corT;
+    }
+    public ArrayList<GatewayTrip> findByDat(String username,BigDecimal latO1,BigDecimal latO2,BigDecimal longO1 ,BigDecimal longO2,BigDecimal lat1,BigDecimal lat2,BigDecimal long1 ,BigDecimal long2, LocalDate dat) throws SQLException {
+        GatewayTrip gT = null;
+        Database d = Database.getInstance();
+        Connection conn = d.getConnection();
+        ArrayList<GatewayTrip> corT = new ArrayList<>();
+        PreparedStatement pS = conn.prepareStatement(("select t.id, t.startDate, t.startTime, " +
+                "t.offeredSeats,t.occupiedSeats,t.restrictions, t.details,t.CancelDate," +
+                "t.vehicleNumberPlate,t.origin,t.destination,t.LatitudeOrigin," +
+                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username," +
+                "AVG(r.points) as avgpoints " +
+                "from TRIP t " +
+                "LEFT OUTER JOIN RATING  r " +
+                "ON t.username = r.ratedUser " +
+                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?) and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id)and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ?"
+                +"group by t.id " +
+                "order by avgpoints desc;"));
+        pS.setString(1,username);
+        pS.setBigDecimal(2,latO1);
+        pS.setBigDecimal(3,latO2);
+        pS.setBigDecimal(4,longO1);
+        pS.setBigDecimal(5,longO2);
+        pS.setBigDecimal(6,lat1);
+        pS.setBigDecimal(7,lat2);
+        pS.setBigDecimal(8,long1);
+        pS.setBigDecimal(9,long2);
+        pS.setDate(10, Date.valueOf(dat));
+        ResultSet r = pS.executeQuery();
+        while (r.next()) {
+            corT.add(createGateway(r));
+        }
+        return corT;
+    }
+
+    public ArrayList<GatewayTrip> findByDatMin(String username,BigDecimal latO1,BigDecimal latO2,BigDecimal longO1 ,BigDecimal longO2,BigDecimal lat1,BigDecimal lat2,BigDecimal long1 ,BigDecimal long2, LocalDate dat,Time min) throws SQLException {
+        GatewayTrip gT = null;
+        Database d = Database.getInstance();
+        Connection conn = d.getConnection();
+        ArrayList<GatewayTrip> corT = new ArrayList<>();
+        PreparedStatement pS = conn.prepareStatement(("select t.id, t.startDate, t.startTime, " +
+                "t.offeredSeats,t.occupiedSeats,t.restrictions, t.details,t.CancelDate," +
+                "t.vehicleNumberPlate,t.origin,t.destination,t.LatitudeOrigin," +
+                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username," +
+                "AVG(r.points) as avgpoints " +
+                "from TRIP t " +
+                "LEFT OUTER JOIN RATING  r " +
+                "ON t.username = r.ratedUser " +
+                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?) and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id)and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ? and startTime >= ?"
+                +"group by t.id " +
+                "order by avgpoints desc;"));
+        pS.setString(1,username);
+        pS.setBigDecimal(2,latO1);
+        pS.setBigDecimal(3,latO2);
+        pS.setBigDecimal(4,longO1);
+        pS.setBigDecimal(5,longO2);
+        pS.setBigDecimal(6,lat1);
+        pS.setBigDecimal(7,lat2);
+        pS.setBigDecimal(8,long1);
+        pS.setBigDecimal(9,long2);
+        pS.setDate(10, Date.valueOf(dat));
         pS.setTime(11,min);
+        ResultSet r = pS.executeQuery();
+        while (r.next()) {
+            corT.add(createGateway(r));
+        }
+        return corT;
+    }
+
+    public ArrayList<GatewayTrip> findByDatMax(String username,BigDecimal latO1,BigDecimal latO2,BigDecimal longO1 ,BigDecimal longO2,BigDecimal lat1,BigDecimal lat2,BigDecimal long1 ,BigDecimal long2, LocalDate dat,Time max) throws SQLException {
+        GatewayTrip gT = null;
+        Database d = Database.getInstance();
+        Connection conn = d.getConnection();
+        ArrayList<GatewayTrip> corT = new ArrayList<>();
+        PreparedStatement pS = conn.prepareStatement(("select t.id, t.startDate, t.startTime, " +
+                "t.offeredSeats,t.occupiedSeats,t.restrictions, t.details,t.CancelDate," +
+                "t.vehicleNumberPlate,t.origin,t.destination,t.LatitudeOrigin," +
+                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username," +
+                "AVG(r.points) as avgpoints " +
+                "from TRIP t " +
+                "LEFT OUTER JOIN RATING  r " +
+                "ON t.username = r.ratedUser " +
+                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?)and  NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id)and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ? and startTime <= ?"
+                +"group by t.id " +
+                "order by avgpoints desc;"));
+        pS.setString(1,username);
+        pS.setBigDecimal(2,latO1);
+        pS.setBigDecimal(3,latO2);
+        pS.setBigDecimal(4,longO1);
+        pS.setBigDecimal(5,longO2);
+        pS.setBigDecimal(6,lat1);
+        pS.setBigDecimal(7,lat2);
+        pS.setBigDecimal(8,long1);
+        pS.setBigDecimal(9,long2);
+        pS.setDate(10, Date.valueOf(dat));
+        pS.setTime(11,max);
+        ResultSet r = pS.executeQuery();
+        while (r.next()) {
+            corT.add(createGateway(r));
+        }
+        return corT;
+    }
+
+    public ArrayList<GatewayTrip> findByDatMaxMin(String username,BigDecimal latO1,BigDecimal latO2,BigDecimal longO1 ,BigDecimal longO2,BigDecimal lat1,BigDecimal lat2,BigDecimal long1 ,BigDecimal long2, LocalDate dat,Time max,Time min) throws SQLException {
+        GatewayTrip gT = null;
+        Database d = Database.getInstance();
+        Connection conn = d.getConnection();
+        ArrayList<GatewayTrip> corT = new ArrayList<>();
+        PreparedStatement pS = conn.prepareStatement(("select t.id, t.startDate, t.startTime, " +
+                "t.offeredSeats,t.occupiedSeats,t.restrictions, t.details,t.CancelDate," +
+                "t.vehicleNumberPlate,t.origin,t.destination,t.LatitudeOrigin," +
+                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username," +
+                "AVG(r.points) as avgpoints " +
+                "from TRIP t " +
+                "LEFT OUTER JOIN RATING  r " +
+                "ON t.username = r.ratedUser " +
+                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?)and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id) and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ? and startTime <= ? and startTime >= ?"
+                +"group by t.id " +
+                "order by avgpoints desc;"));
+        pS.setString(1,username);
+        pS.setBigDecimal(2,latO1);
+        pS.setBigDecimal(3,latO2);
+        pS.setBigDecimal(4,longO1);
+        pS.setBigDecimal(5,longO2);
+        pS.setBigDecimal(6,lat1);
+        pS.setBigDecimal(7,lat2);
+        pS.setBigDecimal(8,long1);
+        pS.setBigDecimal(9,long2);
+        pS.setDate(10, Date.valueOf(dat));
+        pS.setTime(11,max);
+        pS.setTime(12,min);
         ResultSet r = pS.executeQuery();
         while (r.next()) {
             corT.add(createGateway(r));
