@@ -247,6 +247,11 @@ public class RestControllerAdvice {
         return handleError(ex, response, 448);
     }
 
+    @ExceptionHandler(AchievementNotFound.class)
+    public String handleAchievementNotFound(AchievementNotFound ex, HttpServletResponse response) {
+        return handleError(ex, response, 449);
+    }
+
 
     //Exception for DB
     @ExceptionHandler(SocketException.class)

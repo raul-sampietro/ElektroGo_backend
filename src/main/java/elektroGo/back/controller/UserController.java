@@ -8,16 +8,11 @@
 package elektroGo.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import elektroGo.back.data.finders.FinderRating;
-import elektroGo.back.data.finders.FinderReport;
-import elektroGo.back.data.finders.FinderUser;
+import elektroGo.back.data.finders.*;
 import elektroGo.back.data.gateways.GatewayRating;
 import elektroGo.back.data.gateways.GatewayReport;
 import elektroGo.back.data.gateways.GatewayUser;
-import elektroGo.back.exceptions.RatingNotFound;
-import elektroGo.back.exceptions.ReportNotFound;
-import elektroGo.back.exceptions.UserAlreadyExists;
-import elektroGo.back.exceptions.UserNotFound;
+import elektroGo.back.exceptions.*;
 import elektroGo.back.logs.CustomLogger;
 import elektroGo.back.logs.logType;
 import elektroGo.back.model.avgRate;
@@ -272,4 +267,6 @@ public class UserController {
         logger.log(log + "End of method", logType.TRACE);
         return fR.findAll();
     }
+
+
 }
