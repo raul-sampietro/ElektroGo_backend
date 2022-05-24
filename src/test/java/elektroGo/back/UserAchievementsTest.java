@@ -18,10 +18,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 public class UserAchievementsTest {
-    private FinderAchievements fA;
+
     private GatewayAchieviements gA1;
     private GatewayAchieviements gA2;
-    private FinderUser fU;
+
     private GatewayUser gU;
 
     private FinderUserAchievement fUA;
@@ -30,9 +30,7 @@ public class UserAchievementsTest {
 
     @BeforeEach
     public void initialize() throws SQLException {
-        fA = FinderAchievements.getInstance();
         fUA = FinderUserAchievement.getInstance();
-        fU = FinderUser.getInstance();
         gA1 = insertTestAchivement();
         gA2 = insertTestAchivement2();
         gU = insertTestUser();
@@ -55,7 +53,7 @@ public class UserAchievementsTest {
 
 
     private GatewayUser insertTestUser() throws SQLException {
-        gU = new GatewayUser("0","p","UserTestClass","t@gmail.com","T","T", "f", "/t");
+        gU = new GatewayUser("0","p","UserTestAchievement","t@gmail.com","T","T", "f", "/t");
         gU.insert();
         return gU;
     }
