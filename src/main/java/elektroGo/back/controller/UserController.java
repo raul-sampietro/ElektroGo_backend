@@ -8,17 +8,28 @@
 package elektroGo.back.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import elektroGo.back.data.finders.FinderBlock;
 import elektroGo.back.data.finders.FinderRating;
 import elektroGo.back.data.finders.FinderReport;
 import elektroGo.back.data.finders.FinderUser;
+import elektroGo.back.data.gateways.GatewayBlock;
+import elektroGo.back.data.gateways.Gateway;
+import elektroGo.back.data.finders.FinderUserTrip;
 import elektroGo.back.data.gateways.Gateway;
 import elektroGo.back.data.gateways.GatewayRating;
 import elektroGo.back.data.gateways.GatewayReport;
 import elektroGo.back.data.gateways.GatewayUser;
+import elektroGo.back.data.gateways.GatewayUserTrip;
 import elektroGo.back.exceptions.RatingNotFound;
 import elektroGo.back.exceptions.ReportNotFound;
 import elektroGo.back.exceptions.UserAlreadyExists;
 import elektroGo.back.exceptions.UserNotFound;
+import elektroGo.back.data.finders.*;
+import elektroGo.back.data.gateways.GatewayRating;
+import elektroGo.back.data.gateways.GatewayReport;
+import elektroGo.back.data.gateways.GatewayUser;
+import elektroGo.back.exceptions.*;
 import elektroGo.back.logs.CustomLogger;
 import elektroGo.back.logs.logType;
 import elektroGo.back.model.avgRate;
@@ -58,7 +69,7 @@ public class UserController {
      * @param gU GatewayUser amb tota la informació necessaria
      * @post S'afegeix l'usuari a la BD
      */
-    @PostMapping("") //TODO test in-app de creacion de usuario: borrar samragu y volver a crearlo
+    @PostMapping("")
     public ResponseEntity<?> createUser(@RequestBody GatewayUser gU) throws SQLException {
         logger.log("\nStarting createUser method with username " + gU.getUsername() + " ...", logType.TRACE);
         FinderUser fU = FinderUser.getInstance();

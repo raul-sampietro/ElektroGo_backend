@@ -10,9 +10,11 @@ package elektroGo.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import elektroGo.back.data.finders.FinderDriver;
+import elektroGo.back.data.finders.FinderRating;
 import elektroGo.back.data.finders.FinderUser;
 import elektroGo.back.data.gateways.GatewayDriver;
 import elektroGo.back.exceptions.DriverAlreadyExists;
+import elektroGo.back.data.gateways.GatewayRating;
 import elektroGo.back.exceptions.DriverNotFound;
 import elektroGo.back.exceptions.UserAlreadyExists;
 import elektroGo.back.exceptions.UserNotFound;
@@ -71,9 +73,18 @@ public class DriverController {
         if (fU.findByUsername(username) == null) throw new UserNotFound(username);
         FinderDriver fD = FinderDriver.getInstance();
         if (fD.findByUserName(username) != null) throw new DriverAlreadyExists(username);
-        GatewayDriver gD = new GatewayDriver(username);
+        GatewayDriver gD = new GatewayDriver(username, false);
         gD.insert();
         logger.log("Driver inserted (End of method)", logType.TRACE);
+    }
+
+    @PutMapping("/{username}/verify")
+    public void updateDriver(@PathVariable String username) throws SQLException {
+        FinderDriver fD = FinderDriver.getInstance();
+        GatewayDriver gD = fD.findByUserName(username);
+        if (gD == null) throw new DriverNotFound(username);
+        gD.setVerified(true);
+        gD.update();
     }
 
     /**
@@ -92,6 +103,4 @@ public class DriverController {
             e.printStackTrace();
         }
     }
-
-    // TODO put /verify
 }

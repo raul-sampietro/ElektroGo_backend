@@ -478,6 +478,70 @@ paths:
                 errorExample:
                   $ref: '#/components/examples/error445'
 
+  /blocks/from/{username}:
+    get:
+      tags:
+      - Blocks
+      summary: Obté els usuaris bloquejats per un usuari.
+      operationId: getBlocksFromUser
+      parameters:
+      - name: username
+        in: path
+        description: Username de l'usuari
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Report'
+        437:
+          description: 'Error: User Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error437'
+
+  /blocks/to{username}:
+    get:
+      tags:
+      - Blocks
+      summary: Obté els usuaris que han bloquejat un usuari.
+      operationId: getBlocksToUser
+      parameters:
+      - name: username
+        in: path
+        description: Username de l'usuari
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Report'
+        437:
+          description: 'Error: User Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error437'
+
   /drivers/{username}:
     get:
       tags:
@@ -1041,6 +1105,38 @@ paths:
                 errorExample:
                   $ref: '#/components/examples/error404'
 
+  /car-pooling/{id}/cancel:
+    put:
+      tags:
+      - Car Pooling
+      summary: Cancela un trajecte de carpooling.
+      operationId: cancelTrip
+      parameters:
+      - name: id
+        in: path
+        description: ID del trajecte de carpooling que es vol esborrar.
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/User'
+        404:
+          description: 'Error: Trip Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResult'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error404'
+
   /car-pooling/{id}/users:
     get:
       tags:
@@ -1050,7 +1146,7 @@ paths:
       parameters:
       - name: id
         in: path
-        description: Ordenació del llistat resultant ["asc", "desc"]
+        description: ID del trajecte de carpooling.
         required: true
         schema:
           type: integer
@@ -1505,6 +1601,12 @@ paths:
               examples:
                 errorExample:
                   $ref: '#/components/examples/error437'
+              
+  /achievements/{achievement}/users/{username}:
+    get:
+      tags:
+      - Achievements
+      
 
 components:
   schemas:

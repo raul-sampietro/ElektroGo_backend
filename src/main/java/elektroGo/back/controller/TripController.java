@@ -7,7 +7,11 @@
 
 package elektroGo.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import elektroGo.back.data.finders.FinderCanceledTrip;
+import elektroGo.back.data.finders.FinderRating;
 import elektroGo.back.data.finders.FinderTrip;
+import elektroGo.back.data.gateways.GatewayCanceledTrip;
 import elektroGo.back.data.finders.FinderUser;
 import elektroGo.back.data.finders.FinderUserTrip;
 import elektroGo.back.data.gateways.GatewayTrip;
@@ -16,6 +20,7 @@ import elektroGo.back.data.gateways.GatewayUserTrip;
 import elektroGo.back.exceptions.*;
 import elektroGo.back.logs.CustomLogger;
 import elektroGo.back.logs.logType;
+import org.springframework.asm.TypeReference;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,26 +47,50 @@ public class TripController {
      * @return Es retorna un String amb la info dels trips
      */
     @GetMapping("")
-    public ArrayList<GatewayTrip> getTrips(@RequestParam(required = false) Boolean order) throws SQLException, JsonProcessingException {
-        if (order) {
-            logger.log("Starting getTripsOrdered method...", logType.TRACE);
-            FinderTrip fT = FinderTrip.getInstance();
-            ArrayList<GatewayTrip> all = fT.findOrdered();
-            if(all == null) throw new TripNotFound();
-            String log = "Returning this trips: \n";
-            for (GatewayTrip gT : all)  log += gT.json() + "\n";
-            logger.log(log + "End of method", logType.TRACE);
-            return all;
+    public ArrayList<GatewayTrip> getTrips(@RequestParam(required = false) String username,
+                                           @RequestParam(required = false) Boolean order) throws SQLException, JsonProcessingException {
+        if (username != null) {
+            if (order) {
+                logger.log("Starting getTripsOrdered method...", logType.TRACE);
+                FinderTrip fT = FinderTrip.getInstance();
+                ArrayList<GatewayTrip> all = fT.findOrdered(username);
+                if (all == null) throw new TripNotFound();
+                String log = "Returning this trips: \n";
+                for (GatewayTrip gT : all) log += gT.json() + "\n";
+                logger.log(log + "End of method", logType.TRACE);
+                return all;
+            } else {
+                logger.log("Starting getTrips method...", logType.TRACE);
+                FinderTrip fT = FinderTrip.getInstance();
+                if (fT.findAll() == null) throw new TripNotFound();
+                String log = "Returning this trips: \n";
+                ArrayList<GatewayTrip> aL = fT.findAll();
+                for (GatewayTrip gT : aL) log += gT.json() + "\n";
+                logger.log(log + "End of method", logType.TRACE);
+                return aL;
+            }
         }
         else {
-            logger.log("Starting getTrips method...", logType.TRACE);
-            FinderTrip fT = FinderTrip.getInstance();
-            if(fT.findAll() == null) throw new TripNotFound();
-            String log = "Returning this trips: \n";
-            ArrayList<GatewayTrip> aL = fT.findAll();
-            for (GatewayTrip gT : aL)  log += gT.json() + "\n";
-            logger.log(log + "End of method", logType.TRACE);
-            return aL;
+            if (order) {
+                logger.log("Starting getTripsOrdered method...", logType.TRACE);
+                FinderTrip fT = FinderTrip.getInstance();
+                // TODO userless findOrdered() method
+                ArrayList<GatewayTrip> all = fT.findOrdered();
+                if (all == null) throw new TripNotFound();
+                String log = "Returning this trips: \n";
+                for (GatewayTrip gT : all) log += gT.json() + "\n";
+                logger.log(log + "End of method", logType.TRACE);
+                return all;
+            } else {
+                logger.log("Starting getTrips method...", logType.TRACE);
+                FinderTrip fT = FinderTrip.getInstance();
+                if (fT.findAll() == null) throw new TripNotFound();
+                String log = "Returning this trips: \n";
+                ArrayList<GatewayTrip> aL = fT.findAll();
+                for (GatewayTrip gT : aL) log += gT.json() + "\n";
+                logger.log(log + "End of method", logType.TRACE);
+                return aL;
+            }
         }
 
     }
@@ -117,6 +146,19 @@ public class TripController {
         }
     }
 
+    @GetMapping("/car-pooling/{id}/users")
+    public List<GatewayUser> getTripParticipants(@PathVariable Integer id) throws SQLException {
+        logger.log("\nStarting getting Trip Participants...", logType.TRACE);
+        FinderTrip fT = FinderTrip.getInstance();
+        if (fT.findById(id) == null) throw new TripNotFound();
+        FinderUserTrip fUT = FinderUserTrip.getInstance();
+        FinderUser fU = FinderUser.getInstance();
+        ArrayList<GatewayUserTrip> utl = fUT.findByTrip(id);
+        ArrayList<GatewayUser> ul = new ArrayList<>();
+        for (GatewayUserTrip gUT : utl) ul.add(fU.findByUsername(gUT.getUsername()));
+        return ul;
+    }
+
     /**
      * @brief Funció amb metode 'GET' que retorna la informació del trip amb el id corresponen
      * @return Es retorna un String amb la info del trip demanada
@@ -128,7 +170,8 @@ public class TripController {
                                                    @RequestParam BigDecimal LongD,
                                                    @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate sDate,
                                                    @RequestParam(required = false) Time sTimeMin,
-                                                   @RequestParam(required = false) Time sTimeMax) throws SQLException {
+                                                   @RequestParam(required = false) Time sTimeMax,
+                                                   @RequestParam String username) throws SQLException {
         logger.log("Starting getTripSelection method with this parameters: " + "\n" +
                 "LatO = "+ LatO + ", LongO = " + LongO + "LatD = " + LatD + ", LongD = " + LongD + "sDate = " + sDate +
                 ", sTimeMin = " + sTimeMin + "and sTimeMax = " + sTimeMax, logType.TRACE);
@@ -137,29 +180,29 @@ public class TripController {
         BigDecimal a = new BigDecimal("0.05");
         if(sDate == null){
             if(sTimeMax == null){
-                if(sTimeMin == null)gT = fT.findByNot(LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
+                if(sTimeMin == null)gT = fT.findByNot(username,LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
                         LatD.subtract(a),LatD.add(a),LongD.subtract(a),LongD.add(a));
-                else gT = fT.findByMin(LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
+                else gT = fT.findByMin(username,LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
                         LatD.subtract(a),LatD.add(a),LongD.subtract(a),LongD.add(a),sTimeMin);
             }
             else{
-                if(sTimeMin == null)gT = fT.findByMax(LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
+                if(sTimeMin == null)gT = fT.findByMax(username,LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
                         LatD.subtract(a),LatD.add(a),LongD.subtract(a),LongD.add(a),sTimeMax);
-                else gT = fT.findByMaxMin(LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
+                else gT = fT.findByMaxMin(username,LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
                         LatD.subtract(a),LatD.add(a),LongD.subtract(a),LongD.add(a),sTimeMax,sTimeMin);
             }
         }
         else{
             if(sTimeMax == null){
-                if(sTimeMin == null)gT = fT.findByDat(LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
+                if(sTimeMin == null)gT = fT.findByDat(username,LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
                         LatD.subtract(a),LatD.add(a),LongD.subtract(a),LongD.add(a),sDate);
-                else gT = fT.findByDatMin(LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
+                else gT = fT.findByDatMin(username,LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
                         LatD.subtract(a),LatD.add(a),LongD.subtract(a),LongD.add(a),sDate,sTimeMin);
             }
             else{
-                if(sTimeMin == null)gT = fT.findByDatMax(LatO.subtract(a),LatO.add(a),LongO.subtract(a),
+                if(sTimeMin == null)gT = fT.findByDatMax(username,LatO.subtract(a),LatO.add(a),LongO.subtract(a),
                         LongO.add(a),LatD.subtract(a),LatD.add(a),LongD.subtract(a),LongD.add(a),sDate,sTimeMax);
-                else gT = fT.findByDatMaxMin(LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
+                else gT = fT.findByDatMaxMin(username,LatO.subtract(a),LatO.add(a),LongO.subtract(a),LongO.add(a),
                         LatD.subtract(a),LatD.add(a),LongD.subtract(a),LongD.add(a),sDate,sTimeMax,sTimeMin);
             }
         }
@@ -212,6 +255,15 @@ public class TripController {
         logger.log(log + "End of method", logType.TRACE);
         return end;
     }
+
+    @PutMapping("/{id}/cancel")
+    public void cancel(@PathVariable Integer id, @RequestBody GatewayCanceledTrip gCT) throws SQLException {
+        FinderTrip fT = FinderTrip.getInstance();
+        if (fT.findById(id) == null) throw new TripNotFound(id);
+        FinderCanceledTrip fCT = FinderCanceledTrip.getInstance();
+        if (fCT.findByID(id) == null) gCT.insert();
+    }
+
 
     /**
      * @brief Funció amb metode 'POST' que crearà un Trip amb la info requerida
