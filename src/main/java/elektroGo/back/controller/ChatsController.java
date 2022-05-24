@@ -33,7 +33,7 @@ public class ChatsController {
      * @brief Metode 'GET' que retorna tots els missatges de la base de dades
      * @return Retorna el llistat de tots els missatges
      */
-    @GetMapping("/findAll")
+    @GetMapping("/messages")
     public ArrayList<GatewayChats> getAll() throws SQLException {
         logger.log("\nStarting Chats.getAll method...", logType.TRACE);
         FinderChats fC = FinderChats.getInstance();
@@ -47,8 +47,8 @@ public class ChatsController {
      * @param userB nom de l'usuari B
      * @return Retorna el llistat de missatges entre els dos usuaris ordenats per data
      */
-    @GetMapping("/findByConversation")
-    public ArrayList<GatewayChats> getChatByConversation(@RequestParam String userA, @RequestParam String userB) throws SQLException {
+    @GetMapping("/messages/{userA}/{userB}")
+    public ArrayList<GatewayChats> getChatByConversation(@PathVariable String userA, @PathVariable String userB) throws SQLException {
         logger.log("\nStarting getChatByConversation method of user '" + userA + "' and '" + userB + "'", logType.TRACE);
         FinderChats fC = FinderChats.getInstance();
         ArrayList<GatewayChats> aL = fC.findByConversation(userA, userB);
@@ -65,8 +65,8 @@ public class ChatsController {
      * @param user nom de l'usuari
      * @return Retorna el llistat de chats
      */
-    @GetMapping("/findByUser")
-    public ArrayList<String> getChatByConversation(@RequestParam String user) throws SQLException {
+    @GetMapping("/{user}")
+    public ArrayList<String> getChatByConversation(@PathVariable String user) throws SQLException {
         logger.log("\nStarting getChatByConversation method with user '" + user + "'...", logType.TRACE);
         FinderChats fC = FinderChats.getInstance();
         DeletedChats dCS = new DeletedChats();
@@ -85,7 +85,7 @@ public class ChatsController {
      * @param user nom de l'usuari
      * @return Retorna el llistat de missatges de l'usuari ordenats per data
      */
-    @GetMapping("/findByReceived")
+    @GetMapping("/messages/to/{user}")
     public ArrayList<GatewayChats> getChatByReceived(@RequestParam String user) throws SQLException {
         logger.log("Starting getChatByReceived method with user '" + user + "'", logType.TRACE);
         FinderChats fC = FinderChats.getInstance();
@@ -103,8 +103,8 @@ public class ChatsController {
      * @param message contingut del missatge en si
      * @post El missatge s'ha creat correctament
      */
-    @PostMapping("/sendMessage")
-    public void postSendMessage(@RequestParam String sender, @RequestParam String receiver, @RequestParam String message) throws SQLException {
+    @PostMapping("/messages/{sender}/{receiver}")
+    public void postSendMessage(@PathVariable String sender, @PathVariable String receiver, @RequestParam String message) throws SQLException {
         logger.log("Starting sendMessage method with sender '" + sender + "' and reciever '" + receiver + "'...", logType.TRACE);
         String timestamp = String.valueOf(new Timestamp(System.currentTimeMillis()));
         timestamp = timestamp.substring(0, timestamp.length() - 4);
@@ -122,8 +122,8 @@ public class ChatsController {
      * @param userB Nom de l'usuari sobre el que s'elimina el xat
      * @post El xat s'ha eliminat correctament
      */
-    @DeleteMapping
-    public void deleteChat(@RequestParam String userA, @RequestParam String userB) throws SQLException {
+    @DeleteMapping("/{userA}/{userB}")
+    public void deleteChat(@PathVariable String userA, @PathVariable String userB) throws SQLException {
         logger.log("Starting deleteChat method with userA '" + userA + "' and userB '" + userB + "'", logType.TRACE);
         GatewayDeletedChats gDC = new GatewayDeletedChats(userA, userB);
         logger.log("Deleting this chats: " + gDC.json() ,logType.TRACE ) ;

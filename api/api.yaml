@@ -1508,6 +1508,29 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Message'
+
+  /chats/messages/to/{username}:
+    get:
+      tags:
+      - Chats
+      summary: Obté tots els missatges rebuts per un usuari.
+      operationId: getReceivedMessages
+      parameters:
+      - name: username
+        in: path
+        required: true
+        description: Username de l'usuari.
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
   
   /chats/messages/{username1}/{username2}:
     get:
@@ -1564,6 +1587,12 @@ paths:
         required: true
         schema:
           type: string
+      - name: message
+        in: query
+        required: true
+        description: Contingut del missatge.
+        schema: 
+          type: string
       responses:
         201:
           description: successful operation
@@ -1601,12 +1630,58 @@ paths:
               examples:
                 errorExample:
                   $ref: '#/components/examples/error437'
-              
+
+  /chats/{username1}/{username2}:
+    delete:
+      tags:
+      - Chats
+      summary: Esborra una conversa d'un usuari amb un altre. El segon encara veurà la conversa.
+      operationId: deleteChat
+      parameters:
+      - name: username1
+        in: path
+        description: Username de l'usuari remitent
+        required: true
+        schema:
+          type: string
+      - name: username2
+        in: path
+        description: Username de l'usuari revedor
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+        437:
+          description: 'Error: User Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error437'
+
   /achievements/{achievement}/users/{username}:
     get:
       tags:
       - Achievements
-      
+      summary: 
+      operationId: getAchievementUser
+      parameters:
+      - name: username1
+        in: path
+        description: Username de l'usuari remitent
+        required: true
+        schema:
+          type: string
+      - name: username2
+        in: path
+        description: Username de l'usuari revedor
+        required: true
+        schema:
+          type: string
 
 components:
   schemas:
