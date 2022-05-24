@@ -7,8 +7,10 @@
 
 package elektroGo.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import elektroGo.back.data.finders.FinderCanceledTrip;
 import elektroGo.back.data.finders.FinderRating;
 import elektroGo.back.data.finders.FinderTrip;
+import elektroGo.back.data.gateways.GatewayCanceledTrip;
 import elektroGo.back.data.gateways.GatewayTrip;
 import elektroGo.back.data.gateways.GatewayUserTrip;
 import elektroGo.back.exceptions.InvalidKey;
@@ -186,6 +188,15 @@ public class TripController {
         for (GatewayTrip gT : corT) log += gT.json() + "\n";
         logger.log(log, logType.TRACE);
         return corT;
+    }
+
+
+    @PostMapping("/car-pooling/canceled")
+    public void cancel(@RequestBody GatewayCanceledTrip gT) throws SQLException {
+        FinderCanceledTrip fCT = FinderCanceledTrip.getInstance();
+        FinderTrip fT = FinderTrip.getInstance();
+        if (fT.findById(gT.getId()) == null)throw new TripNotFound(gT.getId());
+        gT.insert();
     }
 
 
