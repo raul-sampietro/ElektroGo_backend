@@ -8,12 +8,18 @@
 package elektroGo.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import elektroGo.back.data.finders.FinderBlock;
 import elektroGo.back.data.finders.FinderRating;
 import elektroGo.back.data.finders.FinderReport;
 import elektroGo.back.data.finders.FinderUser;
+import elektroGo.back.data.gateways.GatewayBlock;
+import elektroGo.back.data.gateways.Gateway;
+import elektroGo.back.data.finders.FinderUserTrip;
+import elektroGo.back.data.gateways.Gateway;
 import elektroGo.back.data.gateways.GatewayRating;
 import elektroGo.back.data.gateways.GatewayReport;
 import elektroGo.back.data.gateways.GatewayUser;
+import elektroGo.back.data.gateways.GatewayUserTrip;
 import elektroGo.back.exceptions.RatingNotFound;
 import elektroGo.back.exceptions.ReportNotFound;
 import elektroGo.back.exceptions.UserAlreadyExists;
@@ -149,6 +155,16 @@ public class UserController {
         return l;
     }
 
+    @GetMapping("/ratings/from/{userFrom}/to/{userTo}")
+    public GatewayRating getSingleRating(@PathVariable String userFrom, @PathVariable String userTo) throws SQLException {
+        logger.log("\nStarting getSingleRating from ' " + userFrom + "' to '" + userTo, logType.TRACE);
+        FinderRating fR = FinderRating.getInstance();
+        GatewayRating gR = fR.findByPrimaryKey(userFrom, userTo);
+        if (gR == null) throw new RatingNotFound(userFrom, userTo);
+        logger.log("Returning this rating:\n" + gR.json() + "\nEnd of method", logType.TRACE);
+        return gR;
+    }
+
     /**
      * @brief Metode que fa un rating donada la informacio d'aquest a "gR"
      * @param gR GatewayRating amb la informacio necessaria per fer un rating
@@ -272,4 +288,25 @@ public class UserController {
         logger.log(log + "End of method", logType.TRACE);
         return fR.findAll();
     }
+
+    @GetMapping("/users/{username}/blocks/made")
+    public List<GatewayBlock> blocksUser(@PathVariable String username) throws SQLException {
+        System.out.println("\nStarting allBlocks method...");
+        FinderBlock fR = FinderBlock.getInstance();
+        return fR.findByUserBlocking(username);
+    }
+    @GetMapping("/users/{username}/blocks/recieved")
+    public List<GatewayBlock> UserIsBlocked(@PathVariable String username) throws SQLException {
+        System.out.println("\nStarting allBlocks method...");
+        FinderBlock fR = FinderBlock.getInstance();
+        return fR.findByBlockUser(username);
+    }
+
+    @GetMapping("/users/trips/{id}")
+    public List<GatewayUserTrip> getTripParticipants(@PathVariable Integer id) throws SQLException {
+        logger.log("\nStarting getting Trip Participants...", logType.TRACE);
+        FinderUserTrip fU = FinderUserTrip.getInstance();
+        return fU.findByTrip(id);
+    }
+
 }

@@ -13,8 +13,6 @@ import elektroGo.back.data.gateways.GatewayDriver;
 import elektroGo.back.data.gateways.GatewayTrip;
 import elektroGo.back.data.gateways.GatewayUser;
 import elektroGo.back.data.gateways.GatewayVehicle;
-import elektroGo.back.logs.CustomLogger;
-import elektroGo.back.logs.logType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,7 +39,6 @@ public class TripTest {
     GatewayVehicle gV;
     FinderTrip fT;
     GatewayTrip gT;
-    CustomLogger logger = CustomLogger.getInstance();
 
     //BEF & AFTER
     @BeforeEach
@@ -49,7 +46,7 @@ public class TripTest {
         fU = FinderUser.getInstance();
         fD = FinderDriver.getInstance();
         gU = insertTest();
-        gD = new GatewayDriver("TripTestClass");
+        gD = new GatewayDriver("TripTestClass",false);
         gD.insert();
         fV = FinderVehicle.getInstance();
         gV = insertTestVehicleComplet();
@@ -97,9 +94,9 @@ public class TripTest {
             GatewayTrip gTest = fT.findByUser("TripTestClass",LocalDate.of(2001, 2, 12),new Time(12*60*60*1000));
             gTest.setRestrictions("NoMascotes");
             gTest.update();
-            logger.log(gTest.json(), logType.TRACE);
+
             gTest = fT.findByUser("TripTestClass",LocalDate.of(2001, 2, 12),new Time(12*60*60*1000));
-            logger.log(gTest.json(), logType.TRACE);
+
             String res =gTest.getVehicleNumberPlate() + " " + gTest.getRestrictions();
             assertEquals("1221 NoMascotes", res);
     }
@@ -111,12 +108,7 @@ public class TripTest {
         assertNull(gTtemplate);
     }
 
-    @Test
-    public void getOrd() throws SQLException {
-        gT.remove();
-        for (GatewayTrip g : fT.findOrdered()) logger.log(g.json(), logType.TRACE);
 
-    }
 
 
 }
