@@ -77,7 +77,7 @@ public class GatewayUserAchievements implements Gateway{
     public void update() throws SQLException {
         Database d = Database.getInstance();
         Connection c = d.getConnection();
-        PreparedStatement pS = c.prepareStatement("UPDATE USERACHIEVEMENTS SET points = ?" +
+        PreparedStatement pS = c.prepareStatement("UPDATE USERACHIEVEMENTS SET points = ? " +
                 "WHERE username = ? and achievement = ?;");
         pS.setInt(1, points);
         pS.setString(2,username);
