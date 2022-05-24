@@ -43,35 +43,35 @@ public class ChatsController {
 
     /**
      * @brief Metode 'GET' que retorna tots els missatges entre dos usuaris de la base de dades
-     * @param userA nom de l'usuari A
-     * @param userB nom de l'usuari B
+     * @param username1 nom de l'usuari A
+     * @param username2 nom de l'usuari B
      * @return Retorna el llistat de missatges entre els dos usuaris ordenats per data
      */
-    @GetMapping("/messages/{userA}/{userB}")
-    public ArrayList<GatewayChats> getChatByConversation(@PathVariable String userA, @PathVariable String userB) throws SQLException {
-        logger.log("\nStarting getChatByConversation method of user '" + userA + "' and '" + userB + "'", logType.TRACE);
+    @GetMapping("/messages/{username1}/{username2}")
+    public ArrayList<GatewayChats> getChatByConversation(@PathVariable String username1, @PathVariable String username2) throws SQLException {
+        logger.log("\nStarting getChatByConversation method of user '" + username1 + "' and '" + username2 + "'", logType.TRACE);
         FinderChats fC = FinderChats.getInstance();
-        ArrayList<GatewayChats> aL = fC.findByConversation(userA, userB);
+        ArrayList<GatewayChats> aL = fC.findByConversation(username1, username2);
         logger.log("Returning this messages...", logType.TRACE);
         String s = "";
         for (GatewayChats gC : aL) s = s + gC.json() + "\n";
         logger.log(s, logType.TRACE);
         logger.log("End of method", logType.TRACE);
-        return fC.findByConversation(userA, userB);
+        return fC.findByConversation(username1, username2);
     }
 
     /**
      * @brief Metode 'GET' que retorna tots els chats que l'usuari te
-     * @param user nom de l'usuari
+     * @param username nom de l'usuari
      * @return Retorna el llistat de chats
      */
-    @GetMapping("/{user}")
-    public ArrayList<String> getChatByConversation(@PathVariable String user) throws SQLException {
-        logger.log("\nStarting getChatByConversation method with user '" + user + "'...", logType.TRACE);
+    @GetMapping("/{username}")
+    public ArrayList<String> getChatByConversation(@PathVariable String username) throws SQLException {
+        logger.log("\nStarting getChatByConversation method with username '" + username + "'...", logType.TRACE);
         FinderChats fC = FinderChats.getInstance();
         DeletedChats dCS = new DeletedChats();
-        ArrayList<String> usersChats = fC.findByUser(user);
-        ArrayList<String> deletedChats = dCS.getDeletedChatsFromUser(user);
+        ArrayList<String> usersChats = fC.findByUser(username);
+        ArrayList<String> deletedChats = dCS.getDeletedChatsFromUser(username);
         usersChats.removeAll(deletedChats);
         logger.log("Returning this chats:", logType.TRACE);
         String log = "";
@@ -86,7 +86,7 @@ public class ChatsController {
      * @return Retorna el llistat de missatges de l'usuari ordenats per data
      */
     @GetMapping("/messages/to/{user}")
-    public ArrayList<GatewayChats> getChatByReceived(@RequestParam String user) throws SQLException {
+    public ArrayList<GatewayChats> getChatByReceived(@PathVariable String user) throws SQLException {
         logger.log("Starting getChatByReceived method with user '" + user + "'", logType.TRACE);
         FinderChats fC = FinderChats.getInstance();
         ArrayList<GatewayChats> aL = fC.findByReceived(user);
@@ -132,7 +132,4 @@ public class ChatsController {
         dCS.deleteMessagesIfNeeded(userA, userB);
         logger.log("End of method", logType.TRACE);
     }
-
-
-
 }
