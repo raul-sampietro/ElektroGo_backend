@@ -24,6 +24,11 @@ import elektroGo.back.exceptions.RatingNotFound;
 import elektroGo.back.exceptions.ReportNotFound;
 import elektroGo.back.exceptions.UserAlreadyExists;
 import elektroGo.back.exceptions.UserNotFound;
+import elektroGo.back.data.finders.*;
+import elektroGo.back.data.gateways.GatewayRating;
+import elektroGo.back.data.gateways.GatewayReport;
+import elektroGo.back.data.gateways.GatewayUser;
+import elektroGo.back.exceptions.*;
 import elektroGo.back.logs.CustomLogger;
 import elektroGo.back.logs.logType;
 import elektroGo.back.model.avgRate;
@@ -288,6 +293,7 @@ public class UserController {
         logger.log(log + "End of method", logType.TRACE);
         return fR.findAll();
     }
+
 
     @GetMapping("/users/{username}/blocks/made")
     public List<GatewayBlock> blocksUser(@PathVariable String username) throws SQLException {
