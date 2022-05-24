@@ -47,8 +47,8 @@ public class BlockTest {
         fU = FinderUser.getInstance();
         fD = FinderBlock.getInstance();
         gU = insertTest1();
-        gB = insertTest1();
-        gV = new GatewayBlock("UserBlocking","BlockUser");
+        gB = insertTest2();
+        gV = new GatewayBlock("UserBlocking12","BlockUser");
         gV.insert();
     }
 
@@ -60,7 +60,7 @@ public class BlockTest {
 
     //FUNCTIONS
     private GatewayUser insertTest1() throws SQLException {
-        GatewayUser g1 = new GatewayUser("0","p","UserBlocking","t@gmail.com","T","T", "f", "/t");
+        GatewayUser g1 = new GatewayUser("0","p","UserBlocking12","t@gmail.com","T","T", "f", "/t");
         g1.insert();
         return g1;
     }
@@ -73,15 +73,15 @@ public class BlockTest {
     //TEST
     @Test
     public void createDriverTest1() throws SQLException {
-        GatewayBlock gUTest = fD.findByPrimaryKey("UserBlocking","BlockUser");
+        GatewayBlock gUTest = fD.findByPrimaryKey("UserBlocking12","BlockUser");
         String res = gUTest.getUserBlocking() + " "+  gUTest.getBlockUser();
-        assertEquals("UserBlocking BlockUser", res);
+        assertEquals("UserBlocking12 BlockUser", res);
     }
 
     @Test
     public void deleteDriverTest() throws SQLException {
         gV.remove();
-        GatewayBlock gUtemplate = fD.findByPrimaryKey("UserBlocking","BlockUser");
+        GatewayBlock gUtemplate = fD.findByPrimaryKey("UserBlocking12","BlockUser");
         assertNull(gUtemplate);
     }
 }
