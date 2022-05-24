@@ -111,6 +111,9 @@ public class ChatsController {
         GatewayChats gC = new GatewayChats(sender, receiver, message,timestamp);
         logger.log("Inserting this chat: " + gC.json(), logType.TRACE);
         gC.insert();
+        // TODO check if there are blocks between each other
+        DeletedChats dCS = new DeletedChats();
+        dCS.messageSent(sender, receiver);
     }
 
     /**

@@ -63,6 +63,7 @@ public class FinderDeletedChats {
         return deletedChats;
     }
 
+
     public ArrayList<GatewayDeletedChats> findByMutualDelete(String userA, String userB) throws SQLException {
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
