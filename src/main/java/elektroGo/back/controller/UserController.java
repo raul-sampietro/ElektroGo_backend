@@ -14,6 +14,8 @@ import elektroGo.back.data.finders.FinderReport;
 import elektroGo.back.data.finders.FinderUser;
 import elektroGo.back.data.gateways.GatewayBlock;
 import elektroGo.back.data.gateways.Gateway;
+import elektroGo.back.data.finders.FinderUserTrip;
+import elektroGo.back.data.gateways.Gateway;
 import elektroGo.back.data.gateways.GatewayRating;
 import elektroGo.back.data.gateways.GatewayReport;
 import elektroGo.back.data.gateways.GatewayUser;
