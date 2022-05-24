@@ -16,6 +16,8 @@ import elektroGo.back.data.gateways.GatewayTrip;
 import elektroGo.back.data.gateways.GatewayUser;
 import elektroGo.back.data.gateways.GatewayUserTrip;
 import elektroGo.back.exceptions.*;
+import elektroGo.back.logs.CustomLogger;
+import elektroGo.back.logs.logType;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
@@ -27,6 +29,8 @@ import java.util.ArrayList;
 @RestController
 public class UserTripController {
 
+    private final CustomLogger logger = CustomLogger.getInstance();
+
     /**
      * @brief Funció amb metode 'GET' que retorna la informació del membre amb el username i l'id del viatgecorresponen
      * @param username Usuari del que volem agafar la info
@@ -35,6 +39,7 @@ public class UserTripController {
      */
     @GetMapping("/userTrip")
     public String getUserTrip(@RequestParam Integer id, @RequestParam String username) throws SQLException {
+        logger.log("Starting getUserTrip method with id = " + id + " and username '" + username + "'...", logType.TRACE);
         FinderUser fU = FinderUser.getInstance();
         GatewayUser gU = fU.findByUsername(username);
         if(gU == null)throw new UserNotFound(username);
@@ -44,22 +49,28 @@ public class UserTripController {
         FinderUserTrip fUT = FinderUserTrip.getInstance();
         GatewayUserTrip gUT = fUT.findByTripUser(id,username);
         if(gUT == null) throw new UserTripNotFound(username, id);
+        logger.log("Returning this userTrip: \n" + gU.json() + "end of method.", logType.TRACE);
         return gU.json();
     }
 
     @GetMapping("/userTrip/byUser")
     public ArrayList<GatewayUserTrip> getUserTripUSer(@RequestParam String username) throws SQLException {
+        logger.log("Starting getUserTripsUser with username '" + username + "'...", logType.TRACE);
         FinderUser fU = FinderUser.getInstance();
         GatewayUser gU = fU.findByUsername(username);
         if(gU == null)throw new UserNotFound(username);
         FinderUserTrip fUT = FinderUserTrip.getInstance();
         ArrayList<GatewayUserTrip> gUT = fUT.findTripByUser(username);
         if(gUT == null) throw new UserTripNotFound();
+        String log = "Returning this userTrips:\n";
+        for (GatewayUserTrip gUOut : gUT) log += gUOut.json() + "\n";
+        logger.log(log + "End of method", logType.TRACE);
         return gUT;
     }
 
     @GetMapping("/userTrip/TripByUser")
     public ArrayList<GatewayTrip> getUserTripUSerinfo(@RequestParam String username) throws SQLException {
+        logger.log("Starting getUserTripUserInfo method with username '"+ username + "'...", logType.TRACE);
         FinderUser fU = FinderUser.getInstance();
         GatewayUser gU = fU.findByUsername(username);
         if(gU == null)throw new UserNotFound(username);
@@ -69,9 +80,12 @@ public class UserTripController {
         if(gUT == null) throw new UserTripNotFound();
         ArrayList<GatewayTrip> end = new ArrayList<>();
         FinderTrip fT = FinderTrip.getInstance();
+        String log = "Returning this userTrips:\n";
         for (GatewayUserTrip gatewayUserTrip : gUT) {
             end.add(fT.findById(gatewayUserTrip.getId()));
+            log += gatewayUserTrip.json() + "\n";
         }
+        logger.log(log + "End of method", logType.TRACE);
         return end;
     }
 
@@ -81,9 +95,11 @@ public class UserTripController {
      */
     @GetMapping("/userTrips")
     public String getUserTrip() throws SQLException, JsonProcessingException {
+        logger.log("Starting getUserTrip method...", logType.TRACE);
         FinderUserTrip fU = FinderUserTrip.getInstance();
         ArrayList<GatewayUserTrip> lU = fU.findAll();
         ObjectMapper objectMapper = new ObjectMapper();
+        logger.log("Returning this userTrips: " +objectMapper.writeValueAsString(lU) + "\nEnd of method", logType.TRACE );
         return objectMapper.writeValueAsString(lU);
     }
 
@@ -94,6 +110,7 @@ public class UserTripController {
      */
     @PostMapping("/userTrip/create")
     public void createUserTrip(@RequestBody GatewayUserTrip gD) throws SQLException {
+        logger.log("Starting createUserTrip method with userTrip:\n" + gD.json() + "...", logType.TRACE);
         FinderUser fU = FinderUser.getInstance();
         GatewayUser gU = fU.findByUsername(gD.getUsername());
         if(gU == null)throw new UserNotFound(gD.getUsername());
@@ -103,6 +120,7 @@ public class UserTripController {
         FinderUserTrip fUT = FinderUserTrip.getInstance();
         if (fUT.findByTripUser(gD.getId(),gD.getUsername()) != null) throw new UserTripAlreadyExists(gD.getId(),gD.getUsername());
         gD.insert();
+        logger.log("userTrip inserted successfully", logType.TRACE);
     }
 
     /**
@@ -113,11 +131,13 @@ public class UserTripController {
      */
     @PostMapping("/userTrip/delete")
     public void deleteDriver(@RequestParam Integer id,@RequestParam String username) {
+        logger.log("Starting delete driver method with id = " + id + " and username '" + username + "'...", logType.TRACE);
         FinderUserTrip fD = FinderUserTrip.getInstance();
         try {
             GatewayUserTrip gD = fD.findByTripUser(id,username);
             if (gD != null) gD.remove();
             else throw new UserTripNotFound(username,id);
+            logger.log("userTrip removed successfully, end of method", logType.TRACE);
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -28,6 +28,7 @@ public class GatewayDriver implements Gateway{
      */
     private String username; //CHANGE TYPE OF THIS ATTRIBUTE TO DRIVER WHEN IMPLEMENTED
 
+    private Boolean verified;
     /**
      * @brief SingleTon amb el FinderDriver
      */
@@ -40,17 +41,23 @@ public class GatewayDriver implements Gateway{
      * @post Es crea un nou GWDriver amb els valors indicats
      * @return Retorna la instancia del gateway que s'acaba de crear
      */
-    public GatewayDriver(String username) {
+    public GatewayDriver(String username, Boolean verified) {
         this.username = username;
+        this.verified = verified;
     }
 
     //Getters and Setters
     public String getUsername() {
         return username;
     }
-
     public void setUsername(String username) {
         this.username = username;
+    }
+    public Boolean getVerified() {
+        return verified;
+    }
+    public void setVerified(Boolean verified) {
+        this.verified = verified;
     }
 
     //SQL operations
@@ -62,6 +69,12 @@ public class GatewayDriver implements Gateway{
      */
     public void setFullPreparedStatement(PreparedStatement pS) throws SQLException {
         pS.setString(1, username);
+        pS.setBoolean(2,verified);
+    }
+
+    public void setUpdatePreparedStatement(PreparedStatement pS) throws SQLException {
+        pS.setString(2, username);
+        pS.setBoolean(1,verified);
     }
     /**
      * @brief Funció inserta a la BD un Driver
@@ -70,7 +83,7 @@ public class GatewayDriver implements Gateway{
     public void insert() throws SQLException {
         Database d = Database.getInstance();
         Connection c = d.getConnection();
-        PreparedStatement pS = c.prepareStatement("INSERT INTO DRIVER VALUES (?); ");
+        PreparedStatement pS = c.prepareStatement("INSERT INTO DRIVER VALUES (?,?); ");
         setFullPreparedStatement(pS);
         pS.executeUpdate();
     }
@@ -81,11 +94,11 @@ public class GatewayDriver implements Gateway{
      * @post Es fa un Update del Driver
      */
     public void update() throws SQLException {
-       /* Database d = Database.getInstance();
+       Database d = Database.getInstance();
         Connection c = d.getConnection();
-        PreparedStatement pS = c.prepareStatement("UPDATE DRIVER SET userName = ?;");
+        PreparedStatement pS = c.prepareStatement("UPDATE DRIVER SET verified = ? WHERE userName = ?");
         setFullPreparedStatement(pS);
-        pS.executeUpdate();*/
+        pS.executeUpdate();
     }
 
     /**

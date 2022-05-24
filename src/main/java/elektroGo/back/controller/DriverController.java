@@ -10,11 +10,15 @@ package elektroGo.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import elektroGo.back.data.finders.FinderDriver;
+import elektroGo.back.data.finders.FinderRating;
 import elektroGo.back.data.finders.FinderUser;
 import elektroGo.back.data.gateways.GatewayDriver;
+import elektroGo.back.data.gateways.GatewayRating;
 import elektroGo.back.exceptions.DriverNotFound;
 import elektroGo.back.exceptions.UserAlreadyExists;
 import elektroGo.back.exceptions.UserNotFound;
+import elektroGo.back.logs.CustomLogger;
+import elektroGo.back.logs.logType;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
@@ -26,6 +30,8 @@ import java.util.ArrayList;
 @RestController
 public class DriverController {
 
+    private final CustomLogger logger = CustomLogger.getInstance();
+
     /**
      * @brief Funció amb metode 'GET' que retorna la informació del driver amb el username corresponen
      * @param userName Usuari del que volem agafar la info
@@ -33,9 +39,11 @@ public class DriverController {
      */
     @GetMapping("/driver")
     public String getDriver(@RequestParam String userName) throws SQLException {
+        logger.log("Starting getDriver method with username '" + userName + "'...", logType.TRACE);
         FinderDriver fU = FinderDriver.getInstance();
         GatewayDriver gU = fU.findByUserName(userName);
         if(gU == null)throw new DriverNotFound(userName);
+        logger.log("Returning this driver:  " + gU.json() + " end of method", logType.TRACE);
         return gU.json();
     }
 
@@ -58,13 +66,21 @@ public class DriverController {
      */
     @PostMapping("/drivers/create")
     public void createDriver(@RequestBody GatewayDriver gD) throws SQLException {
-        System.out.println("\nStarting createDriver method with username " + gD.getUsername() + " ...");
+        logger.log("\nStarting createDriver method with username " + gD.getUsername() + " ...", logType.TRACE);
         FinderUser fU = FinderUser.getInstance();
         if (fU.findByUsername(gD.getUsername()) == null) throw new UserNotFound(gD.getUsername());
         FinderDriver fD = FinderDriver.getInstance();
         if (fD.findByUserName(gD.getUsername()) != null) throw new UserAlreadyExists(gD.getUsername());
         gD.insert();
-        System.out.println("Driver inserted (End of method)");
+        logger.log("Driver inserted (End of method)", logType.TRACE);
+    }
+
+    @PostMapping("/driver/update")
+    public void updateDriver(@RequestBody GatewayDriver gD) throws SQLException {
+        FinderUser fU = FinderUser.getInstance();
+        if (fU.findByUsername(gD.getUsername()) == null) throw new UserNotFound(gD.getUsername());
+        FinderDriver fD = FinderDriver.getInstance();
+        gD.update();
     }
 
     /**

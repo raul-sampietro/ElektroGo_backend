@@ -46,7 +46,7 @@ public class TripTest {
         fU = FinderUser.getInstance();
         fD = FinderDriver.getInstance();
         gU = insertTest();
-        gD = new GatewayDriver("TripTestClass");
+        gD = new GatewayDriver("TripTestClass",false);
         gD.insert();
         fV = FinderVehicle.getInstance();
         gV = insertTestVehicleComplet();
@@ -94,9 +94,9 @@ public class TripTest {
             GatewayTrip gTest = fT.findByUser("TripTestClass",LocalDate.of(2001, 2, 12),new Time(12*60*60*1000));
             gTest.setRestrictions("NoMascotes");
             gTest.update();
-            System.out.println(gTest.json());
+
             gTest = fT.findByUser("TripTestClass",LocalDate.of(2001, 2, 12),new Time(12*60*60*1000));
-            System.out.println(gTest.json());
+
             String res =gTest.getVehicleNumberPlate() + " " + gTest.getRestrictions();
             assertEquals("1221 NoMascotes", res);
     }
@@ -108,12 +108,7 @@ public class TripTest {
         assertNull(gTtemplate);
     }
 
-    @Test
-    public void getOrd() throws SQLException {
-        gT.remove();
-        for (GatewayTrip g : fT.findOrdered()) System.out.println(g.json());
 
-    }
 
 
 }
