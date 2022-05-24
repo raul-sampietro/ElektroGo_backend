@@ -1,8 +1,8 @@
 /**
- * @file GatewayDriver.java
+ * @file GatewayCanceledTrip.java
  * @author Gerard Castell
- * @date 10/03/2023
- * @brief Implementació de la classe GatewayDriver
+ * @date 22/05/2023
+ * @brief Implementació de la classe Gateway
  */
 
 package elektroGo.back.data.gateways;
@@ -10,54 +10,70 @@ package elektroGo.back.data.gateways;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import elektroGo.back.data.Database;
+import elektroGo.back.data.finders.FinderCanceledTrip;
 import elektroGo.back.data.finders.FinderDriver;
-
-
-
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 /**
- * @brief La classe GatewayDriver implementa el Gateway de Driver el qual te els atributs de Driver i fa insert/update/delete a la BD
+ * @brief La classe Gateway implementa el Gateway el qual te els atributs de CanceledTrip i fa insert/update/delete a la BD
  */
-public class GatewayDriver implements Gateway{
+public class GatewayCanceledTrip implements Gateway{
 
     /**
-     * @brief Username del Driver
+     * @brief id trip
      */
-    private String username; //CHANGE TYPE OF THIS ATTRIBUTE TO DRIVER WHEN IMPLEMENTED
+    private Integer id;
+    private LocalDate dayCanceled;
+    private String reason;
 
-    private Boolean verified;
     /**
-     * @brief SingleTon amb el FinderDriver
+     * @brief SingleTon amb el Finder
      */
-    private FinderDriver fD;
+    private FinderCanceledTrip fD;
 
-    public GatewayDriver() {}
+    public GatewayCanceledTrip() {}
     /**
-     * @brief Creadora de la Clase Gateway Driver amb el username
-     * @param username Usuari del qual volem crear el GW
-     * @post Es crea un nou GWDriver amb els valors indicats
-     * @return Retorna la instancia del gateway que s'acaba de crear
+     * @brief Creadora de la Clase Gateway
+     * @param id Usuari del qual volem crear el GW
+     * @param dayCanceled data cancelacio
+     * @param reason motiu cancelacio
+     * @post Es crea un nou GW amb els valors indicats
      */
-    public GatewayDriver(String username, Boolean verified) {
-        this.username = username;
-        this.verified = verified;
+    public GatewayCanceledTrip(Integer id, LocalDate dayCanceled, String reason) {
+        this.id = id;
+        this.dayCanceled = dayCanceled;
+        this.reason = reason;
     }
+
 
     //Getters and Setters
-    public String getUsername() {
-        return username;
+
+    public Integer getId() {
+        return id;
     }
-    public void setUsername(String username) {
-        this.username = username;
+
+    public void setId(Integer id) {
+        this.id = id;
     }
-    public Boolean getVerified() {
-        return verified;
+
+    public LocalDate getDayCanceled() {
+        return dayCanceled;
     }
-    public void setVerified(Boolean verified) {
-        this.verified = verified;
+
+    public void setDayCanceled(LocalDate dayCanceled) {
+        this.dayCanceled = dayCanceled;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
     //SQL operations
@@ -68,13 +84,15 @@ public class GatewayDriver implements Gateway{
      * @post el pS queda assignat amb la info requerida
      */
     public void setFullPreparedStatement(PreparedStatement pS) throws SQLException {
-        pS.setString(1, username);
-        pS.setBoolean(2,verified);
+        pS.setInt(1, id);
+        pS.setDate(2, Date.valueOf(dayCanceled));
+        pS.setString(3,reason);
     }
 
     public void setUpdatePreparedStatement(PreparedStatement pS) throws SQLException {
-        pS.setString(2, username);
-        pS.setBoolean(1,verified);
+        pS.setInt(3, id);
+        pS.setDate(1, Date.valueOf(dayCanceled));
+        pS.setString(2,reason);
     }
     /**
      * @brief Funció inserta a la BD un Driver
@@ -83,7 +101,7 @@ public class GatewayDriver implements Gateway{
     public void insert() throws SQLException {
         Database d = Database.getInstance();
         Connection c = d.getConnection();
-        PreparedStatement pS = c.prepareStatement("INSERT INTO DRIVER VALUES (?,?); ");
+        PreparedStatement pS = c.prepareStatement("INSERT INTO CANCELEDTRIP VALUES (?,?,?); ");
         setFullPreparedStatement(pS);
         pS.executeUpdate();
     }
@@ -96,8 +114,8 @@ public class GatewayDriver implements Gateway{
     public void update() throws SQLException {
        Database d = Database.getInstance();
         Connection c = d.getConnection();
-        PreparedStatement pS = c.prepareStatement("UPDATE DRIVER SET verified = ? WHERE userName = ?");
-        setFullPreparedStatement(pS);
+        PreparedStatement pS = c.prepareStatement("UPDATE CANCELEDTRIP SET dayCanceled = ?,reason=? WHERE id=?;");
+        setUpdatePreparedStatement(pS);
         pS.executeUpdate();
     }
 
@@ -107,7 +125,7 @@ public class GatewayDriver implements Gateway{
      */
     public void remove() throws SQLException {
         Database d = Database.getInstance();
-        d.executeSQLUpdate("DELETE FROM DRIVER WHERE userName='" + username + "';");
+        d.executeSQLUpdate("DELETE FROM CANCELEDTRIP WHERE id=" + id + ";");
     }
 
     /**
