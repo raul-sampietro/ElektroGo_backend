@@ -1545,6 +1545,44 @@ paths:
               examples:
                 errorExample:
                   $ref: '#/components/examples/error437'
+                
+  /chats/{deleter}/{deleted}:
+    delete:
+      tags:
+      - Chats
+      summary: Esborra el xat d'un usuari amb un altre. L'últim pot seguir veient el missatges.
+      operationId: deleteConversation
+      parameters:
+      - name: deleter
+        in: path
+        description: Username de l'usuari que esborra el xat.
+        required: true
+        schema:
+          type: string
+      - name: deleted
+        in: path
+        description: Username de l'usuari del qual s'esborra el xat.
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Chat'
+        437:
+          description: 'Error: User Not Found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResultElektroGo'
+              examples:
+                errorExample:
+                  $ref: '#/components/examples/error437'
 
 components:
   schemas:
