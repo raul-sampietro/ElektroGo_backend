@@ -20,13 +20,13 @@ import java.util.List;
 @RequestMapping("blocks")
 @RestController
 public class BlocksController {
-    @GetMapping("/blocks/from/{username}")
+    @GetMapping("/from/{username}")
     public List<GatewayBlock> blocksUser(@PathVariable String username) throws SQLException {
         System.out.println("\nStarting allBlocks method...");
         FinderBlock fR = FinderBlock.getInstance();
         return fR.findByUserBlocking(username);
     }
-    @GetMapping("/blocks/to/{username}")
+    @GetMapping("/to/{username}")
     public List<GatewayBlock> UserIsBlocked(@PathVariable String username) throws SQLException {
         System.out.println("\nStarting allBlocks method...");
         FinderBlock fR = FinderBlock.getInstance();
