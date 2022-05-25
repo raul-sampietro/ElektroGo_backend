@@ -143,7 +143,7 @@ public class FinderTrip {
         ArrayList<GatewayTrip> gtrip = new ArrayList<>();
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
-        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP t WHERE t.username= ? AND t.startDate >= CURDATE() AND t.startTime >= CURTIME() and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id);");
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP t WHERE t.username= ? AND (t.startDate > CURDATE() or ( t.startDate = CURDATE()  and  t.startTime >= CURTIME())) and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id);");
         pS.setString(1, username);
         ResultSet r = pS.executeQuery();
         while (r.next()) {
@@ -186,7 +186,7 @@ public class FinderTrip {
                         "from TRIP t " +
                         "LEFT OUTER JOIN RATING  r " +
                         "ON t.username = r.ratedUser " +
-                        "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?)and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id)and  LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ?"
+                        "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?)and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id)and  LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and (t.startDate > CURDATE() or ( t.startDate = CURDATE()  and  t.startTime >= CURTIME()))"
                         +"group by t.id " +
                         "order by avgpoints desc;"));
         pS.setString(1,username);
