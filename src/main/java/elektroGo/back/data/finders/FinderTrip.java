@@ -206,7 +206,7 @@ public class FinderTrip {
                 "from TRIP t " +
                 "LEFT OUTER JOIN RATING  r " +
                 "ON t.username = r.ratedUser " +
-                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?) and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id)and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startTime >= ?"
+                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?) and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id)and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startTime >= ? and startDate >= CURDATE()"
                 +"group by t.id " +
                 "order by avgpoints desc;"));
         pS.setString(1,username);
@@ -239,7 +239,7 @@ public class FinderTrip {
                 "from TRIP t " +
                 "LEFT OUTER JOIN RATING  r " +
                 "ON t.username = r.ratedUser " +
-                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?) and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id)and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startTime <= ?"
+                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?) and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id)and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startTime <= ? and startDate >= CURDATE()"
                 +"group by t.id " +
                 "order by avgpoints desc;"));
         pS.setString(1,username);
@@ -272,7 +272,7 @@ public class FinderTrip {
                 "from TRIP t " +
                 "LEFT OUTER JOIN RATING  r " +
                 "ON t.username = r.ratedUser " +
-                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?)and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id)and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startTime BETWEEN ? AND ?"
+                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?)and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id)and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startTime BETWEEN ? AND ? and startDate >= CURDATE()"
                 +"group by t.id " +
                 "order by avgpoints desc;"));
         pS.setString(1,username);
@@ -305,7 +305,7 @@ public class FinderTrip {
                 "from TRIP t " +
                 "LEFT OUTER JOIN RATING  r " +
                 "ON t.username = r.ratedUser " +
-                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?) and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id)and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ?"
+                "WHERE NOT EXISTS (SELECT NULL FROM BLOCK b where t.username = b.blockUser and b.userBlocking = ?) and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id)and LatitudeOrigin BETWEEN ? AND ? and longitudeOrigin BETWEEN ? AND ? and LatitudeDestination BETWEEN ? AND ? and LongitudeDestination BETWEEN ? AND ? and startDate = ? and startTime >= CURTIME()"
                 +"group by t.id " +
                 "order by avgpoints desc;"));
         pS.setString(1,username);
