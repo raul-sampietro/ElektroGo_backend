@@ -8,12 +8,9 @@
 package elektroGo.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import elektroGo.back.data.finders.FinderCanceledTrip;
-import elektroGo.back.data.finders.FinderRating;
-import elektroGo.back.data.finders.FinderTrip;
+import com.mysql.cj.x.protobuf.MysqlxCrud;
+import elektroGo.back.data.finders.*;
 import elektroGo.back.data.gateways.GatewayCanceledTrip;
-import elektroGo.back.data.finders.FinderUser;
-import elektroGo.back.data.finders.FinderUserTrip;
 import elektroGo.back.data.gateways.GatewayTrip;
 import elektroGo.back.data.gateways.GatewayUser;
 import elektroGo.back.data.gateways.GatewayUserTrip;
@@ -305,5 +302,21 @@ public class TripController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * @brief Funció amb metode 'GET' que demana que s'esborri un userTrip de la BD
+     * @param username Usuari que volem eliminar
+     * @post El usertrip s'elimina de la BD
+     */
+    @GetMapping("/created/{username}")
+    public ArrayList<GatewayTrip> getDriver(@PathVariable String username) throws SQLException {
+        logger.log("Starting get trip form " + username + "'...", logType.TRACE);
+        FinderDriver fd = FinderDriver.getInstance();
+        if(fd.findByUserName(username) == null)throw new DriverNotFound(username);
+        FinderTrip ft = FinderTrip.getInstance();
+        ArrayList<GatewayTrip> gt = ft.findByDriver(username);
+        if(gt == null)throw new TripNotFound();
+        return gt;
     }
 }

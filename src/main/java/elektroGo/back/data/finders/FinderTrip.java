@@ -139,6 +139,18 @@ public class FinderTrip {
         if (r.next()) gT = createGateway(r);
         return gT;
     }
+    public ArrayList<GatewayTrip> findByDriver(String username) throws SQLException {
+        ArrayList<GatewayTrip> gtrip = new ArrayList<>();
+        Database d = Database.getInstance();
+        Connection conn = d.getConnection();
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM TRIP t WHERE t.username= ? AND t.startDate >= CURDATE() AND t.startTime >= CURTIME() and NOT EXISTS (SELECT NULL FROM CANCELEDTRIP c  where t.id = c.id);");
+        pS.setString(1, username);
+        ResultSet r = pS.executeQuery();
+        while (r.next()) {
+            gtrip.add(createGateway(r));
+        }
+        return gtrip;
+    }
 
     /**
      * @brief Funció que agafa tots els trips de la BD i els posa a un Array
