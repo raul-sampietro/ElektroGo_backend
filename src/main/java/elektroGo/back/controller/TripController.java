@@ -7,8 +7,6 @@
 
 package elektroGo.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mysql.cj.x.protobuf.MysqlxCrud;
 import elektroGo.back.data.finders.*;
 import elektroGo.back.data.gateways.GatewayCanceledTrip;
 import elektroGo.back.data.gateways.GatewayTrip;
@@ -17,7 +15,6 @@ import elektroGo.back.data.gateways.GatewayUserTrip;
 import elektroGo.back.exceptions.*;
 import elektroGo.back.logs.CustomLogger;
 import elektroGo.back.logs.logType;
-import org.springframework.asm.TypeReference;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 

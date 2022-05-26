@@ -9,7 +9,6 @@ package elektroGo.back.controller;
 
 import elektroGo.back.data.finders.FinderBlock;
 import elektroGo.back.data.gateways.GatewayBlock;
-import elektroGo.back.data.gateways.GatewayDriver;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;

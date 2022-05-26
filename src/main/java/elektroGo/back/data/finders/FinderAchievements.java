@@ -2,7 +2,6 @@ package elektroGo.back.data.finders;
 
 import elektroGo.back.data.Database;
 import elektroGo.back.data.gateways.GatewayAchieviements;
-import elektroGo.back.data.gateways.GatewayUserAchievements;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

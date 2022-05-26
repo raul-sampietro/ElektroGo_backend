@@ -8,37 +8,17 @@
 package elektroGo.back.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import elektroGo.back.data.finders.FinderBlock;
-import elektroGo.back.data.finders.FinderRating;
-import elektroGo.back.data.finders.FinderReport;
 import elektroGo.back.data.finders.FinderUser;
-import elektroGo.back.data.gateways.GatewayBlock;
-import elektroGo.back.data.gateways.Gateway;
-import elektroGo.back.data.finders.FinderUserTrip;
-import elektroGo.back.data.gateways.Gateway;
-import elektroGo.back.data.gateways.GatewayRating;
-import elektroGo.back.data.gateways.GatewayReport;
 import elektroGo.back.data.gateways.GatewayUser;
-import elektroGo.back.data.gateways.GatewayUserTrip;
-import elektroGo.back.exceptions.RatingNotFound;
-import elektroGo.back.exceptions.ReportNotFound;
 import elektroGo.back.exceptions.UserAlreadyExists;
 import elektroGo.back.exceptions.UserNotFound;
-import elektroGo.back.data.finders.*;
-import elektroGo.back.data.gateways.GatewayRating;
-import elektroGo.back.data.gateways.GatewayReport;
-import elektroGo.back.data.gateways.GatewayUser;
-import elektroGo.back.exceptions.*;
 import elektroGo.back.logs.CustomLogger;
 import elektroGo.back.logs.logType;
-import elektroGo.back.model.avgRate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @brief La classe UserController és la classe que comunicarà front-end i back-end a l'hora de tractar amb dades dels Users

@@ -9,7 +9,6 @@
 package elektroGo.back.data.finders;
 
 import elektroGo.back.data.gateways.GatewayCanceledTrip;
-import elektroGo.back.data.gateways.GatewayDriver;
 import elektroGo.back.data.Database;
 import java.sql.*;
 import java.time.LocalDate;

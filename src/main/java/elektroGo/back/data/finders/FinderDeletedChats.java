@@ -8,7 +8,6 @@
 package elektroGo.back.data.finders;
 
 import elektroGo.back.data.Database;
-import elektroGo.back.data.gateways.GatewayChats;
 import elektroGo.back.data.gateways.GatewayDeletedChats;
 
 import java.sql.Connection;

@@ -6,7 +6,6 @@
  */
 package elektroGo.back.data.finders;
 
-import elektroGo.back.data.gateways.GatewayChargingStations;
 import elektroGo.back.data.gateways.GatewayTrip;
 import elektroGo.back.data.Database;
 

@@ -10,7 +10,6 @@ package elektroGo.back.controller;
 import elektroGo.back.exceptions.DestinationNotReachable;
 import elektroGo.back.logs.CustomLogger;
 import elektroGo.back.logs.logType;
-import elektroGo.back.model.Point;
 import elektroGo.back.model.RouteCalculation;
 
 import org.springframework.web.bind.annotation.*;
