@@ -1600,12 +1600,6 @@ paths:
           type: string
       - name: message
         in: query
-        description: Content of the message
-        required: true
-        schema:
-          type: string
-      - name: message
-        in: query
         required: true
         description: Contingut del missatge.
         schema: 
@@ -1629,6 +1623,13 @@ paths:
       - Chats
       summary: Obté tots els xats de l'usuari.
       operationId: getAllChats
+      parameters:
+      - name: username
+        in: path
+        description: Username de l'usuari
+        required: true
+        schema:
+          type: string
       responses:
         200:
           description: successful operation
