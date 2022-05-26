@@ -143,7 +143,7 @@ public class TripController {
         }
     }
 
-    @GetMapping("/car-pooling/{id}/users")
+    @GetMapping("/{id}/users")
     public List<GatewayUser> getTripParticipants(@PathVariable Integer id) throws SQLException {
         logger.log("\nStarting getting Trip Participants...", logType.TRACE);
         FinderTrip fT = FinderTrip.getInstance();
@@ -212,7 +212,7 @@ public class TripController {
         return gT;
     }
 
-    @GetMapping("/car-pooling/byCoord")
+    @GetMapping("/byCoord")
     public ArrayList<GatewayTrip> getTripByCord(@RequestParam BigDecimal latitude, @RequestParam BigDecimal longitude, @RequestParam BigDecimal Radi,  @RequestParam String key) throws SQLException {
         logger.log("This is an external API method", logType.INFO);
         logger.log("Starting getTripByCoord method with this parameters: \n" +

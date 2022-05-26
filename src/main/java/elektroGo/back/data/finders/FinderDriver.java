@@ -52,7 +52,7 @@ public class FinderDriver {
     public ArrayList<GatewayDriver> findAll() throws SQLException {
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
-        ArrayList<GatewayDriver> gdriver = new ArrayList<>();
+            ArrayList<GatewayDriver> gdriver = new ArrayList<>();
         PreparedStatement pS = conn.prepareStatement("SELECT * FROM DRIVER;");
         ResultSet r = pS.executeQuery();
         while (r.next()) {
@@ -75,6 +75,18 @@ public class FinderDriver {
         ResultSet r = pS.executeQuery();
         if (r.next()) gU = createGateway(r);
         return gU;
+    }
+
+    public ArrayList<GatewayDriver> findByNonVerified() throws SQLException {
+        ArrayList<GatewayDriver> gdriver = new ArrayList<>();
+        Database d = Database.getInstance();
+        Connection conn = d.getConnection();
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM DRIVER WHERE verified = FALSE;");
+        ResultSet r = pS.executeQuery();
+        while (r.next()) {
+            gdriver.add(createGateway(r));
+        }
+        return gdriver;
     }
 
     /**
