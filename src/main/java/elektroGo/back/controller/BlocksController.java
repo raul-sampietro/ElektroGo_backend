@@ -9,10 +9,8 @@ package elektroGo.back.controller;
 
 import elektroGo.back.data.finders.FinderBlock;
 import elektroGo.back.data.gateways.GatewayBlock;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import elektroGo.back.data.gateways.GatewayDriver;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -31,5 +29,13 @@ public class BlocksController {
         System.out.println("\nStarting allBlocks method...");
         FinderBlock fR = FinderBlock.getInstance();
         return fR.findByBlockUser(username);
+    }
+
+
+    @PostMapping("/{username}/block/{userBlock}")
+    public void BlockUser(@PathVariable String username,@PathVariable String userBlock) throws SQLException {
+        System.out.println("\nBlocking method...");
+        GatewayBlock gD = new GatewayBlock(username, userBlock);
+        gD.insert();
     }
 }

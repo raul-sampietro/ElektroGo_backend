@@ -87,6 +87,11 @@ public class DriverController {
         gD.update();
     }
 
+    @GetMapping("/nonVerified")
+    public ArrayList<GatewayDriver> getDriverFalse() throws SQLException {
+        FinderDriver fD = FinderDriver.getInstance();
+        return fD.findByNonVerified();
+    }
     /**
      * @brief Funció amb metode 'POST' que demana que s'esborri un Driver de la BD
      * @param username Usuari que volem eliminar
