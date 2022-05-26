@@ -255,8 +255,14 @@ public class TripController {
 
     @PutMapping("/{id}/cancel")
     public void cancel(@PathVariable Integer id, @RequestBody GatewayCanceledTrip gCT) throws SQLException {
+        logger.log("Starting cancel trip method with id = " + id + " and CanceledTrip\n"+ gCT.json(), logType.TRACE);
         FinderTrip fT = FinderTrip.getInstance();
-        if (fT.findById(id) == null) throw new TripNotFound(id);
+        GatewayTrip gT = fT.findById(id);
+        if (gT == null) throw new TripNotFound(id);
+        gT.setState("cancelled");
+        gT.update();
+        gT = fT.findById(id);
+        logger.log("Trip updated:\n" + gT.json(), logType.TRACE);
         FinderCanceledTrip fCT = FinderCanceledTrip.getInstance();
         if (fCT.findByID(id) == null) gCT.insert();
     }
