@@ -130,6 +130,25 @@ public class GatewayTrip implements Gateway{
         state = "current";
     }
 
+    public GatewayTrip(Integer id, LocalDate startDate, Time startTime, Integer offeredSeats, Integer occupiedSeats, String restrictions, String details, LocalDate CancelDate, String vehicleNumberPlate,String origin, String destination, BigDecimal latitudeO, BigDecimal longitudeO,BigDecimal latitudeD, BigDecimal longitudeD,String username, String state) {
+        this.startDate = startDate;
+        this.startTime = startTime;
+        this.offeredSeats = offeredSeats;
+        this.occupiedSeats = occupiedSeats;
+        this.restrictions = restrictions;
+        this.details = details;
+        this.CancelDate = CancelDate;
+        this.vehicleNumberPlate = vehicleNumberPlate;
+        this.origin = origin;
+        this.destination = destination;
+        this.LatitudeOrigin = latitudeO;
+        this.LongitudeOrigin = longitudeO;
+        this.LatitudeDestination = latitudeD;
+        this.LongitudeDestination = longitudeD;
+        this.username = username;
+        this.state = state;
+    }
+
 
     //Getters and Setters
 

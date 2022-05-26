@@ -462,8 +462,9 @@ public class FinderTrip {
         BigDecimal latitudeDestination = r.getBigDecimal(14);
         BigDecimal longitudeDestination = r.getBigDecimal(15);
         String username = r.getString(16);
+        String state = r.getString(17);
         return new GatewayTrip(id,startDate,startTime, offeredSeats ,occupiedSeats,restrictions,details, CancelDate,
-                vehicleNumberPlate, origin, destination,latitudeOrigin, longitudeOrigin, latitudeDestination, longitudeDestination, username);
+                vehicleNumberPlate, origin, destination,latitudeOrigin, longitudeOrigin, latitudeDestination, longitudeDestination, username, state);
     }
 
 }

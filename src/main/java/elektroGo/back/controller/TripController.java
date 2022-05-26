@@ -325,4 +325,18 @@ public class TripController {
         if(gt == null)throw new TripNotFound();
         return gt;
     }
+
+    @PutMapping("/{id}/finish")
+    public void endTrip(@PathVariable Integer id) throws SQLException {
+        logger.log("Starting finish trip method with id = " + id+"...",logType.TRACE);
+        FinderTrip fT = FinderTrip.getInstance();
+        GatewayTrip gT = fT.findById(id);
+        if (gT == null) throw new TripNotFound(id);
+        gT.setState("finished");
+        gT.update();
+        gT = fT.findById(id);
+        logger.log("Trip updated:\n" + gT.json(),logType.TRACE);
+    }
+
+
 }
