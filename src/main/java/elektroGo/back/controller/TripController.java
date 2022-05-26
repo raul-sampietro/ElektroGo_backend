@@ -147,12 +147,16 @@ public class TripController {
     public List<GatewayUser> getTripParticipants(@PathVariable Integer id) throws SQLException {
         logger.log("\nStarting getting Trip Participants...", logType.TRACE);
         FinderTrip fT = FinderTrip.getInstance();
-        if (fT.findById(id) == null) throw new TripNotFound();
+        GatewayTrip gT = fT.findById(id);
+        if (gT == null) throw new TripNotFound();
         FinderUserTrip fUT = FinderUserTrip.getInstance();
         FinderUser fU = FinderUser.getInstance();
         ArrayList<GatewayUserTrip> utl = fUT.findByTrip(id);
         ArrayList<GatewayUser> ul = new ArrayList<>();
-        for (GatewayUserTrip gUT : utl) ul.add(fU.findByUsername(gUT.getUsername()));
+        for (GatewayUserTrip gUT : utl) {
+            if (!gT.getUsername().equals(gUT.getUsername()))
+                ul.add(fU.findByUsername(gUT.getUsername()));
+        }
         return ul;
     }
 
