@@ -7,8 +7,6 @@
 
 package elektroGo.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mysql.cj.x.protobuf.MysqlxCrud;
 import elektroGo.back.data.finders.*;
 import elektroGo.back.data.gateways.GatewayCanceledTrip;
 import elektroGo.back.data.gateways.GatewayTrip;
@@ -17,7 +15,6 @@ import elektroGo.back.data.gateways.GatewayUserTrip;
 import elektroGo.back.exceptions.*;
 import elektroGo.back.logs.CustomLogger;
 import elektroGo.back.logs.logType;
-import org.springframework.asm.TypeReference;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +32,7 @@ import static java.lang.Math.cos;
 @RequestMapping("/car-pooling")
 @RestController
 public class TripController {
-    String password = "34ee7e6c4c51e43ed6a7767bc717a7f9127d3d0025a0efbf6af124d15821c6ec";
+        String password = "34ee7e6c4c51e43ed6a7767bc717a7f9127d3d0025a0efbf6af124d15821c6ec";
 
     private final CustomLogger logger = CustomLogger.getInstance();
 
@@ -47,7 +44,7 @@ public class TripController {
     public ArrayList<GatewayTrip> getTrips(@RequestParam(required = false) String username,
                                            @RequestParam(required = false) Boolean order) throws SQLException, JsonProcessingException {
         if (username != null) {
-            if (order) {
+            if (order != null && order) {
                 logger.log("Starting getTripsOrdered method...", logType.TRACE);
                 FinderTrip fT = FinderTrip.getInstance();
                 ArrayList<GatewayTrip> all = fT.findOrdered(username);
@@ -68,7 +65,7 @@ public class TripController {
             }
         }
         else {
-            if (order) {
+            if (order != null && order) {
                 logger.log("Starting getTripsOrdered method...", logType.TRACE);
                 FinderTrip fT = FinderTrip.getInstance();
                 // TODO userless findOrdered() method
@@ -255,8 +252,14 @@ public class TripController {
 
     @PutMapping("/{id}/cancel")
     public void cancel(@PathVariable Integer id, @RequestBody GatewayCanceledTrip gCT) throws SQLException {
+        logger.log("Starting cancel trip method with id = " + id + " and CanceledTrip\n"+ gCT.json(), logType.TRACE);
         FinderTrip fT = FinderTrip.getInstance();
-        if (fT.findById(id) == null) throw new TripNotFound(id);
+        GatewayTrip gT = fT.findById(id);
+        if (gT == null) throw new TripNotFound(id);
+        gT.setState("cancelled");
+        gT.update();
+        gT = fT.findById(id);
+        logger.log("Trip updated:\n" + gT.json(), logType.TRACE);
         FinderCanceledTrip fCT = FinderCanceledTrip.getInstance();
         if (fCT.findByID(id) == null) gCT.insert();
     }
@@ -319,4 +322,19 @@ public class TripController {
         if(gt == null)throw new TripNotFound();
         return gt;
     }
+
+    @PutMapping("/{id}/finish")
+    public void endTrip(@PathVariable Integer id) throws SQLException {
+        logger.log("Starting finish trip method with id = " + id+"...",logType.TRACE);
+        FinderTrip fT = FinderTrip.getInstance();
+        GatewayTrip gT = fT.findById(id);
+        if (gT == null) throw new TripNotFound(id);
+        gT.setState("finished");
+        gT.update();
+        gT = fT.findById(id);
+        logger.log("Trip updated:\n" + gT.json(),logType.TRACE);
+    }
+
+
+
 }
