@@ -70,7 +70,7 @@ public class FinderTrip {
         PreparedStatement pS = conn.prepareStatement("select t.id, t.startDate, t.startTime, " +
                 "t.offeredSeats,t.occupiedSeats,t.restrictions, t.details,t.CancelDate," +
                 "t.vehicleNumberPlate,t.origin,t.destination,t.LatitudeOrigin," +
-                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username," +
+                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username, t.state" +
                 "AVG(r.points) as avgpoints " +
                 "from TRIP t " +
                 "LEFT OUTER JOIN RATING  r " +
@@ -97,7 +97,7 @@ public class FinderTrip {
         PreparedStatement pS = conn.prepareStatement("select t.id, t.startDate, t.startTime, " +
                 "t.offeredSeats,t.occupiedSeats,t.restrictions, t.details,t.CancelDate," +
                 "t.vehicleNumberPlate,t.origin,t.destination,t.LatitudeOrigin," +
-                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username," +
+                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username, t.state, " +
                 "AVG(r.points) as avgpoints " +
                 "from TRIP t " +
                 "LEFT OUTER JOIN RATING  r " +
@@ -181,7 +181,7 @@ public class FinderTrip {
         PreparedStatement pS = conn.prepareStatement(("select t.id, t.startDate, t.startTime, " +
                         "t.offeredSeats,t.occupiedSeats,t.restrictions, t.details,t.CancelDate," +
                         "t.vehicleNumberPlate,t.origin,t.destination,t.LatitudeOrigin," +
-                        "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username," +
+                        "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username, t.state, " +
                         "AVG(r.points) as avgpoints " +
                         "from TRIP t " +
                         "LEFT OUTER JOIN RATING  r " +
@@ -213,7 +213,7 @@ public class FinderTrip {
         PreparedStatement pS = conn.prepareStatement(("select t.id, t.startDate, t.startTime, " +
                 "t.offeredSeats,t.occupiedSeats,t.restrictions, t.details,t.CancelDate," +
                 "t.vehicleNumberPlate,t.origin,t.destination,t.LatitudeOrigin," +
-                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username," +
+                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username, t.state, " +
                 "AVG(r.points) as avgpoints " +
                 "from TRIP t " +
                 "LEFT OUTER JOIN RATING  r " +
@@ -246,7 +246,7 @@ public class FinderTrip {
         PreparedStatement pS = conn.prepareStatement(("select t.id, t.startDate, t.startTime, " +
                 "t.offeredSeats,t.occupiedSeats,t.restrictions, t.details,t.CancelDate," +
                 "t.vehicleNumberPlate,t.origin,t.destination,t.LatitudeOrigin," +
-                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username," +
+                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username, t.state, " +
                 "AVG(r.points) as avgpoints " +
                 "from TRIP t " +
                 "LEFT OUTER JOIN RATING  r " +
@@ -279,7 +279,7 @@ public class FinderTrip {
         PreparedStatement pS = conn.prepareStatement(("select t.id, t.startDate, t.startTime, " +
                 "t.offeredSeats,t.occupiedSeats,t.restrictions, t.details,t.CancelDate," +
                 "t.vehicleNumberPlate,t.origin,t.destination,t.LatitudeOrigin," +
-                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username," +
+                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username, t.state, " +
                 "AVG(r.points) as avgpoints " +
                 "from TRIP t " +
                 "LEFT OUTER JOIN RATING  r " +
@@ -312,7 +312,7 @@ public class FinderTrip {
         PreparedStatement pS = conn.prepareStatement(("select t.id, t.startDate, t.startTime, " +
                 "t.offeredSeats,t.occupiedSeats,t.restrictions, t.details,t.CancelDate," +
                 "t.vehicleNumberPlate,t.origin,t.destination,t.LatitudeOrigin," +
-                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username," +
+                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username, t.state, " +
                 "AVG(r.points) as avgpoints " +
                 "from TRIP t " +
                 "LEFT OUTER JOIN RATING  r " +
@@ -345,7 +345,7 @@ public class FinderTrip {
         PreparedStatement pS = conn.prepareStatement(("select t.id, t.startDate, t.startTime, " +
                 "t.offeredSeats,t.occupiedSeats,t.restrictions, t.details,t.CancelDate," +
                 "t.vehicleNumberPlate,t.origin,t.destination,t.LatitudeOrigin," +
-                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username," +
+                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username, t.state, " +
                 "AVG(r.points) as avgpoints " +
                 "from TRIP t " +
                 "LEFT OUTER JOIN RATING  r " +
@@ -379,7 +379,7 @@ public class FinderTrip {
         PreparedStatement pS = conn.prepareStatement(("select t.id, t.startDate, t.startTime, " +
                 "t.offeredSeats,t.occupiedSeats,t.restrictions, t.details,t.CancelDate," +
                 "t.vehicleNumberPlate,t.origin,t.destination,t.LatitudeOrigin," +
-                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username," +
+                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username, t.state, " +
                 "AVG(r.points) as avgpoints " +
                 "from TRIP t " +
                 "LEFT OUTER JOIN RATING  r " +
@@ -413,7 +413,7 @@ public class FinderTrip {
         PreparedStatement pS = conn.prepareStatement(("select t.id, t.startDate, t.startTime, " +
                 "t.offeredSeats,t.occupiedSeats,t.restrictions, t.details,t.CancelDate," +
                 "t.vehicleNumberPlate,t.origin,t.destination,t.LatitudeOrigin," +
-                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username," +
+                "t.LongitudeOrigin,t.LatitudeDestination,t.LongitudeDestination,t.username, t.state, " +
                 "AVG(r.points) as avgpoints " +
                 "from TRIP t " +
                 "LEFT OUTER JOIN RATING  r " +
@@ -462,8 +462,8 @@ public class FinderTrip {
         BigDecimal latitudeDestination = r.getBigDecimal(14);
         BigDecimal longitudeDestination = r.getBigDecimal(15);
         String username = r.getString(16);
+        String state = r.getString(17);
         return new GatewayTrip(id,startDate,startTime, offeredSeats ,occupiedSeats,restrictions,details, CancelDate,
-                vehicleNumberPlate, origin, destination,latitudeOrigin, longitudeOrigin, latitudeDestination, longitudeDestination, username);
+                vehicleNumberPlate, origin, destination,latitudeOrigin, longitudeOrigin, latitudeDestination, longitudeDestination, username, state);
     }
-
 }
