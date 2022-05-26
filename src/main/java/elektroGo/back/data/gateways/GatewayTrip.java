@@ -131,6 +131,7 @@ public class GatewayTrip implements Gateway{
     }
 
     public GatewayTrip(Integer id, LocalDate startDate, Time startTime, Integer offeredSeats, Integer occupiedSeats, String restrictions, String details, LocalDate CancelDate, String vehicleNumberPlate,String origin, String destination, BigDecimal latitudeO, BigDecimal longitudeO,BigDecimal latitudeD, BigDecimal longitudeD,String username, String state) {
+        this.id = id;
         this.startDate = startDate;
         this.startTime = startTime;
         this.offeredSeats = offeredSeats;
