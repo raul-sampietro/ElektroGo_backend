@@ -169,7 +169,7 @@ public class DriverController {
 
 
     @PostMapping("/{username}/imageBack")
-    public void setImageback(@PathVariable String username  ,@RequestParam("imageFront") MultipartFile file) throws IOException, SQLException {
+    public void setImageback(@PathVariable String username  ,@RequestParam("imageBack") MultipartFile file) throws IOException, SQLException {
         FinderDriver fV = FinderDriver.getInstance();
         GatewayDriver gV = fV.findByUserName(username);
         if (gV == null) throw new DriverNotFound(username);
