@@ -12,7 +12,7 @@ import elektroGo.back.data.gateways.GatewayChats;
 import elektroGo.back.data.gateways.GatewayDeletedChats;
 import elektroGo.back.logs.CustomLogger;
 import elektroGo.back.logs.logType;
-import elektroGo.back.model.DeletedChats;
+import elektroGo.back.model.ManagementChat;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
@@ -35,9 +35,7 @@ public class ChatsController {
      */
     @GetMapping("/messages")
     public ArrayList<GatewayChats> getAll() throws SQLException {
-        logger.log("\nStarting Chats.getAll method...", logType.TRACE);
         FinderChats fC = FinderChats.getInstance();
-        logger.log("Ending Chats.getAll method...", logType.TRACE);
         return fC.findAll();
     }
 
@@ -49,14 +47,8 @@ public class ChatsController {
      */
     @GetMapping("/messages/{username1}/{username2}")
     public ArrayList<GatewayChats> getChatByConversation(@PathVariable String username1, @PathVariable String username2) throws SQLException {
-        logger.log("\nStarting getChatByConversation method of user '" + username1 + "' and '" + username2 + "'", logType.TRACE);
         FinderChats fC = FinderChats.getInstance();
         ArrayList<GatewayChats> aL = fC.findByConversation(username1, username2);
-        logger.log("Returning this messages...", logType.TRACE);
-        String s = "";
-        for (GatewayChats gC : aL) s = s + gC.json() + "\n";
-        logger.log(s, logType.TRACE);
-        logger.log("End of method", logType.TRACE);
         return fC.findByConversation(username1, username2);
     }
 
@@ -67,16 +59,11 @@ public class ChatsController {
      */
     @GetMapping("/{username}")
     public ArrayList<String> getChatByConversation(@PathVariable String username) throws SQLException {
-        logger.log("\nStarting getChatByConversation method with username '" + username + "'...", logType.TRACE);
         FinderChats fC = FinderChats.getInstance();
-        DeletedChats dCS = new DeletedChats();
+        ManagementChat dCS = new ManagementChat();
         ArrayList<String> usersChats = fC.findByUser(username);
         ArrayList<String> deletedChats = dCS.getDeletedChatsFromUser(username);
         usersChats.removeAll(deletedChats);
-        logger.log("Returning this chats:", logType.TRACE);
-        String log = "";
-        for (String s : usersChats ) log = log + s + " ";
-        logger.log(log, logType.TRACE);
         return usersChats;
     }
 
@@ -87,12 +74,8 @@ public class ChatsController {
      */
     @GetMapping("/messages/to/{user}")
     public ArrayList<GatewayChats> getChatByReceived(@PathVariable String user) throws SQLException {
-        logger.log("Starting getChatByReceived method with user '" + user + "'", logType.TRACE);
         FinderChats fC = FinderChats.getInstance();
         ArrayList<GatewayChats> aL = fC.findByReceived(user);
-        String log = "";
-        for (GatewayChats gC : aL) log += gC.json() + "\n";
-        logger.log(log, logType.TRACE);
         return aL;
     }
 
@@ -110,10 +93,11 @@ public class ChatsController {
         timestamp = timestamp.substring(0, timestamp.length() - 4);
         GatewayChats gC = new GatewayChats(sender, receiver, message,timestamp);
         logger.log("Inserting this chat: " + gC.json(), logType.TRACE);
-        gC.insert();
-        // TODO check if there are blocks between each other
-        DeletedChats dCS = new DeletedChats();
-        dCS.messageSent(sender, receiver);
+        ManagementChat dCS = new ManagementChat();
+        if (dCS.usersNotBlocked(sender, receiver)) {
+            gC.insert();
+            dCS.messageSent(sender, receiver);
+        }
     }
 
     /**
@@ -127,7 +111,7 @@ public class ChatsController {
         logger.log("Starting deleteChat method with userA '" + userA + "' and userB '" + userB + "'", logType.TRACE);
         GatewayDeletedChats gDC = new GatewayDeletedChats(userA, userB);
         logger.log("Deleting this chats: " + gDC.json() ,logType.TRACE ) ;
-        DeletedChats dCS = new DeletedChats();
+        ManagementChat dCS = new ManagementChat();
         gDC.insert();
         dCS.deleteMessagesIfNeeded(userA, userB);
         logger.log("End of method", logType.TRACE);

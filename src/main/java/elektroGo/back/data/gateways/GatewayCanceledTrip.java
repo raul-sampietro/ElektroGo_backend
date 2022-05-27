@@ -9,6 +9,7 @@ package elektroGo.back.data.gateways;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import elektroGo.back.data.Database;
 import elektroGo.back.data.finders.FinderCanceledTrip;
 import elektroGo.back.data.finders.FinderDriver;
@@ -136,6 +137,7 @@ public class GatewayCanceledTrip implements Gateway{
     public String json() {
         ObjectMapper mapper = new ObjectMapper();
         String json = "";
+        mapper.registerModule(new JavaTimeModule());
         try {
             json = mapper.writeValueAsString(this);
         } catch (JsonProcessingException e) {
