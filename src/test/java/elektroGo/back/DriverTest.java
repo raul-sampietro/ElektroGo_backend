@@ -44,7 +44,7 @@ public class DriverTest {
         fU = FinderUser.getInstance();
         fD = FinderDriver.getInstance();
         gU = insertTest();
-        gV = new GatewayDriver("UserTestClass",false);
+        gV = new GatewayDriver("UserTestClass","pendent");
         gV.insert();
     }
 

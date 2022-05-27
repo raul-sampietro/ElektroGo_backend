@@ -73,7 +73,7 @@ public class DriverController {
         if (fU.findByUsername(username) == null) throw new UserNotFound(username);
         FinderDriver fD = FinderDriver.getInstance();
         if (fD.findByUserName(username) != null) throw new DriverAlreadyExists(username);
-        GatewayDriver gD = new GatewayDriver(username, false);
+        GatewayDriver gD = new GatewayDriver(username, "pendent");
         gD.insert();
         logger.log("Driver inserted (End of method)", logType.TRACE);
     }
@@ -83,7 +83,7 @@ public class DriverController {
         FinderDriver fD = FinderDriver.getInstance();
         GatewayDriver gD = fD.findByUserName(username);
         if (gD == null) throw new DriverNotFound(username);
-        gD.setVerified(true);
+        gD.setStatus("verified");
         gD.update();
     }
 
