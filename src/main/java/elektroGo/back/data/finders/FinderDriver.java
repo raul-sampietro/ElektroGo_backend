@@ -81,7 +81,7 @@ public class FinderDriver {
         ArrayList<GatewayDriver> gdriver = new ArrayList<>();
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
-        PreparedStatement pS = conn.prepareStatement("SELECT * FROM DRIVER WHERE status is null or status = 'pendent';");
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM DRIVER WHERE status = 'pendent';");
         ResultSet r = pS.executeQuery();
         while (r.next()) {
             gdriver.add(createGateway(r));
