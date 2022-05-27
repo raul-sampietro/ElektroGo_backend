@@ -89,7 +89,7 @@ public class FinderChats {
                 "SELECT * FROM CHATS WHERE sender = ? and receiver = ?" +
                 "UNION " +
                 "SELECT * FROM CHATS WHERE sender = ? and receiver = ?" +
-                "ORDER BY sentAt;");
+                "ORDER BY sentAt DESC;");
         pS.setString(1,userA);
         pS.setString(2,userB);
         pS.setString(3,userB);
@@ -135,7 +135,7 @@ public class FinderChats {
         Connection conn = d.getConnection();
         PreparedStatement pS = conn.prepareStatement("" +
                 "SELECT * FROM CHATS WHERE receiver = ? " +
-                "ORDER BY sentAt;");
+                "ORDER BY sentAt DESC;");
         pS.setString(1,user);
         ResultSet r = pS.executeQuery();
         ArrayList<GatewayChats> aL = new ArrayList<>();
