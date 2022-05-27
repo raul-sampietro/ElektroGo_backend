@@ -48,7 +48,7 @@ public class DriverVehicleTest {
         gU1 = fU.findByUsername("VTestDriverVehicleTest");
         if (gU1 == null) {
             gU1 = createUser("TestDriverVehicle");
-            gD = new GatewayDriver(gU1.getUsername(),false);
+            gD = new GatewayDriver(gU1.getUsername(),"pendent");
             gU1.insert();
             gD.insert();
         }

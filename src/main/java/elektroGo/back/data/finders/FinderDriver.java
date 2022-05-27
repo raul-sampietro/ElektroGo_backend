@@ -81,7 +81,7 @@ public class FinderDriver {
         ArrayList<GatewayDriver> gdriver = new ArrayList<>();
         Database d = Database.getInstance();
         Connection conn = d.getConnection();
-        PreparedStatement pS = conn.prepareStatement("SELECT * FROM DRIVER WHERE verified = FALSE;");
+        PreparedStatement pS = conn.prepareStatement("SELECT * FROM DRIVER WHERE status is null or status = 'pendent';");
         ResultSet r = pS.executeQuery();
         while (r.next()) {
             gdriver.add(createGateway(r));
@@ -96,8 +96,8 @@ public class FinderDriver {
      */
     private GatewayDriver createGateway(ResultSet r) throws SQLException {
         String userName = r.getString(1);
-        Boolean verified = r.getBoolean(2);
-        return new GatewayDriver(userName,verified);
+        String status= r.getString(2);
+        return new GatewayDriver(userName,status);
     }
 
 }
