@@ -12,16 +12,28 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import elektroGo.back.data.finders.FinderDriver;
 import elektroGo.back.data.finders.FinderRating;
 import elektroGo.back.data.finders.FinderUser;
+import elektroGo.back.data.finders.FinderVehicle;
 import elektroGo.back.data.gateways.GatewayDriver;
-import elektroGo.back.exceptions.DriverAlreadyExists;
+import elektroGo.back.data.gateways.GatewayVehicle;
+import elektroGo.back.exceptions.*;
 import elektroGo.back.data.gateways.GatewayRating;
-import elektroGo.back.exceptions.DriverNotFound;
-import elektroGo.back.exceptions.UserAlreadyExists;
-import elektroGo.back.exceptions.UserNotFound;
 import elektroGo.back.logs.CustomLogger;
 import elektroGo.back.logs.logType;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.springframework.http.MediaType;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -107,5 +119,76 @@ public class DriverController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+
+    @GetMapping("/{username}/imageFront")
+    public void getImage(HttpServletResponse response, @PathVariable String username) throws IOException, SQLException {
+        FinderDriver fV = FinderDriver.getInstance();
+        GatewayDriver gV = fV.findByUserName(username);
+        if (gV == null) throw new DriverNotFound(username);
+        InputStream in = new BufferedInputStream(new FileInputStream("../Images/dni/" + username+"Front.png"));
+        response.setContentType(MediaType.IMAGE_PNG_VALUE);
+        IOUtils.copy(in, response.getOutputStream());
+    }
+
+
+    @PostMapping("/{username}/imageFront")
+    public void setImage(@PathVariable String username  ,@RequestParam("imageFront") MultipartFile file) throws IOException, SQLException {
+        FinderDriver fV = FinderDriver.getInstance();
+        GatewayDriver gV = fV.findByUserName(username);
+        if (gV == null) throw new DriverNotFound(username);
+
+        String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
+        String fileName = username+"Front."+extension;
+
+
+        Path uploadPath = Paths.get("../Images/dni/");
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        try (InputStream inputStream = file.getInputStream()) {
+            Path filePath = uploadPath.resolve(fileName);
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ioe) {
+            throw new IOException("Could not save image file: " + fileName, ioe);
+        }
+
+    }
+
+    @GetMapping("/{username}/imageBack")
+    public void getImageBack(HttpServletResponse response, @PathVariable String username) throws IOException, SQLException {
+        FinderDriver fV = FinderDriver.getInstance();
+        GatewayDriver gV = fV.findByUserName(username);
+        if (gV == null) throw new DriverNotFound(username);
+        InputStream in = new BufferedInputStream(new FileInputStream("../Images/dni/" + username+"Back.png"));
+        response.setContentType(MediaType.IMAGE_PNG_VALUE);
+        IOUtils.copy(in, response.getOutputStream());
+    }
+
+
+    @PostMapping("/{username}/imageBack")
+    public void setImageback(@PathVariable String username  ,@RequestParam("imageFront") MultipartFile file) throws IOException, SQLException {
+        FinderDriver fV = FinderDriver.getInstance();
+        GatewayDriver gV = fV.findByUserName(username);
+        if (gV == null) throw new DriverNotFound(username);
+
+        String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
+        String fileName = username+"Back."+extension;
+
+
+        Path uploadPath = Paths.get("../Images/dni/");
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        try (InputStream inputStream = file.getInputStream()) {
+            Path filePath = uploadPath.resolve(fileName);
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ioe) {
+            throw new IOException("Could not save image file: " + fileName, ioe);
+        }
+
     }
 }
