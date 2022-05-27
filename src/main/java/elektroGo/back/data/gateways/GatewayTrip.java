@@ -35,6 +35,7 @@ public class GatewayTrip implements Gateway{
      * 	vehicleNumberPlate varchar(100),
      * 	Latitude varchar(100),
      * 	Longitude varchar(100),
+     *
      */
     private Integer id;
     private LocalDate startDate;
@@ -43,15 +44,6 @@ public class GatewayTrip implements Gateway{
     private Integer occupiedSeats;
     private String restrictions;
     private String details;
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     private LocalDate CancelDate;
     private String vehicleNumberPlate;
     private String origin;
@@ -61,6 +53,22 @@ public class GatewayTrip implements Gateway{
     private BigDecimal LatitudeDestination;
     private BigDecimal LongitudeDestination;
     private String username;
+    private String state;
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public GatewayTrip(){}
     /**
@@ -100,6 +108,7 @@ public class GatewayTrip implements Gateway{
         this.LatitudeDestination = latitudeD;
         this.LongitudeDestination = longitudeD;
         this.username = username;
+        state = "current";
     }
 
     public GatewayTrip(LocalDate startDate, Time startTime, Integer offeredSeats, Integer occupiedSeats, String restrictions, String details, LocalDate CancelDate, String vehicleNumberPlate,String origin, String destination, BigDecimal latitudeO, BigDecimal longitudeO,BigDecimal latitudeD, BigDecimal longitudeD, String username) {
@@ -118,6 +127,27 @@ public class GatewayTrip implements Gateway{
         this.LatitudeDestination = latitudeD;
         this.LongitudeDestination = longitudeD;
         this.username = username;
+        state = "current";
+    }
+
+    public GatewayTrip(Integer id, LocalDate startDate, Time startTime, Integer offeredSeats, Integer occupiedSeats, String restrictions, String details, LocalDate CancelDate, String vehicleNumberPlate,String origin, String destination, BigDecimal latitudeO, BigDecimal longitudeO,BigDecimal latitudeD, BigDecimal longitudeD,String username, String state) {
+        this.id = id;
+        this.startDate = startDate;
+        this.startTime = startTime;
+        this.offeredSeats = offeredSeats;
+        this.occupiedSeats = occupiedSeats;
+        this.restrictions = restrictions;
+        this.details = details;
+        this.CancelDate = CancelDate;
+        this.vehicleNumberPlate = vehicleNumberPlate;
+        this.origin = origin;
+        this.destination = destination;
+        this.LatitudeOrigin = latitudeO;
+        this.LongitudeOrigin = longitudeO;
+        this.LatitudeDestination = latitudeD;
+        this.LongitudeDestination = longitudeD;
+        this.username = username;
+        this.state = state;
     }
 
 
@@ -197,7 +227,8 @@ public class GatewayTrip implements Gateway{
         pS.setString(13, String.valueOf(LatitudeDestination));
         pS.setString(14, String.valueOf(LongitudeDestination));
         pS.setString(15,username);
-        pS.setInt(16,id);
+        pS.setString(16,state);
+        pS.setInt(17,id);
     }
 
 
@@ -222,7 +253,7 @@ public class GatewayTrip implements Gateway{
         Connection c = d.getConnection();
         PreparedStatement pS = c.prepareStatement("UPDATE TRIP SET startDate = ?, startTime = ?, offeredSeats = ?," +
                 "occupiedSeats = ?, restrictions = ?, details = ?, CancelDate = ?, vehicleNumberPlate = ?, origin = ?, destination = ?," +
-                " LatitudeOrigin = ?, LongitudeOrigin = ?, LatitudeDestination = ?, LongitudeDestination = ?, username = ? WHERE id = ?");
+                " LatitudeOrigin = ?, LongitudeOrigin = ?, LatitudeDestination = ?, LongitudeDestination = ?, username = ?, state = ? WHERE id = ?");
         setFullPreparedStatementUpdate(pS);
         pS.executeUpdate();
     }

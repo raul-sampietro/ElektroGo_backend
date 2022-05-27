@@ -35,9 +35,7 @@ public class ChatsController {
      */
     @GetMapping("/messages")
     public ArrayList<GatewayChats> getAll() throws SQLException {
-        logger.log("\nStarting Chats.getAll method...", logType.TRACE);
         FinderChats fC = FinderChats.getInstance();
-        logger.log("Ending Chats.getAll method...", logType.TRACE);
         return fC.findAll();
     }
 
@@ -49,14 +47,8 @@ public class ChatsController {
      */
     @GetMapping("/messages/{username1}/{username2}")
     public ArrayList<GatewayChats> getChatByConversation(@PathVariable String username1, @PathVariable String username2) throws SQLException {
-        logger.log("\nStarting getChatByConversation method of user '" + username1 + "' and '" + username2 + "'", logType.TRACE);
         FinderChats fC = FinderChats.getInstance();
         ArrayList<GatewayChats> aL = fC.findByConversation(username1, username2);
-        logger.log("Returning this messages...", logType.TRACE);
-        String s = "";
-        for (GatewayChats gC : aL) s = s + gC.json() + "\n";
-        logger.log(s, logType.TRACE);
-        logger.log("End of method", logType.TRACE);
         return fC.findByConversation(username1, username2);
     }
 
@@ -67,16 +59,11 @@ public class ChatsController {
      */
     @GetMapping("/{username}")
     public ArrayList<String> getChatByConversation(@PathVariable String username) throws SQLException {
-        logger.log("\nStarting getChatByConversation method with username '" + username + "'...", logType.TRACE);
         FinderChats fC = FinderChats.getInstance();
         ManagementChat dCS = new ManagementChat();
         ArrayList<String> usersChats = fC.findByUser(username);
         ArrayList<String> deletedChats = dCS.getDeletedChatsFromUser(username);
         usersChats.removeAll(deletedChats);
-        logger.log("Returning this chats:", logType.TRACE);
-        String log = "";
-        for (String s : usersChats ) log = log + s + " ";
-        logger.log(log, logType.TRACE);
         return usersChats;
     }
 
@@ -87,12 +74,8 @@ public class ChatsController {
      */
     @GetMapping("/messages/to/{user}")
     public ArrayList<GatewayChats> getChatByReceived(@PathVariable String user) throws SQLException {
-        logger.log("Starting getChatByReceived method with user '" + user + "'", logType.TRACE);
         FinderChats fC = FinderChats.getInstance();
         ArrayList<GatewayChats> aL = fC.findByReceived(user);
-        String log = "";
-        for (GatewayChats gC : aL) log += gC.json() + "\n";
-        logger.log(log, logType.TRACE);
         return aL;
     }
 

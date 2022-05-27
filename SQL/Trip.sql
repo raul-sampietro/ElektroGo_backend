@@ -20,3 +20,5 @@ CREATE TABLE TRIP(
                      CONSTRAINT Trip_FK_Vehicle FOREIGN KEY (vehicleNumberPlate) REFERENCES VEHICLE(numberPlate)ON DELETE CASCADE,
                      UNIQUE(username, startTime, startDate)
 );
+
+ALTER TABLE TRIP ADD state varchar(15) DEFAULT ('current');
