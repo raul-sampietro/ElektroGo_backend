@@ -37,8 +37,15 @@ public class ManagementChat {
         ArrayList<String> deletedUsers = fDCS.findByUserDeleting(receiver);
         if (deletedUsers.contains(sender)) {
             // L'usuari que rep el missatge tenia el xat eliminat
-            // Ha de tornar a d'apereixer el xat a l'usuari
+            // Ha de tornar a apereixer el xat a l'usuari
             GatewayDeletedChats gDC = new GatewayDeletedChats(receiver, sender);
+            gDC.remove();
+        }
+        deletedUsers = fDCS.findByUserDeleting(sender);
+        if (deletedUsers.contains(receiver)) {
+            // L'usuari que envia el missatge tenia el xat eliminat
+            // Ha de tornar a apereixer el xat a l'usuari
+            GatewayDeletedChats gDC = new GatewayDeletedChats(sender, receiver);
             gDC.remove();
         }
     }
