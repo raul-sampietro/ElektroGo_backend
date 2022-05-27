@@ -282,6 +282,9 @@ public class TripController {
         if(gT == null)throw new TripNotFound(id);
         FinderUserTrip fUT = FinderUserTrip.getInstance();
         if (fUT.findByTripUser(id,username) != null) throw new UserTripAlreadyExists(id,username);
+        if (Objects.equals(gT.getOccupiedSeats(), gT.getOfferedSeats())) throw new TripIsFull(gT.getId(), gT.getOfferedSeats(), gT.getOccupiedSeats());
+        gT.setOccupiedSeats(gT.getOccupiedSeats()+1);
+        gT.update();
         GatewayUserTrip gUT = new GatewayUserTrip(id, username);
         gUT.insert();
         logger.log("userTrip inserted successfully", logType.TRACE);
@@ -299,7 +302,16 @@ public class TripController {
         FinderUserTrip fD = FinderUserTrip.getInstance();
         try {
             GatewayUserTrip gD = fD.findByTripUser(id,username);
-            if (gD != null) gD.remove();
+            if (gD != null) {
+                gD.remove();
+                FinderTrip fT = FinderTrip.getInstance();
+                GatewayTrip gT = fT.findById(gD.getId());
+                gT.setOccupiedSeats(gT.getOccupiedSeats()-1);
+                if (gT.getOccupiedSeats() == -1) {
+                    logger.log("Occupied seats would be -1", logType.ERROR);
+                }
+                else gT.update();
+            }
             else throw new UserTripNotFound(username,id);
             logger.log("userTrip removed successfully, end of method", logType.TRACE);
         } catch (SQLException e) {

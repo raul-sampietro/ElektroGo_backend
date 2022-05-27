@@ -252,6 +252,11 @@ public class RestControllerAdvice {
         return handleError(ex, response, 449);
     }
 
+    @ExceptionHandler(TripIsFull.class)
+    public String handleTripIsFull(TripIsFull ex, HttpServletResponse response) {
+        return handleError(ex, response, 450);
+    }
+
 
     //Exception for DB
     @ExceptionHandler(SocketException.class)
