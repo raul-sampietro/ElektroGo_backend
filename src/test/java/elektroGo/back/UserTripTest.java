@@ -38,7 +38,7 @@ public class UserTripTest {
         fD = FinderDriver.getInstance();
         gU = insertTest();
         gU2 = insertTest2();
-        gD = new GatewayDriver("UserTestClass",false);
+        gD = new GatewayDriver("UserTestClass","pendent");
         gD.insert();
         fV = FinderVehicle.getInstance();
         gV = insertTestVehicleComplet();

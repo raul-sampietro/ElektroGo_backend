@@ -7,6 +7,7 @@
 
 package elektroGo.back.controller;
 
+import com.mysql.cj.exceptions.ConnectionIsClosedException;
 import elektroGo.back.data.Database;
 import elektroGo.back.exceptions.*;
 import elektroGo.back.logs.CustomLogger;
@@ -252,10 +253,22 @@ public class RestControllerAdvice {
         return handleError(ex, response, 449);
     }
 
+    @ExceptionHandler(TripIsFull.class)
+    public String handleTripIsFull(TripIsFull ex, HttpServletResponse response) {
+        return handleError(ex, response, 450);
+    }
+
 
     //Exception for DB
     @ExceptionHandler(SocketException.class)
     public String handleSocketException(SocketException ex, HttpServletResponse response) {
+        Database db = Database.getInstance();
+        db.reestablishConnection();
+        return handleError(ex, response, 500);
+    }
+
+    @ExceptionHandler(ConnectionIsClosedException.class)
+    public String handleConnectionClosedException(SocketException ex, HttpServletResponse response) {
         Database db = Database.getInstance();
         db.reestablishConnection();
         return handleError(ex, response, 500);

@@ -17,8 +17,21 @@ import elektroGo.back.exceptions.DriverNotFound;
 import elektroGo.back.exceptions.UserNotFound;
 import elektroGo.back.logs.CustomLogger;
 import elektroGo.back.logs.logType;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.springframework.http.MediaType;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -70,7 +83,7 @@ public class DriverController {
         if (fU.findByUsername(username) == null) throw new UserNotFound(username);
         FinderDriver fD = FinderDriver.getInstance();
         if (fD.findByUserName(username) != null) throw new DriverAlreadyExists(username);
-        GatewayDriver gD = new GatewayDriver(username, false);
+        GatewayDriver gD = new GatewayDriver(username, "pendent");
         gD.insert();
         logger.log("Driver inserted (End of method)", logType.TRACE);
     }
@@ -80,7 +93,7 @@ public class DriverController {
         FinderDriver fD = FinderDriver.getInstance();
         GatewayDriver gD = fD.findByUserName(username);
         if (gD == null) throw new DriverNotFound(username);
-        gD.setVerified(true);
+        gD.setStatus("verified");
         gD.update();
     }
 
@@ -104,5 +117,76 @@ public class DriverController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+
+    @GetMapping("/{username}/imageFront")
+    public void getImage(HttpServletResponse response, @PathVariable String username) throws IOException, SQLException {
+        FinderDriver fV = FinderDriver.getInstance();
+        GatewayDriver gV = fV.findByUserName(username);
+        if (gV == null) throw new DriverNotFound(username);
+        InputStream in = new BufferedInputStream(new FileInputStream("../Images/dni/" + username+"Front.png"));
+        response.setContentType(MediaType.IMAGE_PNG_VALUE);
+        IOUtils.copy(in, response.getOutputStream());
+    }
+
+
+    @PostMapping("/{username}/imageFront")
+    public void setImage(@PathVariable String username  ,@RequestParam("imageFront") MultipartFile file) throws IOException, SQLException {
+        FinderDriver fV = FinderDriver.getInstance();
+        GatewayDriver gV = fV.findByUserName(username);
+        if (gV == null) throw new DriverNotFound(username);
+
+        String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
+        String fileName = username+"Front."+extension;
+
+
+        Path uploadPath = Paths.get("../Images/dni/");
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        try (InputStream inputStream = file.getInputStream()) {
+            Path filePath = uploadPath.resolve(fileName);
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ioe) {
+            throw new IOException("Could not save image file: " + fileName, ioe);
+        }
+
+    }
+
+    @GetMapping("/{username}/imageBack")
+    public void getImageBack(HttpServletResponse response, @PathVariable String username) throws IOException, SQLException {
+        FinderDriver fV = FinderDriver.getInstance();
+        GatewayDriver gV = fV.findByUserName(username);
+        if (gV == null) throw new DriverNotFound(username);
+        InputStream in = new BufferedInputStream(new FileInputStream("../Images/dni/" + username+"Back.png"));
+        response.setContentType(MediaType.IMAGE_PNG_VALUE);
+        IOUtils.copy(in, response.getOutputStream());
+    }
+
+
+    @PostMapping("/{username}/imageBack")
+    public void setImageback(@PathVariable String username  ,@RequestParam("imageBack") MultipartFile file) throws IOException, SQLException {
+        FinderDriver fV = FinderDriver.getInstance();
+        GatewayDriver gV = fV.findByUserName(username);
+        if (gV == null) throw new DriverNotFound(username);
+
+        String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
+        String fileName = username+"Back."+extension;
+
+
+        Path uploadPath = Paths.get("../Images/dni/");
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        try (InputStream inputStream = file.getInputStream()) {
+            Path filePath = uploadPath.resolve(fileName);
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ioe) {
+            throw new IOException("Could not save image file: " + fileName, ioe);
+        }
+
     }
 }

@@ -28,7 +28,7 @@ public class GatewayDriver implements Gateway{
      */
     private String username; //CHANGE TYPE OF THIS ATTRIBUTE TO DRIVER WHEN IMPLEMENTED
 
-    private Boolean verified;
+    private String status;
     /**
      * @brief SingleTon amb el FinderDriver
      */
@@ -41,9 +41,9 @@ public class GatewayDriver implements Gateway{
      * @post Es crea un nou GWDriver amb els valors indicats
      * @return Retorna la instancia del gateway que s'acaba de crear
      */
-    public GatewayDriver(String username, Boolean verified) {
+    public GatewayDriver(String username, String status) {
         this.username = username;
-        this.verified = verified;
+        this.status = status;
     }
 
     //Getters and Setters
@@ -53,11 +53,11 @@ public class GatewayDriver implements Gateway{
     public void setUsername(String username) {
         this.username = username;
     }
-    public Boolean getVerified() {
-        return verified;
+    public String getStatus() {
+        return status;
     }
-    public void setVerified(Boolean verified) {
-        this.verified = verified;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     //SQL operations
@@ -69,12 +69,12 @@ public class GatewayDriver implements Gateway{
      */
     public void setFullPreparedStatement(PreparedStatement pS) throws SQLException {
         pS.setString(1, username);
-        pS.setBoolean(2,false);
+        pS.setString(2,status);
     }
 
     public void setUpdatePreparedStatement(PreparedStatement pS) throws SQLException {
         pS.setString(2, username);
-        pS.setBoolean(1,verified);
+        pS.setString(1,status);
     }
     /**
      * @brief Funció inserta a la BD un Driver
@@ -96,7 +96,7 @@ public class GatewayDriver implements Gateway{
     public void update() throws SQLException {
        Database d = Database.getInstance();
         Connection c = d.getConnection();
-        PreparedStatement pS = c.prepareStatement("UPDATE DRIVER SET verified = ? WHERE userName = ?");
+        PreparedStatement pS = c.prepareStatement("UPDATE DRIVER SET status = ? WHERE userName = ?");
         setUpdatePreparedStatement(pS);
         pS.executeUpdate();
     }
