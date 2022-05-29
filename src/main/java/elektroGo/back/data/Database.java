@@ -42,6 +42,13 @@ public class Database {
         if (singletonObject == null) {
             singletonObject = new Database();
         }
+        else {
+            try {
+                if (!singletonObject.conn.isValid(50000)) singletonObject.connectDB();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
         return singletonObject;
     }
 
@@ -64,6 +71,7 @@ public class Database {
      * @post Executa la sentencia SQL continguda en l'string "sql" com a update
      */
     public void executeSQLUpdate(String sql) throws SQLException {
+        if (!conn.isValid(50000)) connectDB();
         Statement s = conn.createStatement();
         s.executeUpdate(sql);
 
@@ -75,6 +83,7 @@ public class Database {
      * @post Executa la sentencia SQL continguda en l'string "sql" com a query
      */
     public ResultSet executeSQLQuery(String sql) throws SQLException {
+        if (!conn.isValid(50000)) connectDB();
         Statement s = conn.createStatement();
         return s.executeQuery(sql);
     }
