@@ -8,10 +8,7 @@
 package elektroGo.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import elektroGo.back.data.finders.*;
-import elektroGo.back.data.gateways.GatewayCanceledTrip;
-import elektroGo.back.data.gateways.GatewayTrip;
-import elektroGo.back.data.gateways.GatewayUser;
-import elektroGo.back.data.gateways.GatewayUserTrip;
+import elektroGo.back.data.gateways.*;
 import elektroGo.back.exceptions.*;
 import elektroGo.back.logs.CustomLogger;
 import elektroGo.back.logs.logType;
@@ -348,6 +345,8 @@ public class TripController {
         gT.setState("finished");
         gT.update();
         gT = fT.findById(id);
+        FinderAchievements fA = FinderAchievements.getInstance();
+        //TODO: Agafar tots els userAchievements dels usuaris que participen i donar-els-hi 1p
         logger.log("Trip updated:\n" + gT.json(),logType.TRACE);
     }
 
