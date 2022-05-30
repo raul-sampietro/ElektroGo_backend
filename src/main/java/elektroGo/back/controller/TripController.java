@@ -350,7 +350,7 @@ public class TripController {
         FinderUserAchievement fUA = FinderUserAchievement.getInstance();
         ArrayList<GatewayUserTrip> aL = fUT.findByTrip(id); //We get all UserTrips to get all user's username of participants
         for (GatewayUserTrip gUT : aL) {
-            GatewayUserAchievements gUA = fUA.findByPK(gUT.getUsername(), "Traveller"); //TODO: Check achievement name
+            GatewayUserAchievements gUA = fUA.findByPK(gUT.getUsername(), "Traveler");
             gUA.setPoints(gUA.getPoints()+1);
             gUA.update();
         }
