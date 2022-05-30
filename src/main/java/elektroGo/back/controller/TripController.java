@@ -346,7 +346,14 @@ public class TripController {
         gT.update();
         gT = fT.findById(id);
         FinderAchievements fA = FinderAchievements.getInstance();
-        //TODO: Agafar tots els userAchievements dels usuaris que participen i donar-els-hi 1p
+        FinderUserTrip fUT = FinderUserTrip.getInstance();
+        FinderUserAchievement fUA = FinderUserAchievement.getInstance();
+        ArrayList<GatewayUserTrip> aL = fUT.findByTrip(id); //We get all UserTrips to get all user's username of participants
+        for (GatewayUserTrip gUT : aL) {
+            GatewayUserAchievements gUA = fUA.findByPK(gUT.getUsername(), "Traveller"); //TODO: Check achievement name
+            gUA.setPoints(gUA.getPoints()+1);
+            gUA.update();
+        }
         logger.log("Trip updated:\n" + gT.json(),logType.TRACE);
     }
 
