@@ -8,8 +8,14 @@
 package elektroGo.back.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import elektroGo.back.data.finders.FinderTrip;
 import elektroGo.back.data.finders.FinderUser;
+import elektroGo.back.data.finders.FinderUserAchievement;
+import elektroGo.back.data.finders.FinderUserTrip;
+import elektroGo.back.data.gateways.GatewayTrip;
 import elektroGo.back.data.gateways.GatewayUser;
+import elektroGo.back.data.gateways.GatewayUserAchievements;
+import elektroGo.back.data.gateways.GatewayUserTrip;
 import elektroGo.back.exceptions.UserAlreadyExists;
 import elektroGo.back.exceptions.UserNotFound;
 import elektroGo.back.logs.CustomLogger;
@@ -89,6 +95,16 @@ public class UserController {
         try {
             GatewayUser gU = fU.findByUsername(username);
             if (gU != null) {
+                FinderUserTrip fUT = FinderUserTrip.getInstance();
+                ArrayList<GatewayUserTrip> aL = fUT.findTripByUser(username);
+                FinderTrip fT = FinderTrip.getInstance();
+                for (GatewayUserTrip gUT : aL) {
+                    GatewayTrip gT = fT.findById(gUT.getId());
+                    if (gT.getState().equals("current")) {
+                        gT.setOccupiedSeats(gT.getOccupiedSeats()-1);
+                        gT.update();
+                    }
+                }
                 gU.remove();
                 logger.log("This user was removed succesfully: " + gU.json() + " end of method", logType.TRACE);
             }
