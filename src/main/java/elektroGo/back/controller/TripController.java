@@ -8,10 +8,7 @@
 package elektroGo.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import elektroGo.back.data.finders.*;
-import elektroGo.back.data.gateways.GatewayCanceledTrip;
-import elektroGo.back.data.gateways.GatewayTrip;
-import elektroGo.back.data.gateways.GatewayUser;
-import elektroGo.back.data.gateways.GatewayUserTrip;
+import elektroGo.back.data.gateways.*;
 import elektroGo.back.exceptions.*;
 import elektroGo.back.logs.CustomLogger;
 import elektroGo.back.logs.logType;
@@ -348,6 +345,15 @@ public class TripController {
         gT.setState("finished");
         gT.update();
         gT = fT.findById(id);
+        FinderAchievements fA = FinderAchievements.getInstance();
+        FinderUserTrip fUT = FinderUserTrip.getInstance();
+        FinderUserAchievement fUA = FinderUserAchievement.getInstance();
+        ArrayList<GatewayUserTrip> aL = fUT.findByTrip(id); //We get all UserTrips to get all user's username of participants
+        for (GatewayUserTrip gUT : aL) {
+            GatewayUserAchievements gUA = fUA.findByPK(gUT.getUsername(), "Traveler");
+            gUA.setPoints(gUA.getPoints()+1);
+            gUA.update();
+        }
         logger.log("Trip updated:\n" + gT.json(),logType.TRACE);
     }
 
